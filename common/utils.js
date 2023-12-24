@@ -1,12 +1,15 @@
 class Utils {
   linkTo(path) {
-    window.location = path
+    window.location.href = path
     // 这里使用$router.push会导致跳转页面之后window.vditor对象undefined，原因未知
     // window.$nuxt.$router.push(path)
   }
 
-  async toSignin(ref) {
-    const nuxt = window.$nuxt
+  openTo(path) {
+    window.open(path)
+  }
+
+  async toSignin(nuxt, ref) {
     if (!ref && process.client) {
       // 如果没配置refUrl，那么取当前地址
       ref = window.location.pathname
@@ -17,7 +20,7 @@ class Utils {
 
       let domainUID = nuxt.$store.state.config.appinfo.domainID
       if (!domainUID) {
-        nuxt.$toast.error("系统暂不支持登录")
+        nuxt.$toast && nuxt.$toast.error("系统暂不支持登录")
       }
 
       let oauth2Query = this.encodeSearchParams({
@@ -27,10 +30,9 @@ class Utils {
         params: '{}',
       })
 
-      console.log("AAA", nuxt.$config.OAUTH2_URL)
       this.linkTo(`${nuxt.$config.OAUTH2_URL}?${oauth2Query}`)
     } catch (e) {
-      nuxt.$toast.error(e.message || e)
+      nuxt.$toast && nuxt.$toast.error(e.message || e)
     }
   }
 

@@ -304,8 +304,8 @@ export default {
           this.$toast.info('请登录后点赞！！！', {
             action: {
               text: '去登录',
-              onClick: (e, toastObject) => {
-                utils.toSignin()
+              onClick: () => {
+                utils.toSignin(this)
               },
             },
           })

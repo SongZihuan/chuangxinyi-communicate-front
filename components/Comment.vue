@@ -195,7 +195,7 @@ export default {
     },
     reply(quote) {
       if (!this.isLogin) {
-        utils.toSignin()
+        utils.toSignin(this)
       }
       this.quote = quote
       this.$refs.commentTitle.scrollIntoView({
@@ -213,7 +213,7 @@ export default {
       elem.style.height = elem.scrollHeight + 'px'
     },
     toLogin() {
-      utils.toSignin()
+      utils.toSignin(this)
     }
   }
 }

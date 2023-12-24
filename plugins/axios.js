@@ -1,8 +1,13 @@
 import qs from 'qs'
 
-export default function({ $axios, $config: cfg }) {
+export default function({ $axios, $config, store }) {
   $axios.onRequest((config) => {
     config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+
+    const token = store.state.auth.userJwt
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`
+    }
 
     config.transformRequest = [
       function(data) {
@@ -16,9 +21,9 @@ export default function({ $axios, $config: cfg }) {
     ]
 
     if (process.server) {
-      config.baseURL = cfg.PrivateAPI
+      config.baseURL = $config.PrivateAPI
     } else {
-      config.baseURL = cfg.BaseAPI
+      config.baseURL = $config.BaseAPI
     }
   })
 

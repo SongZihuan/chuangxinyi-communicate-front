@@ -1,10 +1,7 @@
 <template>
   <div class="widget">
-    <div class="widget-header">{{ user.username }} ({{ user.nickname }})</div>
+    <div class="widget-header" @click="toHomePage" >{{ user.username }} ({{ user.nickname }})</div>
     <div class="widget-content">
-      <div v-if="user.description" class="description">
-        <p>{{ user.description }}</p>
-      </div>
       <div class="score">
         <i class="iconfont icon-dollar" />
         <span>{{ user.score }}</span>
@@ -15,7 +12,7 @@
       <ul v-if="isOwner" class="operations">
         <li>
           <i class="iconfont icon-edit" />
-          <a href="/user/settings">编辑资料</a>
+          <span @click="toUserCenter">编辑资料</span>
         </li>
         <li>
           <i class="iconfont icon-message" />
@@ -31,6 +28,8 @@
 </template>
 
 <script>
+import Utils from "~/common/utils"
+
 export default {
   props: {
     user: {
@@ -46,6 +45,14 @@ export default {
     isOwner() {
       const current = this.$store.state.auth.currentUser
       return this.user && current && this.user.id === current.id
+    }
+  },
+  methods: {
+    toUserCenter() {
+      Utils.openTo(this.$config.USER_CENTER)
+    },
+    toHomePage() {
+      Utils.openTo(this.$config.HOME_PAGE + "?userID=" + this.user.uid)
     }
   }
 }

@@ -3,7 +3,7 @@ import Utils from '~/common/utils'
 export default async function(context) {
   const user = context.store.state.auth.currentUser
   if (!user) {
-    await Utils.toSignin()
+    await Utils.toSignin(context)
     return
   }
   if (isAdminUrl(context)) {

@@ -14,10 +14,16 @@ export const mutations = {
 
 export const actions = {
   // 登录成功
-  loginSuccess(context, { token, user }) {
-    console.log(token)
+  loginSuccess(context, { token }) {
     this.$cookies.set('jwt', token, { maxAge: 86400 * 7, path: '/' })
     context.commit('setUserJwt', token)
+  },
+
+  getTokenFromCookie(context) {
+    const token = this.$cookies.get('jwt')
+    if (token) {
+      context.commit('setUserJwt', token)
+    }
   },
 
   // 获取当前登录用户
@@ -40,69 +46,6 @@ export const actions = {
     } else {
       throw ret
     }
-  },
-
-  // github登录
-  async signinByGithub(context, { code, state }) {
-    const ret = await this.$axios.get('/api/oauth/github/callback', {
-      params: {
-        code,
-        state
-      }
-    })
-    if (ret.success === true) {
-      context.dispatch('loginSuccess', ret.data)
-    } else {
-      throw ret
-    }
-  },
-
-  // github登录
-  async signinByGitee(context, { code, state }) {
-    const ret = await this.$axios.get('/api/oauth/gitee/callback', {
-      params: {
-        code,
-        state
-      }
-    })
-    if (ret.success === true) {
-      context.dispatch('loginSuccess', ret.data)
-    } else {
-      throw ret
-    }
-  },
-
-  // qq登录
-  async signinByQQ(context, { code, state }) {
-    const ret = await this.$axios.get('/api/oauth/qq/callback', {
-      params: {
-        code,
-        state
-      }
-    })
-    if (ret.success === true) {
-      context.dispatch('loginSuccess', ret.data)
-    } else {
-      throw ret
-    }
-  },
-
-  // 注册
-  async signup(
-    context,
-    { captchaId, captchaCode, nickname, username, email, password, rePassword }
-  ) {
-    const ret = await this.$axios.post('/api/auth/signup', {
-      captchaId,
-      captchaCode,
-      nickname,
-      username,
-      email,
-      password,
-      rePassword
-    })
-    context.dispatch('loginSuccess', ret)
-    return ret.user
   },
 
   // 退出登录

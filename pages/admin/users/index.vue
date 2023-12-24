@@ -82,9 +82,11 @@
           />
         </template>
       </el-table-column>
+      <el-table-column prop="uid" label="标识符"></el-table-column>
+      <el-table-column prop="phone" label="手机号"></el-table-column>
+      <el-table-column prop="email" label="邮箱"></el-table-column>
       <el-table-column prop="username" label="用户名"></el-table-column>
       <el-table-column prop="nickname" label="昵称"></el-table-column>
-      <el-table-column prop="email" label="邮箱"></el-table-column>
       <el-table-column prop="score" label="积分"></el-table-column>
       <el-table-column prop="createTime" label="角色">
         <template slot-scope="scope">{{
@@ -114,44 +116,6 @@
     </div>
 
     <el-dialog
-      :visible.sync="addFormVisible"
-      :close-on-click-modal="false"
-      title="新增"
-    >
-      <el-form
-        ref="addForm"
-        :model="addForm"
-        :rules="addFormRules"
-        label-width="80px"
-      >
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="addForm.username"></el-input>
-        </el-form-item>
-
-        <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="addForm.nickname"></el-input>
-        </el-form-item>
-
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="addForm.email"></el-input>
-        </el-form-item>
-
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="addForm.password"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="addFormVisible = false">取消</el-button>
-        <el-button
-          @click.native="addSubmit"
-          :loading="addLoading"
-          type="primary"
-          >提交</el-button
-        >
-      </div>
-    </el-dialog>
-
-    <el-dialog
       :visible.sync="editFormVisible"
       :close-on-click-modal="false"
       title="编辑"
@@ -163,27 +127,11 @@
         label-width="80px"
       >
         <el-input v-model="editForm.id" type="hidden"></el-input>
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="editForm.username"></el-input>
-        </el-form-item>
-        <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="editForm.nickname"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="editForm.email"></el-input>
-        </el-form-item>
         <el-form-item label="角色" prop="level">
           <el-select v-model="editForm.level" placeholder="请选择">
             <el-option :key="0" :value="0" label="普通用户"></el-option>
             <el-option :key="1" :value="10" label="管理员"></el-option>
           </el-select>
-        </el-form-item>
-
-        <el-form-item label="密码" prop="password">
-          <el-input
-            v-model="editForm.password"
-            placeholder="不填写表示不更改密码"
-          ></el-input>
         </el-form-item>
 
         <el-form-item label="状态" prop="status">
@@ -219,27 +167,9 @@ export default {
       },
       selectedRows: [],
 
-      addForm: {
-        username: '',
-        nickname: '',
-        avatar: '',
-        email: '',
-        roles: [],
-        password: '',
-        status: ''
-      },
-      addFormVisible: false,
-      addFormRules: {},
-      addLoading: false,
-
       editForm: {
         id: '',
-        username: '',
-        nickname: '',
-        avatar: '',
-        email: '',
         roles: [],
-        password: '',
         status: ''
       },
       editFormVisible: false,
@@ -277,26 +207,6 @@ export default {
       this.page.limit = val
       this.list()
     },
-    handleAdd() {
-      this.addForm = {
-        name: '',
-        description: ''
-      }
-      this.addFormVisible = true
-    },
-    addSubmit() {
-      const me = this
-      this.$axios
-        .post('/api/admin/users', this.addForm)
-        .then((data) => {
-          me.$message({ message: '提交成功', type: 'success' })
-          me.addFormVisible = false
-          me.list()
-        })
-        .catch((rsp) => {
-          me.$notify.error({ title: '错误', message: rsp.message })
-        })
-    },
     handleEdit(index, row) {
       const me = this
       this.$axios
@@ -314,7 +224,7 @@ export default {
       const me = this
       this.$axios
         .put('/api/admin/users/' + me.editForm.id, me.editForm)
-        .then((data) => {
+        .then(() => {
           me.list()
           me.editFormVisible = false
         })

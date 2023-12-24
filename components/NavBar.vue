@@ -22,7 +22,7 @@
             v-for="(nav, index) in setting.siteNavs"
             :key="index"
             :href="nav.url"
-            :class="{ 'is-active': $route.path == nav.url }"
+            :class="{ 'is-active': $route.path === nav.url }"
             class="navbar-item"
             >{{ nav.title }}</a
           >
@@ -75,7 +75,7 @@
 
           <div v-if="user" class="navbar-item has-dropdown is-hoverable">
             <a :href="'/user/' + user.id" class="navbar-link">
-              <strong>{{ user.username }}</strong>
+              <strong>{{ username }}</strong>
             </a>
             <div class="navbar-dropdown">
               <a :href="'/user/' + user.id" class="navbar-item">
@@ -122,6 +122,9 @@ export default {
     user() {
       return this.$store.state.auth.currentUser
     },
+    username() {
+      return this.$store.state.auth.currentUser.nickname || this.$store.state.auth.currentUser.username || this.$store.state.auth.currentUser.email || this.$store.state.auth.currentUser.phone
+    },
     isAdmin() {
       const user = this.$store.state.auth.currentUser
       const LevelUserAdmin = this.$store.state.config.appinfo.user_level_admin
@@ -139,7 +142,7 @@ export default {
   },
   methods: {
     async login() {
-      await utils.toSignin(window.location.href)
+      await utils.toSignin(this, window.location.href)
     },
     async signout() {
       try {

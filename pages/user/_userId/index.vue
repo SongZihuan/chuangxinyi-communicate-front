@@ -6,18 +6,17 @@
           <ul>
             <li :class="{ 'is-active': activeTab === 'topics' }">
               <a :href="'/user/' + user.id + '?tab=topics'">
-                <span class="icon is-small">
-                  <i class="iconfont icon-topic" aria-hidden="true" />
-                </span>
                 <span>话题</span>
               </a>
             </li>
             <li :class="{ 'is-active': activeTab === 'articles' }">
               <a :href="'/user/' + user.id + '?tab=articles'">
-                <span class="icon is-small">
-                  <i class="iconfont icon-article" aria-hidden="true" />
-                </span>
                 <span>文章</span>
+              </a>
+            </li>
+            <li>
+              <a @click="toHomePage" href="#">
+                <span>主页</span>
               </a>
             </li>
           </ul>
@@ -83,6 +82,7 @@ import utils from '~/common/utils'
 import TopicList from '~/components/TopicList'
 import ArticleList from '~/components/ArticleList'
 import UserCenterSidebar from '~/components/UserCenterSidebar'
+import Utils from '~/common/utils'
 
 const defaultTab = 'topics'
 
@@ -147,6 +147,9 @@ export default {
     },
   },
   methods: {
+    toHomePage() {
+      Utils.openTo(this.$config.HOME_PAGE + "?userID=" + this.user.uid)
+    },
     async watch(user) {
       try {
         if (this.watched) {
@@ -178,8 +181,8 @@ export default {
           this.$toast.info('请登录后再关注', {
             action: {
               text: '去登录',
-              onClick: (e, toastObject) => {
-                utils.toSignin()
+              onClick: () => {
+                utils.toSignin(this)
               },
             },
           })

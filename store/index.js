@@ -12,6 +12,7 @@ export const actions = {
     const config = await dispatch('config/loadConfig')
     app.head.title = config.setting.siteTitle
 
+    dispatch('auth/getTokenFromCookie')
     await dispatch('auth/getCurrentUser')
   }
 }

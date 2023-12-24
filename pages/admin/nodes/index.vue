@@ -188,6 +188,7 @@ export default {
         .then((data) => {
           me.results = data.results
           me.page = data.page
+          console.log(data, me.page)
         })
         .finally(() => {
           me.listLoading = false
@@ -212,7 +213,7 @@ export default {
       const me = this
       this.$axios
         .post('/api/admin/nodes', this.addForm)
-        .then((data) => {
+        .then(() => {
           me.$message({ message: '提交成功', type: 'success' })
           me.addFormVisible = false
           me.list()
@@ -237,7 +238,7 @@ export default {
       const me = this
       this.$axios
         .put('/api/admin/nodes/' + me.editForm.id, me.editForm)
-        .then((data) => {
+        .then(() => {
           me.$message({ message: '编辑成功', type: 'success' })
           me.list()
           me.editFormVisible = false

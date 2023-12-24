@@ -139,6 +139,8 @@ export default {
     BaseAPI: process.env.NUXT_PUBLIC_BASE_API,
     OAUTH2_URL: process.env.OAUTH2_URL,
     REDIECT_URL: process.env.REDIECT_URL,
+    USER_CENTER: process.env.USER_CENTER,
+    HOME_PAGE: process.env.HOME_PAGE
   }
 
 }
