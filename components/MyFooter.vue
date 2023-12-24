@@ -8,12 +8,7 @@
         </p>
         <p>
           © 2020-2022 Powered by
-          <a href="http://zendea.com" target="_blank" class="light">
-            {{ appName }}
-          </a>
-          v{{ appVersion }}
-          <i class="iconfont icon-divider-vertical"></i>
-          <small>Inspired by RubyChina</small>
+          {{ appName }}
         </p>
       </div>
     </footer>
@@ -26,11 +21,9 @@ export default {
     appName() {
       return this.$store.state.config.appinfo.name || ''
     },
-    appVersion() {
-      return this.$store.state.config.appinfo.version || ''
-    },
   },
 }
+
 </script>
 
 <style lang="scss" scoped>

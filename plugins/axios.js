@@ -1,9 +1,9 @@
 import qs from 'qs'
 
-export default function({ $axios, $toast, app }) {
+export default function({ $axios, $config: cfg }) {
   $axios.onRequest((config) => {
-    config.headers.common['X-Client'] = 'zendea'
     config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+
     config.transformRequest = [
       function(data) {
         if (process.client && data instanceof FormData) {
@@ -14,6 +14,12 @@ export default function({ $axios, $toast, app }) {
         return data
       }
     ]
+
+    if (process.server) {
+      config.baseURL = cfg.PrivateAPI
+    } else {
+      config.baseURL = cfg.BaseAPI
+    }
   })
 
   $axios.onResponse((response) => {

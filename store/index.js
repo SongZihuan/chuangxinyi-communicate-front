@@ -8,7 +8,7 @@ export const actions = {
    * @param app
    * @returns {Promise<void>}
    */
-  async nuxtServerInit({ commit, dispatch }, { req, app }) {
+  async nuxtServerInit({ dispatch }, { app }) {
     const config = await dispatch('config/loadConfig')
     app.head.title = config.setting.siteTitle
 

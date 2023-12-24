@@ -31,12 +31,9 @@ export const actions = {
   },
 
   // 登录
-  async signin(context, { captchaId, captchaCode, username, password }) {
+  async signin(context, { token }) {
     const ret = await this.$axios.post('/api/auth/login', {
-      captchaId,
-      captchaCode,
-      username,
-      password
+      loginToken: token,
     })
     if (ret.success === true) {
       context.dispatch('loginSuccess', ret.data)

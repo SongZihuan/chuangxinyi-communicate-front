@@ -1,7 +1,9 @@
-export default function(context) {
+import Utils from '~/common/utils'
+
+export default async function(context) {
   const user = context.store.state.auth.currentUser
   if (!user) {
-    toSignIn(context)
+    await Utils.toSignin()
     return
   }
   if (isAdminUrl(context)) {
@@ -25,31 +27,6 @@ function isAdminUser(context, user) {
   if (!user) {
     return false
   }
-  if (user.level === LevelUserAdmin) {
-    return true
-  }
-  return false
-}
+  return user.level === LevelUserAdmin;
 
-// 前往登录地址
-function toSignIn(context) {
-  const signInUrl = getSignInUrl(context)
-  context.redirect(signInUrl)
-}
-
-// 获取登录跳转地址
-function getSignInUrl(context) {
-  let ref // 来源地址
-  if (process.server) {
-    // 服务端
-    ref = context.req.originalUrl
-  } else if (process.client) {
-    // 客户端
-    ref = context.route.path
-  }
-  let signinUrl = '/auth/signin'
-  if (ref) {
-    signinUrl += '?ref=' + encodeURIComponent(ref)
-  }
-  return signinUrl
 }

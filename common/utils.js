@@ -5,16 +5,33 @@ class Utils {
     // window.$nuxt.$router.push(path)
   }
 
-  toSignin(ref) {
+  async toSignin(ref) {
+    const nuxt = window.$nuxt
     if (!ref && process.client) {
       // 如果没配置refUrl，那么取当前地址
       ref = window.location.pathname
     }
-    this.linkTo('/auth/signin?ref=' + encodeURIComponent(ref))
-  }
 
-  isSigninUrl(ref) {
-    return ref === '/auth/signin'
+    try {
+      await nuxt.$store.dispatch('auth/signout')
+
+      let domainUID = nuxt.$store.state.config.appinfo.domainID
+      if (!domainUID) {
+        nuxt.$toast.error("系统暂不支持登录")
+      }
+
+      let oauth2Query = this.encodeSearchParams({
+        redirect_uri: nuxt.$config.REDIECT_URL,
+        redirect: ref,
+        domain: domainUID,
+        params: '{}',
+      })
+
+      console.log("AAA", nuxt.$config.OAUTH2_URL)
+      this.linkTo(`${nuxt.$config.OAUTH2_URL}?${oauth2Query}`)
+    } catch (e) {
+      nuxt.$toast.error(e.message || e)
+    }
   }
 
   handleToc(tocDom) {
@@ -22,7 +39,7 @@ class Utils {
       return
     }
     const tocSelector = '.toc'
-    window.addEventListener('scroll', (event) => {
+    window.addEventListener('scroll', () => {
       const fromTop = window.scrollY
       const mainNavLinks = document.querySelectorAll(tocSelector + ' a')
       mainNavLinks.forEach((link, index) => {
@@ -56,7 +73,7 @@ class Utils {
 
     // 滚动的时候控制toc位置
     const oldTop = tocDom.offsetTop
-    window.addEventListener('scroll', (event) => {
+    window.addEventListener('scroll', () => {
       // 更改toc位置
       const scrollTop = Math.max(
         document.body.scrollTop || document.documentElement.scrollTop
@@ -108,6 +125,22 @@ class Utils {
 
   isBoolean(sources) {
     return typeof sources === 'boolean'
+  }
+
+  encodeSearchParams(obj) {
+    const params = []
+
+    Object.keys(obj).forEach((key) => {
+      let value = obj[key]
+      // 如果值为undefined我们将其置空
+      if (typeof value === 'undefined') {
+        value = ''
+      }
+      // 对于需要编码的文本（比如说中文）我们要进行编码
+      params.push([key, encodeURIComponent(value)].join('='))
+    })
+
+    return params.join('&')
   }
 }
 export default new Utils()

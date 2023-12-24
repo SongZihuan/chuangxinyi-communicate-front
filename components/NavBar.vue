@@ -94,12 +94,9 @@
           </div>
           <div v-else class="navbar-item">
             <div class="buttons">
-              <nuxt-link class="button is-small" to="/auth/signup"
-                >注册
-              </nuxt-link>
-              <nuxt-link class="button is-small is-info" to="/auth/signin"
+              <div class="button is-small is-info" @click="login"
                 >登录
-              </nuxt-link>
+              </div>
             </div>
           </div>
         </div>
@@ -141,6 +138,9 @@ export default {
     },
   },
   methods: {
+    async login() {
+      await utils.toSignin(window.location.href)
+    },
     async signout() {
       try {
         await this.$store.dispatch('auth/signout')
