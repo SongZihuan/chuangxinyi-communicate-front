@@ -15,7 +15,7 @@
                   :title="article.user.username"
                   target="_blank"
                 >
-                  <img v-lazy="article.user.avatar" class="avatar" />
+                  <img v-lazy="$config.AVATAR_URL + '?uid=' + article.user.uid" class="avatar" />
                 </a>
               </div>
               <div class="article-item-right">

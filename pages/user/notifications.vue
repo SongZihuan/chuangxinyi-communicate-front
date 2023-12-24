@@ -32,7 +32,7 @@
                 class="message-item"
               >
                 <div class="message-item-left">
-                  <img v-lazy="message.from.avatar" class="avatar" />
+                  <img v-lazy="$config.AVATAR_URL + '?uid=' + message.from.uid" class="avatar" />
                 </div>
                 <div class="message-item-right">
                   <div class="message-item-meta">

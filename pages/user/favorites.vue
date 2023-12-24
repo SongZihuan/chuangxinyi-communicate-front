@@ -30,7 +30,7 @@
                 <article v-else class="article-item">
                   <div class="article-item-left">
                     <a :href="'/user/' + favorite.user.id" target="_blank">
-                      <img v-lazy="favorite.user.avatar" class="avatar" />
+                      <img v-lazy="$config.AVATAR_URL + '?uid=' + favorite.user.uid" class="avatar" />
                     </a>
                   </div>
 
@@ -79,7 +79,7 @@ export default {
   components: {
     UserCenterSidebar
   },
-  async asyncData({ $axios, params }) {},
+  async asyncData() {},
   data() {
     return {
       favorites: [],

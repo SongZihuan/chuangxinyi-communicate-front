@@ -18,8 +18,7 @@
             <li v-for="msg in messages" :key="msg.messageId" class="msg-item">
               <a :href="'/user/' + msg.from.id" :title="msg.from.username">
                 <img
-                  v-if="msg.from.avatar"
-                  v-lazy="msg.from.avatar"
+                  v-lazy="$config.AVATAR_URL + '?uid=' + msg.from.uid"
                   class="avatar size-20"
                 />
               </a>

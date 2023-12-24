@@ -44,7 +44,7 @@
         <li v-for="item in results" :key="item.id">
           <div class="comment-item">
             <div
-              :style="{ backgroundImage: 'url(' + item.user.avatar + ')' }"
+              :style="{ backgroundImage: 'url(' + $config.AVATAR_URL + '?uid=' + scope.row.uid + ')' }"
               class="avatar"
             ></div>
             <div class="content">
@@ -176,7 +176,7 @@ export default {
       const me = this
       this.$axios
         .delete(`/api/admin/comments/${row.id}`)
-        .then((data) => {
+        .then(() => {
           me.$message.success('删除成功')
           me.list()
         })

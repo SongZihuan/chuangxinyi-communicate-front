@@ -51,7 +51,7 @@
             <blockquote v-if="comment.quote" class="comment-quote">
               <div class="comment-quote-user">
                 <img
-                  v-lazy="comment.quote.user.avatar"
+                  v-lazy="$config.AVATAR_URL + '?uid=' + comment.quote.user.uid"
                   class="avatar size-20"
                 />
                 <a class="quote-username">{{ comment.quote.user.username }}</a>

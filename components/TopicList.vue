@@ -5,7 +5,7 @@
         <div class="topic-header">
           <div class="topic-header-left">
             <a :href="'/user/' + topic.user.id" :title="topic.user.username">
-              avatar
+              <img :src="$config.AVATAR_URL + '?uid=' + topic.user.uid" class="avatar" />
             </a>
           </div>
           <div class="topic-header-center">

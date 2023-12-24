@@ -140,7 +140,8 @@ export default {
     OAUTH2_URL: process.env.OAUTH2_URL,
     REDIECT_URL: process.env.REDIECT_URL,
     USER_CENTER: process.env.USER_CENTER,
-    HOME_PAGE: process.env.HOME_PAGE
+    HOME_PAGE: process.env.HOME_PAGE,
+    AVATAR_URL: process.env.AVATAR_URL,
   }
 
 }
