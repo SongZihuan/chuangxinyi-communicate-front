@@ -22,7 +22,7 @@
             v-for="(nav, index) in setting.siteNavs"
             :key="index"
             :href="nav.url"
-            :class="{ 'is-active': $route.path === nav.url }"
+            :class="{ 'is-active': route.path === nav.url }"
             class="navbar-item"
             >{{ nav.title }}</a
           >
@@ -90,7 +90,7 @@ import { useConfigStore } from '~/store/config'
 import { useAuthStore } from '~/store/auth'
 import { ElMessage } from "element-plus"
 
-
+const route = useRoute()
 const configStore = useConfigStore()
 const authStore = useAuthStore()
 

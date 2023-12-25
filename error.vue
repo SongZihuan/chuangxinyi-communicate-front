@@ -3,28 +3,28 @@
     <div class="container">
       <div class="error">
         <div class="description">
-          <span v-if="error.statusCode === 404">{{
-            error.message ? error.message : '页面没找到'
+          <span v-if="props.error.statusCode === 404">{{
+              props.error.message ? props.error.message : '页面没找到'
           }}</span>
-          <span v-if="error.statusCode === 403">{{
-            error.message ? error.message : 'forbidden'
+          <span v-if="props.error.statusCode === 403">{{
+              props.error.message ? props.error.message : 'forbidden'
           }}</span>
-          <span v-else>{{ error.statusCode }} 页面异常</span>
+          <span v-else>{{ props.error.statusCode }} 页面异常</span>
         </div>
       </div>
     </div>
   </section>
 </template>
 
-<script>
-export default {
-  props: {
-    error: {
-      type: Object,
-      default: null
-    }
+<script setup lang="ts">
+
+const props = defineProps({
+  error: {
+    type: Object,
+    default: null,
   }
-}
+})
+
 </script>
 
 <style lang="scss" scoped>

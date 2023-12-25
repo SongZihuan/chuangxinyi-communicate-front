@@ -126,27 +126,19 @@
   </div>
 </template>
 
-<script>
-import '~/plugins/element-ui'
+<script setup lang="ts">
+definePageMeta({
+  middleware: [
+    'authenticated',
+  ],
+})
 
-export default {
-  middleware: ['authenticated'],
-  data() {
-    return {
-      navbarActive: false,
-    }
-  },
-  methods: {
-    toggleNav() {
-      this.navbarActive = !this.navbarActive
-    },
-  },
-  head() {
-    return {
-      title: '后台管理',
-    }
-  },
+let navbarActive = ref(false)
+
+const toggleNav = () => {
+  navbarActive.value = !navbarActive.value
 }
+
 </script>
 
 <style lang="scss">
