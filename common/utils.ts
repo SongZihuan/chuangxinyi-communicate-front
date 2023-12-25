@@ -1,4 +1,6 @@
 import { useConfigStore } from '~/store/config'
+import { useAuthStore } from '~/store/auth'
+import { ElMessage } from "element-plus"
 
 let Utils = {
   linkTo(path: string) {
@@ -71,25 +73,29 @@ let Utils = {
       ref = window.location.pathname
     }
 
-    try {
-      await nuxt.$store.dispatch('auth/signout')
+    const runtimeConfig = useRuntimeConfig()
+    const authStore = useAuthStore()
+    const configStore = useConfigStore()
 
-      let domainUID = nuxt.$store.state.config.appinfo.domainID
+    try {
+      await authStore.logout()
+
+      let domainUID = configStore.appinfo.domainID
       if (!domainUID) {
-        nuxt.$toast && nuxt.$toast.error("系统暂不支持登录")
+        ElMessage.error("系统暂不支持登录")
       }
 
 
-      let oauth2Query = this.encodeSearchParams({
-        redirect_uri: nuxt.$config.REDIECT_URL,
+      let oauth2Query = Utils.encodeSearchParams({
+        redirect_uri: runtimeConfig.public.REDIECT_URL,
         redirect: ref,
         domain: domainUID,
         params: '{}',
       })
 
-      this.linkTo(`${nuxt.$config.OAUTH2_URL}?${oauth2Query}`)
+      Utils.linkTo(`${runtimeConfig.public.OAUTH2_URL}?${oauth2Query}`)
     } catch (e) {
-      nuxt.$toast && nuxt.$toast.error(e.message || e)
+      ElMessage.error(e.message || e)
     }
   },
 

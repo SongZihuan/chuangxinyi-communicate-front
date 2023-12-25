@@ -2,11 +2,14 @@ import Utils from '~/common/utils'
 import {useAuthStore} from '~/store/auth'
 import {useConfigStore} from '~/store/config'
 
-export default async function(to) {
+export default async function(to: { path: string | string[] }) {
   const authStore = useAuthStore()
   const user = authStore.currentUser
 
+  console.log("AAAAA", user)
+
   if (!user) {
+    console.log("BBBB")
     const nuxtApp = useNuxtApp()
     await Utils.toSignin(nuxtApp)
     return

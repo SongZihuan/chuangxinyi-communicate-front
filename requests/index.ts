@@ -79,6 +79,12 @@ export default function (requests: req, opt?: any) {
       if (requests.useCache) {
         return useFetch(requests.url, cfg)
       }
-      return $fetch(requests.url, cfg)
+      return $fetch(requests.url, cfg).then((_data)=>{
+        return {
+          status: ref("success"),
+          error: ref(null),
+          data: ref(_data),
+        }
+      })
   })
 }

@@ -216,7 +216,7 @@ const getTopic = async () => {
 const getFavorited = async () => {
   let {data, status, error} = await useTopicApi().favorited(topicID)
   if (status.value === "success") {
-    favorited.value = data.value.data.favorited
+    favorited.value = data.value?.data?.favorited || false  // 如果没有token，没登陆，favorited回是underfined
   } else {
     console.log(status.value, error && error.value)
   }
@@ -313,7 +313,6 @@ const like = async (topic) => {
     ElMessage.error(e.message || e)
   }
 }
-
 </script>
 
 <style lang="scss" scoped>

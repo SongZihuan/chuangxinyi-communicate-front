@@ -101,5 +101,45 @@ export function useTopicApi() {
         }
       )
     },
+    tagAutoComplete: async (data: { input: string }) => {
+      return request({
+          url: '/api/tag/autocomplete',
+          method: "POST",
+          query: {},
+          data: data,
+          useCache: false,
+        }
+      )
+    },
+    nodes: async () => {
+      return request({
+          url: '/api/nodes',
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: false,
+        }
+      )
+    },
+    getNode: async (id: number) => {
+      return request({
+          url: '/api/node/' + id,
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    newTopics: async (data: any) => {
+      return request({
+          url: '/api/topics',
+          method: "POST",
+          query: {},
+          data: data,
+          useCache: false,
+        }
+      )
+    },
   }
 }
