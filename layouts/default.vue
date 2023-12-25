@@ -1,16 +1,14 @@
 <template>
   <div class="zendea">
     <NavBar />
-
-<!--    <nuxt />-->
-
-<!--    <my-footer />-->
-<!--    <back-to-top />-->
+      <slot />
+    <Footer />
+    <BackToTop />
   </div>
 </template>
 
 <script setup lang="ts">
 import NavBar from '~/components/NavBar'
-// import MyFooter from '~/components/MyFooter'
-// import BackToTop from '~/components/BackToTop'
+import Footer from '~/components/Footer'
+import BackToTop from '~/components/BackToTop.vue'
 </script>

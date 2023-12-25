@@ -1,5 +1,6 @@
 <template>
   <section class="main">
+    Hello, World
 <!--    <div class="container main-container left-main">-->
 <!--      <div class="left-container">-->
 <!--        <div class="main-content">-->
