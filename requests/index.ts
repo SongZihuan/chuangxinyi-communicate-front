@@ -39,9 +39,18 @@ export default function (requests: req, opt?: any) {
     return useNuxtApp().runWithContext(() => {
       const token = useAuthStore().userJwt
 
+      let data = requests.data
+      if (data) {
+        if (process.client && data instanceof FormData) {
+          // 无操作
+        } else {
+          data = qs.stringify(data)
+        }
+      }
+
       const cfg = {
         method: requests.method,
-        body: requests.data,
+        body: data,
 
         query: requests.query,
 
@@ -53,17 +62,6 @@ export default function (requests: req, opt?: any) {
         ...opt,
 
         onRequest({ options }) {
-          options.transformRequest = [
-            function(data) {
-              if (process.client && data instanceof FormData) {
-                // 如果是FormData就不转换
-                return data
-              }
-              data = qs.stringify(data)
-              return data
-            }
-          ]
-
           options.baseURL = getBaseAPI().baseAPI()
         },
 

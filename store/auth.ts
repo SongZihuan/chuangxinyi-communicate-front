@@ -38,18 +38,20 @@ export const useAuthStore = defineStore("auth", ()=> {
     userJwt.value = jwt
   }
 
-  const loginSuccess = ({ token }): string => {
-    let cookieJwt = useCookie("jwt")
-    cookieJwt.value = token
-    setUserJwt(token)
+  const loginSuccess = ({ token }, nuxtApp: any): string => {
+    nuxtApp.runWithContext(()=>{
+      let cookieJwt = useCookie("jwt")
+      cookieJwt.value = token
+      setUserJwt(token)
+    })
     return token
   }
 
   // 登录
-  const login = async ({ token }): Promise<void> => {
-    let {data, status} = await useUserApi().login({loginToken: token as string})
+  const login = async ({ token }, nuxtApp: any): Promise<void> => {
+    let {data, status} = await useUserApi().login({loginToken: token})
     if (status.value === "success" && data.value.success) {
-      loginSuccess(data.value.data)
+      loginSuccess(data.value.data, nuxtApp)
     } else {
       throw data.value
     }
