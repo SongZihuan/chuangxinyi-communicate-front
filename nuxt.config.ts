@@ -11,11 +11,13 @@ export default {
   /*
    ** Global CSS
    */
-  css: [{ src: '~/assets/styles/all.scss', lang: 'scss' }],
+  css: [
+    '~/assets/styles/all.scss'
+  ],
 
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
+    '@nuxtjs/eslint-module'
   ],
   /*
    ** Nuxt.js modules
@@ -39,12 +41,6 @@ export default {
     },
   },
 
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-    },
-  },
-
   runtimeConfig: {
     PrivateAPI: process.env.NUXT_PRIVARE_BASE_API,
     public: {
@@ -53,7 +49,7 @@ export default {
       REDIECT_URL: process.env.REDIECT_URL,
       USER_CENTER: process.env.USER_CENTER,
       HOME_PAGE: process.env.HOME_PAGE,
-      AVATAR_URL: process.env.AVATAR_URL,
+      AVATAR_URL: process.env.AVATAR_URL
     }
-  },
+  }
 }

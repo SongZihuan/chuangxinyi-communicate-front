@@ -16,18 +16,18 @@ export const useConfigStore = defineStore("config", ()=> {
   })
 
   const siteTitle = computed(() => {
-    return setting.siteTitle || ''
+    return setting.value.siteTitle || ''
   })
 
   const siteDescription = computed(() => {
-    return setting.siteDescription || ''
+    return setting.value.siteDescription || ''
   })
 
   const siteKeywords = computed(() => {
-    return setting.siteKeywords || ''
+    return setting.value.siteKeywords || ''
   })
 
-  const setConfig = (config) => {
+  const setConfig = (config: { setting: any, appinfo: any }) => {
     setting.value = config.setting
     appinfo.value = config.appinfo
   }
@@ -44,15 +44,3 @@ export const useConfigStore = defineStore("config", ()=> {
     setConfig,
   }
 })
-
-export const getters = {
-  siteTitle(state) {
-    return state.setting.siteTitle || ''
-  },
-  siteDescription(state) {
-    return state.setting.siteDescription || ''
-  },
-  siteKeywords(state) {
-    return state.setting.siteKeywords || ''
-  },
-}

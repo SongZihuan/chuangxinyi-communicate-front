@@ -1,7 +1,6 @@
 <template>
-  <div>
-    Hello, World
-<!--    <nav-bar />-->
+  <div class="zendea">
+    <NavBar />
 
 <!--    <nuxt />-->
 
@@ -11,15 +10,7 @@
 </template>
 
 <script setup lang="ts">
-// import NavBar from '~/components/NavBar'
+import NavBar from '~/components/NavBar'
 // import MyFooter from '~/components/MyFooter'
 // import BackToTop from '~/components/BackToTop'
-//
-// export default {
-//   components: {
-//     NavBar,
-//     MyFooter,
-//     BackToTop
-//   }
-// }
 </script>

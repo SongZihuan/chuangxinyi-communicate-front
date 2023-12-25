@@ -10,7 +10,7 @@ export const useAuthStore = defineStore("auth", ()=> {
     if (cookieJwt.value) {
       setUserJwt(cookieJwt.value)
     }
-    return cookieJwt.token
+    return cookieJwt.value as string
   })
 
   // 获取当前登录用户
@@ -23,7 +23,14 @@ export const useAuthStore = defineStore("auth", ()=> {
     }
   })
 
-  const setCurrentUser = (user) => {
+  const currentUserName = computed(() => {
+    if (!currentUser.value) {
+      return "陌生用户"
+    }
+    return currentUser.value.nickname || currentUser.value.username || currentUser.value.email || currentUser.value.phone
+  })
+
+  const setCurrentUser = (user: any) => {
     currentUser.value = user
   }
 
@@ -64,6 +71,7 @@ export const useAuthStore = defineStore("auth", ()=> {
     setCurrentUser,
     setUserJwt,
 
+    currentUserName,
     getTokenFromCookie,
     getCurrentUser,
 
