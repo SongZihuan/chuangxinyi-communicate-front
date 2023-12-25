@@ -19,7 +19,7 @@ if (process.client) {
   let loginToken = route.query?.token
   let subToken = route.query?.subToken
   console.log("AAA", loginToken, subToken)
-  let hasRoute = false  // 确保必须路由到一个页面
+  let hasRoute = ref(false)  // 确保必须路由到一个页面
 
   if (loginToken && subToken) {
     try {
@@ -33,7 +33,7 @@ if (process.client) {
     }
   }
 
-  if (!hasRoute) {
+  if (!hasRoute.value) {
     utils.linkTo("/")
   }
 
