@@ -104,7 +104,7 @@ let Utils = {
     return this.formatDate(timestamp, 'yyyy-MM-dd HH:mm:ss')
   },
 
-  siteTitle: (subTitle: string) => {
+  siteTitle: (subTitle: string|undefined = undefined) => {
     const configStore = useConfigStore()
     const title = configStore.siteTitle || ''
     if (subTitle) {
