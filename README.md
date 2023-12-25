@@ -9,7 +9,7 @@
 $ npm install
 
 # edit configurations
-$ cp nuxt.config.example.js nuxt.config.js
+$ cp nuxt.config.example.js nuxt.config.ts
 
 # serve with hot reload at localhost:3000
 $ npm run dev
