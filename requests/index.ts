@@ -1,5 +1,5 @@
 import qs from 'qs'
-import { useAuthStore } from '../store/auth'
+import { useAuthStore } from '~/store/auth'
 
 interface req {
     url: string,
@@ -38,41 +38,47 @@ export default function (requests: req, opt?: any) {
 
     return useNuxtApp().runWithContext(() => {
       const token = useAuthStore().userJwt
-      return useFetch(requests.url, {
-          method: requests.method,
-          body: requests.data,
 
-          query: requests.query,
+      const cfg = {
+        method: requests.method,
+        body: requests.data,
 
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            "Authorization": `Bearer ${token}`
-          },
+        query: requests.query,
 
-          ...opt,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          "Authorization": `Bearer ${token}`
+        },
 
-          onRequest({ options }) {
-            options.transformRequest = [
-              function(data) {
-                if (process.client && data instanceof FormData) {
-                  // 如果是FormData就不转换
-                  return data
-                }
-                data = qs.stringify(data)
+        ...opt,
+
+        onRequest({ options }) {
+          options.transformRequest = [
+            function(data) {
+              if (process.client && data instanceof FormData) {
+                // 如果是FormData就不转换
                 return data
               }
-            ]
+              data = qs.stringify(data)
+              return data
+            }
+          ]
 
-            options.baseURL = getBaseAPI().baseAPI()
-          },
+          options.baseURL = getBaseAPI().baseAPI()
+        },
 
-          onRequestError({ error }) {
-              console.info("fetch requests error: ", error)
-          },
+        onRequestError({ error }) {
+          console.info("fetch requests error: ", error)
+        },
 
-          onResponseError({ error }) {
-              console.info("fetch error: ", error)
-          }
-      })
+        onResponseError({ error }) {
+          console.info("fetch error: ", error)
+        }
+      }
+
+      if (requests.useCache) {
+        return useFetch(requests.url, cfg)
+      }
+      return $fetch(requests.url, cfg)
   })
 }

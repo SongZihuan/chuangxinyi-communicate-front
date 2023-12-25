@@ -56,6 +56,9 @@ dependencies:
   vue-infinite-scroll:
     specifier: ^2.0.2
     version: 2.0.2
+  vue-lazyload:
+    specifier: ^3.0.0
+    version: 3.0.0
   vue-router:
     specifier: ^4.2.5
     version: 4.2.5(vue@3.3.13)
@@ -7439,6 +7442,10 @@ packages:
 
   /vue-infinite-scroll@2.0.2:
     resolution: {integrity: sha512-n+YghR059YmciANGJh9SsNWRi1YZEBVlODtmnb/12zI+4R72QZSWd+EuZ5mW6auEo/yaJXgxzwsuhvALVnm73A==, tarball: https://registry.npmmirror.com/vue-infinite-scroll/-/vue-infinite-scroll-2.0.2.tgz}
+    dev: false
+
+  /vue-lazyload@3.0.0:
+    resolution: {integrity: sha512-h2keL/Rj550dLgesgOtXJS9qOiSMmuJNeVlfNAYV1/IYwOQYaWk5mFJlwRxmZDK9YC5gECcFLYYj7z1lKSf9ug==, tarball: https://registry.npmmirror.com/vue-lazyload/-/vue-lazyload-3.0.0.tgz}
     dev: false
 
   /vue-router@4.2.5(vue@3.3.13):
