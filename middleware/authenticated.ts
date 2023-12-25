@@ -13,7 +13,7 @@ export default async function(to) {
   }
 
   if (to.path.indexOf('/admin') === 0) {
-    if (!isAdminUser(nuxtApp, user)) {
+    if (!isAdminUser(user)) {
       abortNavigation({
         statusCode: 403,
         message: '403 forbidden'

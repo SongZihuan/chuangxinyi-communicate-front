@@ -1,74 +1,92 @@
 <template>
   <section class="main">
-    Hello, World
-<!--    <div class="container main-container left-main">-->
-<!--      <div class="left-container">-->
-<!--        <div class="main-content">-->
-<!--          <topics-nav />-->
-<!--          <topic-list :topics="topicsPage.results" :show-ad="true" />-->
-<!--          <pagination :page="topicsPage.page" url-prefix="/topics?p=" />-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <topic-side :score-rank="scoreRank" :links="links" :stat="stat" />-->
-<!--    </div>-->
+    <div class="container main-container left-main">
+      <div class="left-container">
+        <div class="main-content">
+          <TopicsNav />
+          <TopicList :topics="topicsPage.results" :show-ad="true" />
+          <Pagination :page="topicsPage.page" url-prefix="/topics?p=" />
+        </div>
+      </div>
+      <TopicSide :score-rank="scoreRank" :links="links" :stat="stat" />
+    </div>
   </section>
 </template>
 
-<script>
-// import TopicSide from '~/components/TopicSide'
-// import TopicsNav from '~/components/TopicsNav'
-// import TopicList from '~/components/TopicList'
-// import Pagination from '~/components/Pagination'
-//
-// export default {
-//   components: {
-//     TopicSide,
-//     TopicsNav,
-//     TopicList,
-//     Pagination,
-//   },
-//   async asyncData({ $axios, query }) {
-//     try {
-//       const [topicsPage, scoreRank, links, stat] = await Promise.all([
-//         $axios.get('/api/topics', {
-//           params: {
-//             page: query.p || 1,
-//           },
-//         }),
-//         $axios.get('/api/user/score/rank'),
-//         $axios.get('/api/links/top'),
-//         $axios.get('/api/stat'),
-//       ])
-//       return { topicsPage, scoreRank, links, stat }
-//     } catch (e) {
-//       console.error(e)
-//     }
-//   },
-//   methods: {
-//     twitterCreated(data) {
-//       if (this.topicsPage) {
-//         if (this.topicsPage.results) {
-//           this.topicsPage.results.unshift(data)
-//         } else {
-//           this.topicsPage.results = [data]
-//         }
-//       }
-//     },
-//   },
-//   head() {
-//     return {
-//       title: this.$siteTitle('社区'),
-//       meta: [
-//         {
-//           hid: 'description',
-//           name: 'description',
-//           content: this.$siteDescription(),
-//         },
-//         { hid: 'keywords', name: 'keywords', content: this.$siteKeywords() },
-//       ],
-//     }
-//   },
-// }
+<script setup lang="ts">
+import TopicSide from '~/components/TopicSide'
+import TopicsNav from '~/components/TopicsNav'
+import TopicList from '~/components/TopicList'
+import Pagination from '~/components/Pagination'
+import { useStatApi } from '~/api/stat'
+import { useTopicApi } from '~/api/topics'
+import { useLinksApi } from '~/api/links'
+import { useUserApi } from '~/api/user'
+import Utils from "~/common/utils"
+
+const topicsPage = ref({})
+const scoreRank = ref([])
+const links = ref([])
+const stat = ref({})
+
+const route = useRoute()
+
+const getTopics = async () => {
+  let {data, status, error} = await useTopicApi().topics({
+    page: route.query.p || 1,
+  })
+  if (status.value === "success") {
+    topicsPage.value = data.value.data
+  } else {
+    console.log(status.value, error && error.value)
+  }
+}
+
+const getUserScoreRand = async () => {
+  let {data, status, error} = await useUserApi().scoreRank()
+  if (status.value === "success") {
+    scoreRank.value = data.value.data
+  } else {
+    console.log(status.value, error && error.value)
+  }
+}
+
+const getLinksTop = async () => {
+  let {data, status, error} = await useLinksApi().topLinks()
+  if (status.value === "success") {
+    links.value = data.value.data
+  } else {
+    console.log(status.value, error && error.value)
+  }
+}
+
+const getStat = async () => {
+  let {data, status, error} = await useStatApi().stat()
+  if (status.value === "success") {
+    stat.value = data.value.data
+  } else {
+    console.log(status.value, error && error.value)
+  }
+}
+
+await Promise.all([
+  getTopics(),
+  getUserScoreRand(),
+  getLinksTop(),
+  getStat(),
+])
+
+useHead({
+  title: Utils.siteTitle("社区"),
+  meta: [
+    {
+      name: 'description',
+      content: Utils.siteDescription(),
+    },
+    { name: 'keywords', content: Utils.siteKeywords() },
+  ],
+})
+
 </script>
 
 <style lang="scss" scoped></style>

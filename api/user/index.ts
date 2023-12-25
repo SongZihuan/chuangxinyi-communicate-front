@@ -22,5 +22,15 @@ export function useUserApi() {
         }
       )
     },
+    scoreRank: async () => {
+      return request({
+            url: '/api/user/score/rank',
+            method: "GET",
+            query: {},
+            data: undefined,
+            useCache: true,
+          }
+        )
+    },
   };
 }

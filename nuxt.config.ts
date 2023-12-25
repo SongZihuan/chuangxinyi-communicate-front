@@ -1,11 +1,7 @@
 export default {
   devtools: { enabled: true },
-  server: {
+  devServer: {
     port: process.env.SERVER_PORT,
-    host: '0.0.0.0',
-    timing: {
-      total: true
-    }
   },
 
   /*

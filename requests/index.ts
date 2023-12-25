@@ -37,43 +37,42 @@ export default function (requests: req, opt?: any) {
     }
 
     return useNuxtApp().runWithContext(() => {
-        return useFetch(requests.url, {
-            method: requests.method,
-            body: requests.data,
+      const token = useAuthStore().userJwt
+      return useFetch(requests.url, {
+          method: requests.method,
+          body: requests.data,
 
-            query: requests.query,
+          query: requests.query,
 
-            ...opt,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            "Authorization": `Bearer ${token}`
+          },
 
-            onRequest({ options }) {
-              options.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+          ...opt,
 
-              const token = useAuthStore().userJwt
-              if (token) {
-                options.headers["Authorization"] = `Bearer ${token}`
-              }
-
-              options.transformRequest = [
-                function(data) {
-                  if (process.client && data instanceof FormData) {
-                    // 如果是FormData就不转换
-                    return data
-                  }
-                  data = qs.stringify(data)
+          onRequest({ options }) {
+            options.transformRequest = [
+              function(data) {
+                if (process.client && data instanceof FormData) {
+                  // 如果是FormData就不转换
                   return data
                 }
-              ]
+                data = qs.stringify(data)
+                return data
+              }
+            ]
 
-              options.baseURL = getBaseAPI().baseAPI()
-            },
+            options.baseURL = getBaseAPI().baseAPI()
+          },
 
-            onRequestError({ error }) {
-                console.info("fetch requests error: ", error.value)
-            },
+          onRequestError({ error }) {
+              console.info("fetch requests error: ", error)
+          },
 
-            onResponseError({ error }) {
-                console.info("fetch error: ", error.value)
-            }
-        })
-    })
+          onResponseError({ error }) {
+              console.info("fetch error: ", error)
+          }
+      })
+  })
 }
