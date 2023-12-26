@@ -56,5 +56,107 @@ export function useUserApi() {
         }
       )
     },
+    profile: async (id: number) => {
+      return request({
+          url: '/api/profile/' + id,
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    topics: async (id: number, page: number) => {
+      return request({
+          url: '/api/user/topics/' + id,
+          method: "GET",
+          query: {
+            userId: id,
+            page: page
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    articles: async (id: number, page: number) => {
+      return request({
+          url: '/api/user/articles/' + id,
+          method: "GET",
+          query: {
+            userId: id,
+            page: page
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    watched: async (id: number) => {
+      return request({
+          url: '/api/watch/watched',
+          method: "GET",
+          query: {
+            userId: id,
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    recentwatchers: async (id: number) => {
+      return request({
+          url: '/api/users/' + id + '/recentwatchers',
+          method: "GET",
+          query: {
+            userId: id,
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    topicesRecent: async (id: number) => {
+      return request({
+          url: '/api/topics/user/recent/' + id + '',
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    articleRecent: async (id: number) => {
+      return request({
+          url: '/api/articles/user/recent/' + id + '',
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    deleteWatched: async (id: number) => {
+      return request({
+          url: '/api/watch/delete',
+          method: "GET",
+          query: {
+            userId: id,
+          },
+          data: {},
+          useCache: false,
+        }
+      )
+    },
+    addWatched: async (id: number) => {
+      return request({
+          url: '/api/users/' + id + '/watch',
+          method: "GET",
+          query: {},
+          data: {},
+          useCache: false,
+        }
+      )
+    },
   };
 }
