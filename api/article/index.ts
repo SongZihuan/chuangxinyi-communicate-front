@@ -144,5 +144,25 @@ export function useArticleApi() {
         }
       )
     },
+    getEdit: async (id: number) => {
+      return request({
+          url: '/api/article/' + id + '/edit',
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: false,
+        }
+      )
+    },
+    edit: async (id: number, data: any) => {
+      return request({
+          url: '/api/article/' + id,
+          method: "PUT",
+          query: {},
+          data: data,
+          useCache: false,
+        }
+      )
+    },
   }
 }
