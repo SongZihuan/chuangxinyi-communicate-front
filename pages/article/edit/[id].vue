@@ -88,7 +88,7 @@ const articleId = route.params.id
 let article = ref({})
 
 const getEdis = async () => {
-  let {data, status, error} = await useTopicApi().edit(articleId)
+  let {data, status, error} = await useTopicApi().getEdit(articleId)
   if (status.value === "success") {
     article.value = data.value.data
   } else {

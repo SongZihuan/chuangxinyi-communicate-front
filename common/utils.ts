@@ -3,10 +3,15 @@ import { useAuthStore } from '~/store/auth'
 import { ElMessage } from "element-plus"
 
 let Utils = {
-  linkTo(path: string) {
+  linkTo: async (path: string) => {
+    const router = useRoute()
+    await router.path({
+      path: path
+    })
+  },
+
+  redirectTo(path: string) {
     window.location.href = path
-    // 这里使用$router.push会导致跳转页面之后window.vditor对象undefined，原因未知
-    // window.$nuxt.$router.push(path)
   },
 
   openTo(path: string) {
@@ -96,7 +101,7 @@ let Utils = {
         params: '{}',
       })
 
-      Utils.linkTo(`${runtimeConfig.public.OAUTH2_URL}?${oauth2Query}`)
+      Utils.redirectTo(`${runtimeConfig.public.OAUTH2_URL}?${oauth2Query}`)
     } catch (e) {
       ElMessage.error(e.message || e)
     }

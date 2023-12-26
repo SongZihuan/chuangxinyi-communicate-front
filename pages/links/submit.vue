@@ -115,8 +115,8 @@ const submitLink = async () => {
     })
     if (status === "success" && data.value.success) {
       ElMessage.info('提交成功，请耐心等待审核。')
-      setTimeout(()=>{
-        Utils.linkTo('/links/1')
+      setTimeout(async ()=>{
+        await Utils.linkTo('/links/1')
       }, 1000)
     } else {
       publishing.value = false

@@ -104,7 +104,7 @@ let topic = ref({})
 let nodes = ref({})
 
 const getEdis = async () => {
-  let {data, status, error} = await useTopicApi().edit(topicId)
+  let {data, status, error} = await useTopicApi().getEdit(topicId)
   if (status.value === "success") {
     topic.value = data.value.data
   } else {
@@ -147,7 +147,7 @@ const submitCreate = async () => {
   publishing.value = true
 
   try {
-    let {data, status} = useTopicApi().submitEdit(topic.value.topicId, {
+    let {data, status} = useTopicApi().edit(topic.value.topicId, {
       nodeId: postForm.value.nodeId,
       title: postForm.value.title,
       content: postForm.value.content,
@@ -156,7 +156,9 @@ const submitCreate = async () => {
 
     if (status === "success") {
       ElMessage.info('提交成功')
-      Utils.linkTo('/topic/' + data.value.data.topicId)
+      setTimeout(async () => {
+        await Utils.linkTo('/topic/' + data.value.data.topicId)
+      }, 1000)
     } else {
       publishing.value = false
       ElMessage.error('提交失败：' + (e.message || e))

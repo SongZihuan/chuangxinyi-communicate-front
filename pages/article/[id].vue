@@ -181,10 +181,14 @@ const runtimeConfig = useRuntimeConfig()
 
 const getArticles = async () => {
   let {data, status, error} = await useArticleApi().getArticle(articleId)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     article.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
+    showError({
+      statusCode: 404,
+      message: "文章不存在或被删除"
+    })
   }
 }
 
@@ -267,8 +271,8 @@ const deleteArticle = async (articleId) => {
     let {data, status} = await useArticleApi().delete(articleId)
     if (status === "success" && data.value.success) {
       ElMessage.info("删除成功")
-      setTimeout(()=>{
-        Utils.linkTo('/articles')
+      setTimeout(async ()=>{
+        await Utils.linkTo('/articles')
       }, 1000)
     } else {
       ElMessage.error("删除失败")

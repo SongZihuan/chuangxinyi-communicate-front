@@ -100,8 +100,8 @@ const submitCreate = async () => {
     })
     if (status.value === "success" && data.value.success) {
       ElMessage.info("提交成功")
-      setTimeout(()=>{
-        Utils.linkTo('/article/' + data.value.data.articleId)
+      setTimeout(async ()=>{
+        await Utils.linkTo('/article/' + data.value.data.articleId)
       })
     } else {
       publishing.value = false

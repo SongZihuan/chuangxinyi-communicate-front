@@ -164,5 +164,15 @@ export function useArticleApi() {
         }
       )
     },
+    redirect: async (id: number) => {
+      return request({
+          url: '/api/article/redirect/' + id,
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: false,
+        }
+      )
+    },
   }
 }

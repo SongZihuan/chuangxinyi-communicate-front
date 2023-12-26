@@ -284,8 +284,8 @@ const deleteTopic = async (topicId) => {
   try {
     await useTopicApi().deleteTopic(topicId)
     ElMessage.info('删除成功')
-    setTimeout(() => {
-      Utils.linkTo('/topics')
+    setTimeout(async () => {
+      await Utils.linkTo('/topics')
     }, 1000)
   } catch (e) {
     ElMessage.error('删除失败：' + (e.message || e))
