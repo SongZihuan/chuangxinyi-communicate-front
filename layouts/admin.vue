@@ -121,18 +121,12 @@
       </div>
     </nav>
     <div class="container">
-      <nuxt />
+      <slot />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  middleware: [
-    'authenticated',
-  ],
-})
-
 let navbarActive = ref(false)
 
 const toggleNav = () => {
