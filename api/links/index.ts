@@ -12,5 +12,35 @@ export function useLinksApi() {
         }
       )
     },
+    links: async (query: {page: number}) => {
+      return request({
+          url: '/api/links',
+          method: "GET",
+          query: query,
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    create: async (data: any) => {
+      return request({
+          url: '/api/link/create',
+          method: "POST",
+          query: {},
+          data: data,
+          useCache: false,
+        }
+      )
+    },
+    create: async (data: any) => {
+      return request({
+          url: '/api/link/create',
+          method: "POST",
+          query: {},
+          data: data,
+          useCache: false,
+        }
+      )
+    },
   }
 }
