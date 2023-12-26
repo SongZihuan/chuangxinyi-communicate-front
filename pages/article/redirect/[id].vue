@@ -11,7 +11,7 @@ const articleId = route.params.id
 
 const toRedirect = async () => {
   try {
-    let {data, status} = useArticleApi().redirect(articleId)
+    let {data, status} = await useArticleApi().redirect(articleId)
     if (status.value === "success" && data.value.success) {
       Utils.redirectTo(data.value.data.url)
     } else {

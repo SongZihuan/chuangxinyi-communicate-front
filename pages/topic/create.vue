@@ -168,7 +168,7 @@ const submitCreate = async () => {
   publishing.value = true
 
   try {
-    let {data, status} = useTopicApi().newTopics({
+    let {data, status} = await useTopicApi().newTopics({
       nodeId: postForm.value.nodeId,
       title: postForm.value.title,
       content: postForm.value.content,

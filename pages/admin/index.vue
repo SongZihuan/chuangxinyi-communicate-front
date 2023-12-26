@@ -22,12 +22,17 @@
 
 <script setup lang="ts">
 import { useAdminApi } from '~/api/admin'
+import Utils from "~/common/utils"
 
 definePageMeta({
   layout: "admin",
   middleware: [
     'authenticated',
   ],
+})
+
+useHead({
+  title: Utils.siteTitle("管理员")
 })
 
 let systeminfo = ref({})
