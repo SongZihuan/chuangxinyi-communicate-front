@@ -32,15 +32,5 @@ export function useLinksApi() {
         }
       )
     },
-    create: async (data: any) => {
-      return request({
-          url: '/api/link/create',
-          method: "POST",
-          query: {},
-          data: data,
-          useCache: false,
-        }
-      )
-    },
   }
 }

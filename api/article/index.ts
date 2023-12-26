@@ -42,5 +42,15 @@ export function useArticleApi() {
         }
       )
     },
+    create: async (data: any) => {
+      return request({
+          url: '/api/articles',
+          method: "POST",
+          query: {},
+          data: data,
+          useCache: false,
+        }
+      )
+    },
   }
 }
