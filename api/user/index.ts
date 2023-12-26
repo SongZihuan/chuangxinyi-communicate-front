@@ -32,5 +32,17 @@ export function useUserApi() {
           }
         )
     },
+    scoreLog: async (page: number) => {
+      return request({
+          url: '/api/user/scorelogs',
+          method: "GET",
+          query: {
+            page: page || 1,
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
   };
 }
