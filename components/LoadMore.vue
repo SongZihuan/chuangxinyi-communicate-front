@@ -27,7 +27,8 @@ const props = defineProps({
     type: Object,
     default() {
       return {}
-    }
+    },
+    required: false
   },
   // 初始化数据
   initData: {
@@ -53,15 +54,15 @@ let disabled = computed((): boolean => {
 const loadMore = async () => {
   loading.value = true
   try {
-    const _params = Object.assign(params.value || {}, {
+    const _params = Object.assign(props.params || {}, {
       cursor: cursor.value
     })
     let {data, status} = await requests({
-      url: url.value,
+      url: props.url,
       method: "GET",
       query: _params,
       data: undefined,
-      useCache: true,
+      useCache: false,
     })
 
     if (status == "success") {

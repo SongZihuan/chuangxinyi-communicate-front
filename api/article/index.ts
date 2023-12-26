@@ -52,5 +52,97 @@ export function useArticleApi() {
         }
       )
     },
+    getArticle: async (id: number) => {
+      return request({
+          url: '/api/article/' + id,
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    comments: async (id: number) => {
+      return request({
+          url: "/api/comments",
+          method: "GET",
+          query: {
+            entityType: 'article',
+            entityId: id,
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    favorited: async (id: number) => {
+      return request({
+          url: '/api/favorites/favorited',
+          method: "GET",
+          query: {
+            entityType: 'article',
+            entityId: id,
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    related: async (id: number) => {
+      return request({
+          url: '/api/articles/related/' + id,
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    newest: async (userId: number) => {
+      return request({
+          url: '/api/articles/user/newest/' + userId,
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    delete: async (id: number) => {
+      return request({
+          url: '/api/article/delete/' + id,
+          method: "POST",
+          query: {},
+          data: {},
+          useCache: false,
+        }
+      )
+    },
+    favoriteDelete: async (id: number) => {
+      return request({
+          url: '/api/favorite/delete',
+          method: "DELETE",
+          query: {
+            entityType: 'article',
+            entityId: id
+          },
+          data: {},
+          useCache: false,
+        }
+      )
+    },
+    favoriteAdd: async (id: number) => {
+      return request({
+          url: '/api/article/' + id + '/favorite',
+          method: "DELETE",
+          query: {
+            entityType: 'article',
+            entityId: id
+          },
+          data: {},
+          useCache: false,
+        }
+      )
+    },
   }
 }
