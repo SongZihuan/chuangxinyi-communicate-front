@@ -44,5 +44,17 @@ export function useUserApi() {
         }
       )
     },
+    favorites: async (cursor: number) => {
+      return request({
+          url: '/api/user/favorites',
+          method: "GET",
+          query: {
+            cursor: cursor,
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
   };
 }

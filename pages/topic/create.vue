@@ -174,7 +174,7 @@ const submitCreate = async () => {
       content: postForm.value.content,
       tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
     })
-    if (status === "success" && data.value.success) {
+    if (status.value === "success" && data.value.success) {
       mdEditor.value.clearCache()
       ElMessage.info('提交成功')
       setTimeout(()=>{

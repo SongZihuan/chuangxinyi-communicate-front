@@ -154,7 +154,7 @@ const submitCreate = async () => {
       tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
     })
 
-    if (status === "success") {
+    if (status.value === "success") {
       ElMessage.info('提交成功')
       setTimeout(async () => {
         await Utils.linkTo('/topic/' + data.value.data.topicId)

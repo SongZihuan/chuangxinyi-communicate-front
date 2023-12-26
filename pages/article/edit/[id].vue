@@ -123,7 +123,7 @@ const submitCreate = async () => {
       content: postForm.value.content,
       tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
     })
-    if (status === "success" && data.value.success) {
+    if (status.value === "success" && data.value.success) {
       ElMessage.success('修改成功')
       setTimeout(()=>{
         utils.linkTo('/article/' + article.articleId)

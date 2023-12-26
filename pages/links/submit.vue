@@ -113,7 +113,7 @@ const submitLink = async () => {
       summary: this.summary,
       logo: this.logo
     })
-    if (status === "success" && data.value.success) {
+    if (status.value === "success" && data.value.success) {
       ElMessage.info('提交成功，请耐心等待审核。')
       setTimeout(async ()=>{
         await Utils.linkTo('/links/1')

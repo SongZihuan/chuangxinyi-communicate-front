@@ -295,7 +295,7 @@ const deleteTopic = async (topicId) => {
 const like = async (topic) => {
   try {
     let {data, status} = await useTopicApi().likeTopic(topic.value.topicId)
-    if (status === "success") {
+    if (status.value === "success") {
       if (data.value.code === 1) {
         ElMessage.info('请登录后点赞')
       } else if (data.value.success) {
