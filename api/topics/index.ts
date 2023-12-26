@@ -2,11 +2,72 @@ import request from '~/requests/index'
 
 export function useTopicApi() {
   return {
-    topics: async (query: object) => {
+    topics: async (page: number) => {
       return request({
           url: '/api/topics',
           method: "GET",
-          query: query,
+          query: {
+            page: page || 1,
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    topicsRecommend: async (page: number) => {
+      return request({
+          url: '/api/topics/recommend',
+          method: "GET",
+          query: {
+            page: page || 1
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    topicsLast: async (page: number) => {
+      return request({
+          url: '/api/topics/last',
+          method: "GET",
+          query: {
+            page: page || 1
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    topicsNoReply: async (page: number) => {
+      return request({
+          url: '/api/topics/noreply',
+          method: "GET",
+          query: {
+            page: page || 1
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    topicsTag: async (page: number, id: number) => {
+      return request({
+          url: '/api/topics/noreply',
+          method: "GET",
+          query: {
+            tagId: id,
+            page: page || 1
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    tag: async (id: number) => {
+      return request({
+          url: '/api/tag/' + id,
+          method: "GET",
+          query: {},
           data: undefined,
           useCache: true,
         }
@@ -158,6 +219,19 @@ export function useTopicApi() {
           query: {},
           data: data,
           useCache: false,
+        }
+      )
+    },
+    topicsNode: async (page: number, id: number) => {
+      return request({
+          url: '/api/topics/node',
+          method: "GET",
+          query: {
+            nodeId: id,
+            page: page || 1
+          },
+          data: undefined,
+          useCache: true,
         }
       )
     },

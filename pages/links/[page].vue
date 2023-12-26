@@ -61,10 +61,11 @@ import Utils from '~/common/utils'
 let linksPage = ref({})
 
 const route = useRoute()
+const page = route.params.page || 1
 
 const getLinkPage = async () => {
   let {data, status, error} = await useLinksApi().links({
-    page: route.params.page
+    page: page
   })
   if (status.value === "success") {
     linksPage.value = data.value.data
