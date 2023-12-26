@@ -9,7 +9,7 @@
                 <li><a href="/">首页</a></li>
                 <li>
                   <a :href="'/user/' + user.id + '?tab=topics'">{{
-                    user.username
+                    username
                   }}</a>
                 </li>
                 <li class="is-active">
@@ -145,11 +145,8 @@ await Promise.all([
 
 let publishing = ref(false)
 
-let user = computed(()=>{
-  return authStore.currentUser
-})
-
-console.log(authStore.currentUser)
+let user = authStore.currentUser
+let username = authStore.currentUserName
 
 let mdEditor = ref(null)
 

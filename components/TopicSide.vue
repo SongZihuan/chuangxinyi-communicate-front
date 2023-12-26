@@ -94,13 +94,6 @@ let currentNodeId = ref(props.currentNodeId)
 let links = ref(props.links)
 let stat = ref(props.stat)
 let scoreRank = ref(props.scoreRank)
-
-watch(scoreRank.value, ()=>{
-  console.log("AAA CHANGE", scoreRank.value)
-})
-
-console.log("BASE", scoreRank.value)
-
 </script>
 
 <style lang="scss" scoped>

@@ -5,16 +5,23 @@ export const useAuthStore = defineStore("auth", ()=> {
   let currentUser = ref(null)
   let userJwt = ref("")
 
-  const getTokenFromCookie = computed((): string => {
-    let cookieJwt = useCookie("jwt")
+  const getTokenFromCookie = computed(async (): Promise<string> => {
+    let cookieJwt = useCookie("jwt", {
+      path: "/",
+    })
     if (cookieJwt.value) {
       setUserJwt(cookieJwt.value)
     }
-    return cookieJwt.value as string
+    return JSON.stringify(cookieJwt.value)
   })
 
   // 获取当前登录用户
   const getCurrentUser = computed(async (): Promise<any> => {
+    if (!userJwt.value) {
+      currentUser.value = null
+      return
+    }
+
     let {data, status} = await useUserApi().getCurrentUser()
     if (status.value === "success" && data.value.success) {
       const user = data.value.data
@@ -40,7 +47,9 @@ export const useAuthStore = defineStore("auth", ()=> {
 
   const loginSuccess = ({ token }, nuxtApp: any): string => {
     nuxtApp.runWithContext(()=>{
-      let cookieJwt = useCookie("jwt")
+      let cookieJwt = useCookie("jwt", {
+        path: "/",
+      })
       cookieJwt.value = token
       setUserJwt(token)
     })
@@ -58,12 +67,23 @@ export const useAuthStore = defineStore("auth", ()=> {
   }
 
   // 退出登录
-  const logout = async () => {
-    let cookieJwt = useCookie("jwt")
-
+  const logout = async (nuxtApp: any) => {
+    console.log("AAA")
     setCurrentUser(null)
     setUserJwt("")
-    cookieJwt.value = ""
+
+
+    let cookieJwt = useCookie("jwt", {
+      path: "/",
+    })
+    console.log("BBB", cookieJwt.value)
+    cookieJwt.value = null
+    console.log("DDD", cookieJwt.value)
+
+    let cookieJwt2 = useCookie("jwt", {
+      path: "/",
+    })
+    console.log("CCC", cookieJwt2.value)
   }
 
   return {

@@ -18,7 +18,7 @@ export function useUserApi() {
           method: "POST",
           query: {},
           data: data,
-          useCache: true,
+          useCache: false,
         }
       )
     },

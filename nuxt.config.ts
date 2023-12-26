@@ -45,7 +45,8 @@ export default {
       REDIECT_URL: process.env.REDIECT_URL,
       USER_CENTER: process.env.USER_CENTER,
       HOME_PAGE: process.env.HOME_PAGE,
-      AVATAR_URL: process.env.AVATAR_URL
+      AVATAR_URL: process.env.AVATAR_URL,
+      ENV: process.env.ENV || "development",
     }
   }
 }

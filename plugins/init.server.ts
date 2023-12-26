@@ -6,6 +6,6 @@ export default defineNuxtPlugin(async (): Promise<void> => {
   await configStore.loadConfig
 
   const authStore = useAuthStore()
-  authStore.getTokenFromCookie
-  authStore.getCurrentUser
+  await authStore.getTokenFromCookie
+  await authStore.getCurrentUser
 })

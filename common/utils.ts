@@ -67,9 +67,12 @@ let Utils = {
     })
   },
 
-  toSignin: async (nuxt: any, ref: string="") => {
-    if (!ref && process.client) {
-      // 如果没配置refUrl，那么取当前地址
+  toSignin: async (nuxtApp: any, ref: string="") => {
+    if (process.server) {
+      return
+    }
+
+    if (!ref) {
       ref = window.location.pathname
     }
 

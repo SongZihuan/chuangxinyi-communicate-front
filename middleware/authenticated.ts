@@ -6,25 +6,34 @@ export default async function(to: { path: string | string[] }) {
   const authStore = useAuthStore()
   const user = authStore.currentUser
 
-  console.log("AAAAA", user)
-
-  if (!user) {
-    console.log("BBBB")
-    const nuxtApp = useNuxtApp()
-    await Utils.toSignin(nuxtApp)
-    return
-  }
+  console.log("AAA")
 
   if (to.path.indexOf('/admin') === 0) {
     if (!isAdminUser(user)) {
       abortNavigation({
         statusCode: 403,
-        message: '403 forbidden'
+        message: '你不允许访问此页面'
       })
+      return
+    }
+  } else {
+    console.log("BBB", user)
+    if (!isNormalUser(user)) {
+      const nuxtApp = useNuxtApp()
+      await Utils.toSignin(nuxtApp)
+      abortNavigation({
+        statusCode: 403,
+        message: '请先登录在进行操作'
+      })
+      return
     }
   }
 }
 
 function isAdminUser(user: any): boolean {
   return user && user.level === useConfigStore().appinfo.user_level_admin
+}
+
+function isNormalUser(user: any): boolean {
+  return user
 }

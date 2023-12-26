@@ -7,9 +7,12 @@
               props.error.message ? props.error.message : '页面没找到'
           }}</span>
           <span v-if="props.error.statusCode === 403">{{
-              props.error.message ? props.error.message : 'forbidden'
+              props.error.message ? props.error.message : '不允许访问'
           }}</span>
-          <span v-else>{{ props.error.statusCode }} 页面异常</span>
+          <span v-else>
+            {{ props.error.statusCode }}
+            {{ runtimeConfig.public.ENV === "development" ? (props.error.message ? props.error.message : '页面错误' ): "页面错误" }}
+          </span>
         </div>
       </div>
     </div>
@@ -24,6 +27,8 @@ const props = defineProps({
     default: null,
   }
 })
+
+const runtimeConfig = useRuntimeConfig()
 
 </script>
 

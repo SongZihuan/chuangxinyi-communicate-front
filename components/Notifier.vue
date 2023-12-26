@@ -42,9 +42,7 @@
   let authStore = useAuthStore()
   const runtimeConfig = useRuntimeConfig()
 
-  let user = computed((): any =>{
-    return authStore.currentUser
-  })
+  let user = authStore.currentUser
 
   const getMsgcount = async () => {
     if (user) {

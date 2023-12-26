@@ -8,9 +8,14 @@ import utils from '~/common/utils'
 import {ElMessage} from "element-plus"
 import {useAuthStore} from '~/store/auth'
 
+definePageMeta({
+  layout: "base",
+})
+
 const route = useRoute()
 
 if (process.client) {
+  NextLoading.start()
   let redirect = route.query?.redirect
   if (!redirect) {
     redirect = "/"
@@ -18,12 +23,11 @@ if (process.client) {
 
   let loginToken = route.query?.token
   let subToken = route.query?.subToken
-  console.log("AAA", loginToken, subToken)
   let hasRoute = ref(false)  // 确保必须路由到一个页面
 
   if (loginToken && subToken) {
     try {
-      useAuthStore().login({
+      await useAuthStore().login({
         token: loginToken
       }, useNuxtApp())
       utils.linkTo(redirect)
@@ -34,7 +38,9 @@ if (process.client) {
   }
 
   if (!hasRoute.value) {
-    utils.linkTo("/")
+    setTimeout(()=>{
+      utils.linkTo("/")
+    }, 1000)
   }
 
   NextLoading.done();

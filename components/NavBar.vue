@@ -96,9 +96,7 @@ const authStore = useAuthStore()
 
 let navbarActive = ref(false)
 
-let user = computed((): any => {
-  return authStore.currentUser
-})
+let user = authStore.currentUser
 
 let username = computed((): string => {
   return authStore.currentUserName
@@ -120,7 +118,7 @@ const login = async () => {
 
 const logout = async () => {
   try {
-    await authStore.logout()
+    await authStore.logout(useNuxtApp())
     let ref = '/'
     if (ref === '/' && process.client) {
       ref = window.location.pathname
