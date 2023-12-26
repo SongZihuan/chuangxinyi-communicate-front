@@ -161,5 +161,18 @@ export function useTopicApi() {
         }
       )
     },
+    topicsNode: async (page: number, id: number) => {
+      return request({
+          url: '/api/topics/node',
+          method: "GET",
+          query: {
+            nodeId: id,
+            page: page || 1
+          },
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
   }
 }
