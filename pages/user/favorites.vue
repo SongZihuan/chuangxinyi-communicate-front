@@ -30,7 +30,7 @@
                 <article v-else class="article-item">
                   <div class="article-item-left">
                     <a :href="'/user/' + favorite.user.id" target="_blank">
-                      <img v-lazy="$config.AVATAR_URL + '?uid=' + favorite.user.uid" class="avatar" />
+                      <img v-lazy="runtimeConfig.public.AVATAR_URL + '?uid=' + favorite.user.uid" class="avatar" />
                     </a>
                   </div>
 
@@ -78,6 +78,8 @@ import UserCenterSidebar from '~/components/UserCenterSidebar'
 import Utils from '../../common/utils'
 import { useAuthStore } from '~/store/auth'
 import { useUserApi } from '~/api/user'
+
+const runtimeConfig = useRuntimeConfig()
 
 definePageMeta({
   middleware: [

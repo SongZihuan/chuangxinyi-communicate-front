@@ -198,7 +198,6 @@ const list = async () => {
     if (status.value === "success" && data.value.success) {
       results.value = data.value.data.results
       page.value = data.value.data.page
-      console.log("results", results.value)
     }
   } finally {
     listLoading.value = false
@@ -233,10 +232,9 @@ const addSubmit = async () => {
   }
 }
 const handleEdit = async (index, row) => {
-  let {data, status} = await useAdminApi().edit(row.id)
+  let {data, status} = await useAdminApi().getEditNode(row.id)
   if (status.value ==="success" && data.value.success) {
     editForm.value = Object.assign({}, data.value.data)
-    console.log("editForm", data.value.data, editForm.value, editForm.value.id)
     editFormVisible.value = true
   }
 }

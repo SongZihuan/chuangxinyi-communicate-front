@@ -32,7 +32,7 @@
                 class="message-item"
               >
                 <div class="message-item-left">
-                  <img v-lazy="$config.AVATAR_URL + '?uid=' + message.from.uid" class="avatar" />
+                  <img v-lazy="runtimeConfig.public.AVATAR_URL + '?uid=' + message.from.uid" class="avatar" />
                 </div>
                 <div class="message-item-right">
                   <div class="message-item-meta">
@@ -99,6 +99,8 @@ import UserCenterSidebar from '~/components/UserCenterSidebar'
 import Pagination from '~/components/Pagination'
 import Utils from "~/common/utils"
 import { useAuthStore } from '~/store/auth'
+
+const runtimeConfig = useRuntimeConfig()
 
 definePageMeta({
   middleware: [
