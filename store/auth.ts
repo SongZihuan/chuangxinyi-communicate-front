@@ -67,7 +67,7 @@ export const useAuthStore = defineStore("auth", ()=> {
   }
 
   // 退出登录
-  const logout = async (nuxtApp: any) => {
+  const logout = async () => {
     console.log("AAA")
     setCurrentUser(null)
     setUserJwt("")

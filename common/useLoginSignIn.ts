@@ -10,7 +10,7 @@ export function useOauth2SignIn() {
       const configStore = useConfigStore()
       const runtimeConfig = useRuntimeConfig()
 
-      await authStore.logout(useNuxtApp())
+      await authStore.logout()
 
       let domainUID = configStore.appinfo.domainID
       if (!domainUID) {

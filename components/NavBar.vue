@@ -118,7 +118,7 @@ const login = async () => {
 
 const logout = async () => {
   try {
-    await authStore.logout(useNuxtApp())
+    await authStore.logout()
     let ref = '/'
     if (ref === '/' && process.client) {
       ref = window.location.pathname
