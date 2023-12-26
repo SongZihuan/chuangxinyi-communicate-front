@@ -141,5 +141,25 @@ export function useTopicApi() {
         }
       )
     },
+    edit: async (id: number) => {
+      return request({
+          url: '/api/topic/' + id + '/edit',
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    submitEdit: async (id: number, data: any) => {
+      return request({
+          url: '/api/topic/' + id,
+          method: "PUT",
+          query: {},
+          data: data,
+          useCache: false,
+        }
+      )
+    },
   }
 }

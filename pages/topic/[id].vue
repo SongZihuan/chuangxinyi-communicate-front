@@ -313,6 +313,11 @@ const like = async (topic) => {
     ElMessage.error(e.message || e)
   }
 }
+
+useHead({
+  title: Utils.siteTitle(topic.value.title),
+})
+
 </script>
 
 <style lang="scss" scoped>

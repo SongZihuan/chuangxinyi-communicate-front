@@ -48,6 +48,10 @@ let siteName = computed(()=>{
   return Utils.siteTitle()
 })
 
+useHead({
+  title: Utils.siteTitle('关于')
+})
+
 </script>
 
 <style lang="scss" scoped></style>
