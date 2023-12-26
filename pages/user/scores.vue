@@ -74,7 +74,7 @@ await Promise.all([
 ])
 
 useHead({
-  title: Utils.siteTitle("积分日志"),
+  title: Utils.siteTitle("积分"),
 })
 
 </script>

@@ -108,6 +108,11 @@ const list = async () => {
 await Promise.all([
   list(),
 ])
+
+useHead({
+  title: Utils.siteTitle("喜爱"),
+})
+
 </script>
 
 <style lang="scss" scoped>
