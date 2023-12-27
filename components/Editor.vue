@@ -163,6 +163,14 @@ if (process.client) {
   editorComponent.value = Editor
 }
 
+const clear = () => {
+  editorRef.value && editorRef.value.clear()
+}
+
+defineExpose({
+  clear
+})
+
 </script>
 
 <style lang="scss">

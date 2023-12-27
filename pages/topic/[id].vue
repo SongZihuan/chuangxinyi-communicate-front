@@ -14,7 +14,7 @@
                   :href="'/user/' + topic.user.id"
                   :title="Utils.getUserName(topic.user)"
                 >
-                  avatar
+                  <img :src="runtimeConfig.public.AVATAR_URL + '?uid=' + topic.user.uid" class="avatar" alt="头像" />
                 </a>
               </div>
               <div class="topic-header-center">
@@ -122,7 +122,7 @@
                   :alt="Utils.getUserName(user)"
                   target="_blank"
                 >
-                  avatar
+                  <img :src="runtimeConfig.public.AVATAR_URL + '?uid=' + user.uid" class="avatar" alt="头像" />
                 </a>
               </div>
             </div>
@@ -142,7 +142,7 @@
           <div class="base">
             <div>
               <a :href="'/user/' + topic.user.id" :alt="Utils.getUserName(topic.user)">
-                avatar
+                <img :src="runtimeConfig.public.AVATAR_URL + '?uid=' + topic.user.uid" class="avatar" alt="头像" />
               </a>
             </div>
             <div class="username">
@@ -197,6 +197,7 @@ const authStore = useAuthStore()
 const route = useRoute()
 const topicID = route.params.id
 
+const runtimeConfig = useRuntimeConfig()
 let topic = ref({})
 let favorited = ref(false)
 let commentsPage = ref({})
@@ -274,11 +275,17 @@ onMounted(() => {
 })
 
 const addFavorite = async (topicId) => {
-  if (favorited.value) {
+  if (!favorited.value) {
+    let {data, status} = await useTopicApi().favoriteAdd(topicId)
+    if (status.value === "success" && data.value.success) {
+      favorited.value = true
+      ElMessage.success('已收藏！')
+    }
+  } else {
     let {data, status} = await useTopicApi().favoriteDelete(topicId)
-    if (status === "success" && data.value.success) {
+    if (status.value === "success" && data.value.success) {
       favorited.value = false
-      ElMessage.info('已取消收藏！')
+      ElMessage.success('已取消收藏！')
     }
   }
 }
@@ -289,7 +296,7 @@ const deleteTopic = async (topicId) => {
   }
   let {data, status} = await useTopicApi().deleteTopic(topicId)
   if (status === "success" && data.value.success) {
-    ElMessage.info('删除成功')
+    ElMessage.success('删除成功')
     setTimeout(async () => {
       await Utils.linkTo('/topics')
     }, 1000)
@@ -297,12 +304,14 @@ const deleteTopic = async (topicId) => {
 }
 
 const like = async (topic) => {
-  let {data, status} = await useTopicApi().likeTopic(topic.value.topicId)
+  let {data, status} = await useTopicApi().likeTopic(topic.topicId)
   if (status.value === "success" && data.value.success) {
       topic.value.liked = true
       topic.value.likeCount++
       likeUsers.value = likeUsers.value || []
       likeUsers.value.unshift(authStore.currentUser)
+  } else {
+    console.log("AAA", status.value, data.value)
   }
 }
 

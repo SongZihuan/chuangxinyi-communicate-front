@@ -12,6 +12,13 @@ let show = ref(false)
 let timer = ref("")
 let speed = ref(10)
 
+const props = defineProps({
+  leaveTop: {
+    type: Number,
+    default: 300
+  }
+})
+
 const getScrollTop = () => {
   return document.documentElement.scrollTop || document.body.scrollTop
 }
@@ -33,7 +40,7 @@ const backToTop = () => {
 
 onMounted(()=>{
   window.addEventListener('scroll', () => {
-    show.value = getScrollTop() > leaveTop.value
+    show.value = getScrollTop() > props.leaveTop
   })
 })
 

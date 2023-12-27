@@ -155,7 +155,7 @@ const submitCreate = async () => {
   })
 
   if (status.value === "success" && data.value.success) {
-    ElMessage.info('提交成功')
+    ElMessage.success('提交成功')
     setTimeout(async () => {
       await Utils.linkTo('/topic/' + data.value.data.topicId)
     }, 1000)

@@ -83,6 +83,24 @@ const loadMore = async () => {
     loading.value = false
   }
 }
+
+const unshiftResults = (item) => {
+  if (item) {
+    results.value.unshift(item)
+  }
+}
+
+const pushResults = (item) => {
+  if (item) {
+    results.value.push(item)
+  }
+}
+
+defineExpose({
+  unshiftResults,
+  pushResults,
+})
+
 </script>
 
 <style lang="scss" scoped>

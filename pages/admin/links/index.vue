@@ -245,7 +245,7 @@ const handleAdd = () => {
 const addSubmit = async () => {
   let {data, status} = await useAdminApi().addLinks(addForm.value)
   if (status.value === "success" && data.value.success) {
-    ElMessage.info("提交成功")
+    ElMessage.success("提交成功")
     addFormVisible.value = false
     await list()
   }
@@ -264,7 +264,7 @@ const editSubmit = async () => {
   if (status.value ==="success" && data.value.success) {
     editFormVisible.value = false
     await list()
-    ElMessage.info("编辑成功")
+    ElMessage.success("编辑成功")
   }
 }
 

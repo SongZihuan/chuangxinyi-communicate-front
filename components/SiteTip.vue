@@ -4,7 +4,7 @@
       {{ randomSiteTip.title }}
     </div>
     <div class="widget-content content tip-content">
-      <p v-html="randomSiteTip.content"></p>
+      <div v-html="randomSiteTip.content"></div>
     </div>
   </div>
 </template>

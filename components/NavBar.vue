@@ -124,7 +124,7 @@ const logout = async () => {
       ref = window.location.pathname
     }
 
-    ElMessage.info("退出成功")
+    ElMessage.success("退出成功")
     setTimeout(()=> {
       utils.linkTo(ref)
     }, 1000)

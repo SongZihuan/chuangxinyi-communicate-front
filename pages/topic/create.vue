@@ -149,8 +149,6 @@ let publishing = ref(false)
 let user = authStore.currentUser
 let username = authStore.currentUserName
 
-let mdEditor = ref(null)
-
 const submitCreate = async () => {
   if (publishing.value) {
     return
@@ -175,8 +173,7 @@ const submitCreate = async () => {
     tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
   })
   if (status.value === "success" && data.value.success) {
-    mdEditor.value.clearCache()
-    ElMessage.info('提交成功')
+    ElMessage.success('提交成功')
     setTimeout(()=>{
       Utils.linkTo('/topic/' + data.value.data.topicId)
     }, 1000)

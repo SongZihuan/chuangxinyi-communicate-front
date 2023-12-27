@@ -180,7 +180,7 @@ const addTagName = (tagName) => {
   }
 
   // 标签已经存在
-  if (tags.value && tags.includes(tagName).value) {
+  if (tags.value && tags.value.includes(tagName).value) {
     return false
   }
 

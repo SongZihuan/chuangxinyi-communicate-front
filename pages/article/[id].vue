@@ -269,7 +269,7 @@ const deleteArticle = async (articleId) => {
   }
   let {data, status} = await useArticleApi().delete(articleId)
   if (status.value === "success" && data.value.success) {
-    ElMessage.info("删除成功")
+    ElMessage.success("删除成功")
     setTimeout(async ()=>{
       await Utils.linkTo('/articles')
     }, 1000)
@@ -281,13 +281,13 @@ const addFavorite = async (articleId) => {
     let {data, status} = await useArticleApi().favoriteDelete(articleId)
     if (status.value === "success" && data.value.success) {
       favorited = false
-      ElMessage.info('已取消收藏！')
+      ElMessage.success('已取消收藏！')
     }
   } else {
     let {data, status} = await useArticleApi().favoriteAdd(articleId)
     if (status.value === "success" && data.value.success) {
       favorited = false
-      ElMessage.info('收藏成功！')
+      ElMessage.success('收藏成功！')
     }
   }
 }

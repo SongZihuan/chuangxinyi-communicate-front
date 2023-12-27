@@ -18,7 +18,7 @@
           itemtype="http://schema.org/Comment"
         >
           <div class="comment-avatar">
-            avatar
+            <img :src="runtimeConfig.public.AVATAR_URL + '?uid=' + comment.user.uid" class="avatar" alt="头像" />
           </div>
           <div class="comment-meta">
             <span
@@ -64,7 +64,7 @@
                 itemprop="text"
               />
             </blockquote>
-            <p
+            <div
               v-html="comment.content"
               v-lazy-container="{ selector: 'img' }"
             />
@@ -89,6 +89,7 @@
           </div>
           <Editor
             v-model="content"
+            ref="editorRef"
           />
         </div>
         <div class="comment-button-wrapper">
@@ -112,6 +113,7 @@ import {ElMessage} from "element-plus"
 import {useCommentApi} from "~/api/comment"
 
 const runtimeConfig = useRuntimeConfig()
+let editorRef = ref(null)
 
 const props = defineProps({
   entityType: {
@@ -173,27 +175,23 @@ const create = async () => {
   if (sending.value) {
     return
   }
-  sending = true
+  sending.value = true
 
-  try {
-    let {data, status} = await useCommentApi().comment({
-      entityType: entityType.value,
-      entityId: entityId.value,
-      content: content.value,
-      quoteId: quote.value ? quote.value.commentId : ''
-    })
-    if (status.value === "success" && data.value.success) {
-      commentsLoadMore.value.pushResults(data.value.data)
-      content.value = ''
-      mdEditor.value.clear()
-      quote.value = null
-    }
-  } catch (e) {
-    console.error(e)
-    ElMessage.error('评论失败：' + (e.message || e))
-  } finally {
-    sending.value = false
+  let {data, status} = await useCommentApi().comment({
+    entityType: entityType.value,
+    entityId: entityId.value,
+    content: content.value,
+    quoteId: quote.value ? quote.value.commentId : ''
+  })
+
+  if (status.value === "success" && data.value.success) {
+    commentsLoadMore.value.pushResults(data.value.data)
+    content.value = ''
+    editorRef.value.clear()
+    quote.value = null
   }
+
+  sending.value = false
 }
 const reply = (q) => {
   if (!isLogin) {

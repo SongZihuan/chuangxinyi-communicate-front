@@ -227,7 +227,7 @@ const editSubmit = async  () => {
   if (status.value ==="success" && data.value.success) {
     editFormVisible.value = false
     await list()
-    ElMessage.info("编辑成功")
+    ElMessage.success("编辑成功")
   }
 }
 </script>

@@ -68,13 +68,15 @@ export default function (requests: req, opt?: any) {
           options.baseURL = getBaseAPI().baseAPI()
         },
 
-        onResponse: async (response) => {
+        onResponse: async ({ response }) => {
+          console.log("AAACCC", response)
           if (response.status !== 200) {
             response._data = {
               success: false,
               code: response.status,
               msg: "请求异常",
             }
+            console.log("AABBB")
             return response
           }
 
@@ -94,7 +96,7 @@ export default function (requests: req, opt?: any) {
               ElMessage.error("登录过期，请重新登录")
             }
           } else {
-            ElMessage.error(data.msg || "遇到错误")
+            ElMessage.error(data.message || "遇到错误")
           }
 
           return response

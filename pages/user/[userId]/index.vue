@@ -67,7 +67,7 @@
                 :alt="Utils.getUserName(user)"
                 :title="Utils.getUserName(user)"
               >
-                avatar
+                <img :src="runtimeConfig.public.AVATAR_URL + '?uid=' + user.uid" class="avatar" alt="头像" />
               </a>
             </div>
           </div>
@@ -171,7 +171,7 @@ const toHomePage = () => {
 
 const watch = async (user) => {
   if (!currentUser) {
-    ElMessage.info('请登录后再关注')
+    ElMessage.success('请登录后再关注')
     return
   }
 
@@ -180,7 +180,7 @@ const watch = async (user) => {
     if (status.value ==="success" && data.value.success) {
       watched.value = false
       user.value.watchCount--
-      ElMessage.info('已取消关注！')
+      ElMessage.success('已取消关注！')
       await getUserWatcher()
     }
   } else {
@@ -188,7 +188,7 @@ const watch = async (user) => {
     if (status.value ==="success" && data.value.success) {
       watched.value = true
       user.value.watchCount++
-      ElMessage.info('关注成功！')
+      ElMessage.success('关注成功！')
       await getUserWatcher()
     }
   }
