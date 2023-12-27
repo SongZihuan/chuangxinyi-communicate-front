@@ -7,7 +7,7 @@
             <li><a href="article">首页</a></li>
             <li>
               <a :href="'/user/' + user.id + '?tab=articles'">{{
-                user.username
+                  Utils.getUserName(user)
               }}</a>
             </li>
             <li class="is-active">
@@ -57,7 +57,7 @@ const getUserProfile = async () => {
 }
 
 const getUserArticles = async () => {
-  let {data, status, error} = await useUserApi().topics(userId, page)
+  let {data, status, error} = await useUserApi().articles(userId, page)
   if (status.value === "success" && data.value.success) {
     articlesPage.value = data.value.data
   } else {
@@ -71,7 +71,7 @@ await Promise.all([
 ])
 
 useHead({
-  title: Utils.siteTitle(user.value.username + ' - 文章')
+  title: Utils.siteTitle(Utils.getUserName(user.value) + ' - 文章')
 })
 
 </script>

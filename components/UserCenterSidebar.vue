@@ -1,6 +1,6 @@
 <template>
   <div class="widget">
-    <div class="widget-header" @click="toHomePage" >{{ user.username }} ({{ user.nickname }})</div>
+    <div class="widget-header" @click="toHomePage" >{{ Utils.getUserName(user) }}</div>
     <div class="widget-content">
       <div class="score">
         <i class="iconfont icon-dollar" />

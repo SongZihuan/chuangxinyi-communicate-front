@@ -200,7 +200,7 @@ const autocomplete = async () => {
       input: inputTag.value
     })
 
-    if (status.value === "success") {
+    if (status.value === "success" && data.value.success) {
       autocompleteTags.value = []
       if (data.value.data.length > 0) {
         for (let i = 0; i < data.value.data.length; i++) {

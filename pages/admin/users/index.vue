@@ -228,8 +228,6 @@ const editSubmit = async  () => {
     editFormVisible.value = false
     await list()
     ElMessage.info("编辑成功")
-  } else {
-    ElMessage.error("编辑失败")
   }
 }
 </script>

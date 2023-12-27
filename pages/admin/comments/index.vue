@@ -165,15 +165,11 @@ const handleDelete = (row) => {
     }
   )
     .then(async () => {
-      try {
-        let {data, status} = await useAdminApi().deleteComment(row.id)
-        if (status.value === "success" && data.value.success) {
-          await list()
-          ElMessage.success("删除成功")
-        } else {
-          ElMessage.success("删除失败")
-        }
-      } catch (err) {
+      let {data, status} = await useAdminApi().deleteComment(row.id)
+      if (status.value === "success" && data.value.success) {
+        await list()
+        ElMessage.success("删除成功")
+      } else {
         ElMessage.success("删除失败")
       }
     })

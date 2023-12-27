@@ -278,7 +278,6 @@ const save = async () => {
       ElMessage.success("提交成功")
       await load()
     }
-    console.log("AAA", data.value)
   } finally {
     loading.value = false
   }

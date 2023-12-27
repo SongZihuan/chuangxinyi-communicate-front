@@ -227,8 +227,6 @@ const addSubmit = async () => {
     ElMessage.info("提交成功")
     addFormVisible.value = false
     await list()
-  } else {
-    ElMessage.info("提交失败")
   }
 }
 const handleEdit = async (index, row) => {
@@ -244,8 +242,6 @@ const editSubmit = async () => {
     editFormVisible.value = false
     await list()
     ElMessage.info("编辑成功")
-  } else {
-    ElMessage.error("编辑失败")
   }
 }
 

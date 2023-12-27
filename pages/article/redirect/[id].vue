@@ -10,20 +10,13 @@ const route = useRoute()
 const articleId = route.params.id
 
 const toRedirect = async () => {
-  try {
-    let {data, status} = await useArticleApi().redirect(articleId)
-    if (status.value === "success" && data.value.success) {
-      Utils.redirectTo(data.value.data.url)
-    } else {
-      showError({
-        statusCode: 404,
-        message: '页面不存在'
-      })
-    }
-  } catch (e) {
+  let {data, status} = await useArticleApi().redirect(articleId)
+  if (status.value === "success" && data.value.success) {
+    Utils.redirectTo(data.value.data.url)
+  } else {
     showError({
       statusCode: 404,
-      message: e.message || '页面不存在'
+      message: '页面不存在'
     })
   }
 }

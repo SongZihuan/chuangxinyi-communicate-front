@@ -9,7 +9,7 @@
                 <li><a href="/">首页</a></li>
                 <li>
                   <a :href="'/user/' + currentUser.id">{{
-                    currentUser.username
+                      currentUserName
                   }}</a>
                 </li>
                 <li class="is-active">
@@ -46,7 +46,7 @@
                     <div class="article-meta">
                       <span class="article-meta-item"
                         ><a :href="'/user/' + favorite.user.id">{{
-                          favorite.user.username
+                          Utils.getUserName(favorite.user)
                         }}</a></span
                       >
                       <span class="article-meta-item">
@@ -92,6 +92,7 @@ let cursor = ref(0)
 let hasMore = ref(false)
 
 let currentUser = useAuthStore().currentUser
+let currentUserName = useAuthStore().currentUserName
 
 const list = async () => {
   let {data, status} = await useUserApi().favorites(cursor.value)

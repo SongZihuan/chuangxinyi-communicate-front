@@ -67,10 +67,14 @@ const getLinkPage = async () => {
   let {data, status, error} = await useLinksApi().links({
     page: page
   })
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     linksPage.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
+    showError({
+      statusCode: 404,
+      message: "友链未找到",
+    })
   }
 }
 

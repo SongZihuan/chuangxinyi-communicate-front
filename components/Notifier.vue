@@ -16,7 +16,7 @@
         <div class="msglist">
           <ul>
             <li v-for="msg in messages" :key="msg.messageId" class="msg-item">
-              <a :href="'/user/' + msg.from.id" :title="msg.from.username">
+              <a :href="'/user/' + msg.from.id" :title="Utils.getUserName(msg.from)">
                 <img
                   v-lazy="runtimeConfig.public.AVATAR_URL + '?uid=' + msg.from.uid"
                   class="avatar size-20"
@@ -36,6 +36,7 @@
 
 <script setup lang="ts">
   import {useAuthStore} from '~/store/auth'
+  import Utils from '~/common/utils'
 
   let msgcount = ref(0)
   let messages = ref([])

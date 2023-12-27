@@ -104,10 +104,14 @@ let authStore = useAuthStore()
 
 const getNodes = async () => {
   let {data, status, error} = await useTopicApi().nodes()
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     nodes.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
+    showError({
+      statusCode: 404,
+      message: "节点未找到",
+    })
   }
 }
 
@@ -126,10 +130,14 @@ const getNode = async () => {
   const nodeId = route.query.nodeId || setting.defaultNodeId
   if (nodeId) {
     let {data, status, error} = await useTopicApi().getNode(nodeId)
-    if (status.value === "success") {
+    if (status.value === "success" && data.value.success) {
       currentNode.value = data.value.data
     } else {
       console.log(status.value, error && error.value)
+      showError({
+        statusCode: 404,
+        message: "节点未找到",
+      })
     }
   }
 
@@ -167,27 +175,18 @@ const submitCreate = async () => {
 
   publishing.value = true
 
-  try {
-    let {data, status} = await useTopicApi().newTopics({
-      nodeId: postForm.value.nodeId,
-      title: postForm.value.title,
-      content: postForm.value.content,
-      tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
-    })
-    if (status.value === "success" && data.value.success) {
-      mdEditor.value.clearCache()
-      ElMessage.info('提交成功')
-      setTimeout(()=>{
-        utils.linkTo('/topic/' + data.value.data.topicId)
-      }, 1000)
-    } else {
-      publishing.value = false
-      ElMessage.error('提交失败')
-    }
-  } catch (e) {
-    console.error(e)
-    publishing.value = false
-    ElMessage.error('提交失败：' + (e.message || e))
+  let {data, status} = await useTopicApi().newTopics({
+    nodeId: postForm.value.nodeId,
+    title: postForm.value.title,
+    content: postForm.value.content,
+    tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
+  })
+  if (status.value === "success" && data.value.success) {
+    mdEditor.value.clearCache()
+    ElMessage.info('提交成功')
+    setTimeout(()=>{
+      Utils.linkTo('/topic/' + data.value.data.topicId)
+    }, 1000)
   }
 }
 

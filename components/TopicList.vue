@@ -4,7 +4,7 @@
       <article itemscope itemtype="http://schema.org/BlogPosting">
         <div class="topic-header">
           <div class="topic-header-left">
-            <a :href="'/user/' + topic.user.id" :title="topic.user.username">
+            <a :href="'/user/' + topic.user.id" :title="Utils.getUserName(topic.user)">
               <img :src="runtimeConfig.public.AVATAR_URL + '?uid=' + topic.user.uid" class="avatar" alt="头像" />
             </a>
           </div>
@@ -30,7 +30,7 @@
                 itemtype="http://schema.org/Person"
               >
                 <a :href="'/user/' + topic.user.id" itemprop="name">{{
-                  topic.user.nickname || topic.user.username || topic.user.email || topic.user.uid
+                    Utils.getUserName(topic.user)
                 }}</a>
               </span>
               <span
@@ -42,7 +42,7 @@
               >
                 最后由
                 <a :href="'/user/' + topic.lastCommentUser.id">{{
-                  topic.lastCommentUser.username
+                    Utils.getUserName(topic.lastCommentUser)
                 }}</a>
                 回复于
               </span>

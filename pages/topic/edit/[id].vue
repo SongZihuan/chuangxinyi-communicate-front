@@ -103,26 +103,34 @@ const topicId = route.params.id
 let topic = ref({})
 let nodes = ref({})
 
-const getEdis = async () => {
+const getEdit = async () => {
   let {data, status, error} = await useTopicApi().getEdit(topicId)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     topic.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
+    showError({
+      statusCode: 404,
+      message: "话题未找到",
+    })
   }
 }
 
 const getNodes = async () => {
   let {data, status, error} = await useTopicApi().nodes()
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     nodes.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
+    showError({
+      statusCode: 404,
+      message: "节点未找到",
+    })
   }
 }
 
 await Promise.all([
-  getEdis(),
+  getEdit(),
   getNodes(),
 ])
 
@@ -146,27 +154,18 @@ const submitCreate = async () => {
 
   publishing.value = true
 
-  try {
-    let {data, status} = await useTopicApi().edit(topic.value.topicId, {
-      nodeId: postForm.value.nodeId,
-      title: postForm.value.title,
-      content: postForm.value.content,
-      tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
-    })
+  let {data, status} = await useTopicApi().edit(topic.value.topicId, {
+    nodeId: postForm.value.nodeId,
+    title: postForm.value.title,
+    content: postForm.value.content,
+    tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
+  })
 
-    if (status.value === "success") {
-      ElMessage.info('提交成功')
-      setTimeout(async () => {
-        await Utils.linkTo('/topic/' + data.value.data.topicId)
-      }, 1000)
-    } else {
-      publishing.value = false
-      ElMessage.error('提交失败：' + (e.message || e))
-    }
-  } catch (e) {
-    console.error(e)
-    publishing.value = false
-    ElMessage.error('提交失败：' + (e.message || e))
+  if (status.value === "success" && data.value.success) {
+    ElMessage.info('提交成功')
+    setTimeout(async () => {
+      await Utils.linkTo('/topic/' + data.value.data.topicId)
+    }, 1000)
   }
 }
 

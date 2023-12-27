@@ -89,7 +89,7 @@ let article = ref({})
 
 const getEdis = async () => {
   let {data, status, error} = await useTopicApi().getEdit(articleId)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     article.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
@@ -117,25 +117,16 @@ const submitCreate = async () => {
 
   publishing.value = true
 
-  try {
-    let {data, status} = await useArticleApi().edit(article.value.articleId, {
-      title: postForm.value.title,
-      content: postForm.value.content,
-      tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
-    })
-    if (status.value === "success" && data.value.success) {
-      ElMessage.success('修改成功')
-      setTimeout(()=>{
-        utils.linkTo('/article/' + article.articleId)
-      }, 1000)
-    } else {
-      publishing.value = true
-      ElMessage.error('提交失败')
-    }
-  } catch (e) {
-    console.error(e)
-    publishing.value = false
-    ElMessage.error('提交失败：' + (e.message || e))
+  let {data, status} = await useArticleApi().edit(article.value.articleId, {
+    title: postForm.value.title,
+    content: postForm.value.content,
+    tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
+  })
+  if (status.value === "success" && data.value.success) {
+    ElMessage.success('修改成功')
+    setTimeout(()=>{
+      utils.linkTo('/article/' + article.articleId)
+    }, 1000)
   }
 }
 

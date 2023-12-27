@@ -64,8 +64,8 @@
             <div v-for="user in userWatchers" :key="user.id">
               <a
                 :href="'/user/' + user.id"
-                :alt="user.username"
-                :title="user.username"
+                :alt="Utils.getUserName(user)"
+                :title="Utils.getUserName(user)"
               >
                 avatar
               </a>
@@ -148,15 +148,11 @@ const getRecent = async ()=> {
     let {data, status} = await useUserApi().topicesRecent(userId)
     if (status.value ==="success" && data.value.success) {
       recentTopics.value = data.value.data
-    } else {
-      console.log("GET ERRPR")
     }
   } else if (activeTab.value  === 'articles') {
     let {data, status} = await useUserApi().articleRecent(userId)
     if (status.value ==="success" && data.value.success) {
       recentArticles.value = data.value.data
-    } else {
-      console.log("GET ERRPR")
     }
   }
 }
@@ -179,35 +175,27 @@ const watch = async (user) => {
     return
   }
 
-  try {
-    if (watched.value) {
-      let {data, status} = await useUserApi().deleteWatched(user.value.id)
-      if (status.value ==="success" && data.value.success) {
-        watched.value = false
-        user.value.watchCount--
-        ElMessage.info('已取消关注！')
-        await getUserWatcher()
-      } else {
-        ElMessage.info('取消关注失败！')
-      }
-    } else {
-      let {data, status} = await useUserApi().addWatched(user.value.id)
-      if (status.value ==="success" && data.value.success) {
-        watched.value = true
-        user.value.watchCount++
-        ElMessage.info('关注成功！')
-        await getUserWatcher()
-      } else {
-        ElMessage.info('关注失败！')
-      }
+  if (watched.value) {
+    let {data, status} = await useUserApi().deleteWatched(user.value.id)
+    if (status.value ==="success" && data.value.success) {
+      watched.value = false
+      user.value.watchCount--
+      ElMessage.info('已取消关注！')
+      await getUserWatcher()
     }
-  } catch (e) {
-      ElMessage.error(e.message || e)
+  } else {
+    let {data, status} = await useUserApi().addWatched(user.value.id)
+    if (status.value ==="success" && data.value.success) {
+      watched.value = true
+      user.value.watchCount++
+      ElMessage.info('关注成功！')
+      await getUserWatcher()
+    }
   }
 }
 
 useHead({
-  title: Utils.siteTitle(user.username),
+  title: Utils.siteTitle(Utils.getUserName(user)),
 })
 
 </script>

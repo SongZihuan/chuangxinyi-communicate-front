@@ -62,7 +62,7 @@ let currentUser = useAuthStore().currentUser
 
 const getScoreLog = async () => {
   let {data, status, error} = await useUserApi().scoreLog(page)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     scoreLogsPage.value = data.value.data
   } else {
     console.log(status.value, error && error.value)

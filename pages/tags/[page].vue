@@ -41,10 +41,14 @@ const getTagsPage = async () => {
   let {data, status, error} = await useTagsApi().tags({
     page: route.params.page
   })
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     tagsPage.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
+    showError({
+      statusCode: 404,
+      message: "标签未找到",
+    })
   }
 }
 

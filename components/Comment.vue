@@ -28,7 +28,7 @@
               itemtype="http://schema.org/Person"
             >
               <a :href="'/user/' + comment.user.id" itemprop="name">
-                {{ comment.user.username }}
+                {{ Utils.getUserName(comment.user) }}
               </a>
             </span>
             <span class="comment-floor">#{{ index + 1 }}</span>
@@ -53,7 +53,7 @@
                   v-lazy="runtimeConfig.public.AVATAR_URL + '?uid=' + comment.quote.user.uid"
                   class="avatar size-20"
                 />
-                <a class="quote-username">{{ comment.quote.user.username }}</a>
+                <a class="quote-username">{{ Utils.getUserName(comment.quote.user) }}</a>
                 <span class="quote-time">
                   {{ Utils.prettyDate(comment.quote.createTime) }}
                 </span>
@@ -80,7 +80,7 @@
         <div ref="commentEditor" class="comment-input-wrapper">
           <div v-if="quote" class="comment-quote-info">
             <i class="iconfont icon-reply"></i> 回复：
-            <label v-text="quote.user.username" />
+            <label v-text="Utils.getUserName(quote.user)" />
             <i
               @click="cancelReply"
               class="iconfont icon-close"
@@ -187,13 +187,11 @@ const create = async () => {
       content: content.value,
       quoteId: quote.value ? quote.value.commentId : ''
     })
-    if (status.value === "success") {
+    if (status.value === "success" && data.value.success) {
       commentsLoadMore.value.pushResults(data.value.data)
       content.value = ''
       mdEditor.value.clear()
       quote.value = null
-    } else {
-      ElMessage.error('评论失败')
     }
   } catch (e) {
     console.error(e)

@@ -248,8 +248,6 @@ const addSubmit = async () => {
     ElMessage.info("提交成功")
     addFormVisible.value = false
     await list()
-  } else {
-    console.log("BBB", data.value)
   }
 }
 
@@ -281,16 +279,10 @@ const deleteSubmit = async (row) => {
     }
   )
     .then(async () => {
-      try {
-        let {data, status} = await useAdminApi().deleteLink(row.id)
-        if (status.value === "success" && data.value.success) {
-          await list()
-          ElMessage.success("删除成功")
-        } else {
-          ElMessage.success("删除失败")
-        }
-      } catch (err) {
-        ElMessage.success("删除失败")
+      let {data, status} = await useAdminApi().deleteLink(row.id)
+      if (status.value === "success" && data.value.success) {
+        await list()
+        ElMessage.success("删除成功")
       }
     })
     .catch(() => {})

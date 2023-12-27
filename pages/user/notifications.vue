@@ -11,7 +11,7 @@
                 </li>
                 <li>
                   <a :href="'/user/' + currentUser.id">{{
-                    currentUser.username
+                      currentUserName
                   }}</a>
                 </li>
                 <li class="is-active">
@@ -38,12 +38,12 @@
                   <div class="message-item-meta">
                     <span v-if="message.from.id > 0" class="username">
                       <a :href="'/user/' + message.from.id" target="_blank">{{
-                        message.from.username
+                          Utils.getUserName(message.from)
                       }}</a>
                     </span>
                     <span v-else class="username">
                       <a href="javascript:void(0)" target="_blank">{{
-                        message.from.username
+                          Utils.getUserName(message.from)
                       }}</a>
                     </span>
                     <span class="time">
@@ -127,6 +127,7 @@ await Promise.all([
 ])
 
 let currentUser = useAuthStore().currentUser
+let currentUserName = useAuthStore().currentUserName
 
 useHead({
   title: Utils.siteTitle("通知"),

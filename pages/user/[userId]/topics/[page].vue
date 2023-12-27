@@ -7,7 +7,7 @@
             <li><a href="article">首页</a></li>
             <li>
               <a :href="'/user/' + user.id + '?tab=topics'">{{
-                user.username
+                  Utils.getUserName(user)
               }}</a>
             </li>
             <li class="is-active">
@@ -71,7 +71,7 @@ await Promise.all([
 ])
 
 useHead({
-  title: Utils.siteTitle(user.value.username + ' - 话题')
+  title: Utils.siteTitle(Utils.getUserName(user.value) + ' - 话题')
 })
 
 </script>

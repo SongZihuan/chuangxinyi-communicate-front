@@ -190,7 +190,24 @@ let Utils = {
   siteKeywords: () => {
     const configStore = useConfigStore()
     return configStore.siteKeywords
+  },
+
+  getUserName: (user: any): string => {
+    if (user.nickname) {
+      return user.nickname
+    }
+
+    if (user.username) {
+      return user.username
+    }
+
+    if (user.uid) {
+      return user.uid.substr(0, 6)
+    }
+
+    return "陌生用户"
   }
+
 }
 
 export default Utils

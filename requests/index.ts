@@ -1,5 +1,6 @@
 import qs from 'qs'
 import { useAuthStore } from '~/store/auth'
+import { ElMessage } from "element-plus"
 
 interface req {
     url: string,
@@ -36,7 +37,7 @@ export default function (requests: req, opt?: any) {
         requests.query = {}
     }
 
-    return useNuxtApp().runWithContext(() => {
+    return useNuxtApp().runWithContext(async () => {
       const token = useAuthStore().userJwt
 
       let data = requests.data
@@ -61,15 +62,35 @@ export default function (requests: req, opt?: any) {
 
         ...opt,
 
-        onRequest({ options }) {
+        onRequest: ({ options }) => {
           options.baseURL = getBaseAPI().baseAPI()
         },
 
-        onRequestError({ error }) {
+        onResponse: (response) => {
+          if (response.status !== 200) {
+            response._data = {
+              success: false,
+              code: response.status,
+              msg: "请求异常",
+            }
+            return response
+          }
+
+          let data = response._data
+
+          if (data.success) {
+            return response
+          }
+
+          ElMessage.error(data.msg || "遇到错误")
+          return response
+        },
+
+        onRequestError: ({ error }) => {
           console.info("fetch requests error: ", error)
         },
 
-        onResponseError({ error }) {
+        onResponseError: ({ error }) => {
           console.info("fetch error: ", error)
         }
       }

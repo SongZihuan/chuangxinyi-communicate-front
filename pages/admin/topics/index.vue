@@ -247,60 +247,36 @@ const deleteSubmit = async (row) => {
     }
   )
     .then(async () => {
-      try {
-        let {data, status} = await useAdminApi().deleteTopic(row.id)
-        if (status.value === "success" && data.value.success) {
-          await list()
-          ElMessage.success("删除成功")
-        } else {
-          ElMessage.success("删除失败")
-        }
-      } catch (err) {
-        ElMessage.success("删除失败")
+      let { data, status } = await useAdminApi().deleteTopic(row.id)
+      if (status.value === "success" && data.value.success) {
+        await list()
+        ElMessage.success("删除成功")
       }
     })
     .catch(() => {})
 }
 
 const undeleteSubmit = async (row) => {
-  try {
-    let {data, status} = await useAdminApi().undeleteTopic(row.id)
-    if (status.value === "success" && data.value.success) {
-      await list()
-      ElMessage.success("取消删除成功")
-    } else {
-      ElMessage.success("取消删除失败")
-    }
-  } catch (err) {
-    ElMessage.success("取消删除失败")
+  let {data, status} = await useAdminApi().undeleteTopic(row.id)
+  if (status.value === "success" && data.value.success) {
+    await list()
+    ElMessage.success("取消删除成功")
   }
 }
 
 const recommend = async (id) => {
-  try {
-    let {data, status} = await useAdminApi().recommendTopics(id)
-    if (status.value === "success" && data.value.success) {
-      await list()
-      ElMessage.success("推荐成功")
-    } else {
-      ElMessage.success("推荐失败")
-    }
-  } catch (err) {
-    ElMessage.success("推荐失败 222", err.message)
+  let {data, status} = await useAdminApi().recommendTopics(id)
+  if (status.value === "success" && data.value.success) {
+    await list()
+    ElMessage.success("推荐成功")
   }
 }
 
 const cancelRecommend = async (id) => {
-  try {
-    let {data, status} = await useAdminApi().cancleRecommendTopics(id)
-    if (status.value === "success" && data.value.success) {
-      await list()
-      ElMessage.success("取消推荐成功")
-    } else {
-      ElMessage.success("取消推荐失败")
-    }
-  } catch (err) {
-    ElMessage.success("取消推荐失败", err.message)
+  let {data, status} = await useAdminApi().cancleRecommendTopics(id)
+  if (status.value === "success" && data.value.success) {
+    await list()
+    ElMessage.success("取消推荐成功")
   }
 }
 

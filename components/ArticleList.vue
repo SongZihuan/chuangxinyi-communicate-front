@@ -23,7 +23,7 @@
               itemprop="author"
               itemscope
               itemtype="http://schema.org/Person"
-              ><span itemprop="name">{{ article.user.username }}</span></a
+              ><span itemprop="name">{{ Utils.getUserName(article.user) }}</span></a
             >发布于
             <time
               :datetime="Utils.formatDate(article.createTime, 'yyyy-MM-ddTHH:mm:ss')"

@@ -43,21 +43,29 @@ const getTag = async () => {
     tag.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
+    showError({
+      statusCode: 404,
+      message: "标签未找到",
+    })
   }
 }
 
 const getTopics = async () => {
   let {data, status, error} = await useTopicApi().topicsTag(page, tagId)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     topicsPage.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
+    showError({
+      statusCode: 404,
+      message: "话题未找到",
+    })
   }
 }
 
 const getScoreRank = async () => {
   let {data, status, error} = await useUserApi().scoreRank()
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     scoreRank.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
@@ -66,7 +74,7 @@ const getScoreRank = async () => {
 
 const getLinks = async () => {
   let {data, status, error} = await useLinksApi().topLinks()
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     links.value = data.value.data
   } else {
     console.log(status.value, error && error.value)

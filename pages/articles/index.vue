@@ -47,7 +47,7 @@ let tagsPage = ref({})
 
 const getArticles = async () => {
   let {data, status, error} = await useArticleApi().articles()
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     articlesPage.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
@@ -56,7 +56,7 @@ const getArticles = async () => {
 
 const getTags = async () => {
   let {data, status, error} = await useArticleApi().tags()
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     tagsPage.value = data.value.data
   } else {
     console.log(status.value, error && error.value)

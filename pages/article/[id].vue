@@ -12,7 +12,7 @@
               <div class="article-item-left">
                 <a
                   :href="'/user/' + article.user.id"
-                  :title="article.user.username"
+                  :title="Utils.getUserName(article.user)"
                   target="_blank"
                 >
                   <img v-lazy="runtimeConfig.public.AVATAR_URL + '?uid=' + article.user.uid" class="avatar" />
@@ -32,7 +32,7 @@
                       itemscope
                       itemtype="http://schema.org/Person"
                       ><span itemprop="name">{{
-                        article.user.username
+                        Utils.getUserName(article.user)
                       }}</span></a
                     >发布于
                     <time
@@ -194,7 +194,7 @@ const getArticles = async () => {
 
 const getFavorited = async () => {
   let {data, status, error} = await useArticleApi().favorited(articleId)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     favorited.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
@@ -203,7 +203,7 @@ const getFavorited = async () => {
 
 const getComments = async () => {
   let {data, status, error} = await useArticleApi().comments(article.value.articleId)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     commentsPage.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
@@ -212,7 +212,7 @@ const getComments = async () => {
 
 const getNewest = async () => {
   let {data, status, error} = await useArticleApi().newest(article.value.user.id)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     newestArticles.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
@@ -221,7 +221,7 @@ const getNewest = async () => {
 
 const getRelated = async () => {
   let {data, status, error} = await useArticleApi().getArticle(article.value.articleId)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     relatedArticles.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
@@ -267,43 +267,28 @@ const deleteArticle = async (articleId) => {
   if (process.client && !window.confirm('是否确认删除该文章？')) {
     return
   }
-  try {
-    let {data, status} = await useArticleApi().delete(articleId)
-    if (status.value === "success" && data.value.success) {
-      ElMessage.info("删除成功")
-      setTimeout(async ()=>{
-        await Utils.linkTo('/articles')
-      }, 1000)
-    } else {
-      ElMessage.error("删除失败")
-    }
-  } catch (e) {
-    ElMessage.error('删除失败：' + (e.message || e))
+  let {data, status} = await useArticleApi().delete(articleId)
+  if (status.value === "success" && data.value.success) {
+    ElMessage.info("删除成功")
+    setTimeout(async ()=>{
+      await Utils.linkTo('/articles')
+    }, 1000)
   }
 }
 
 const addFavorite = async (articleId) => {
-  try {
-    if (favorited.value) {
-      let {data, status} = await useArticleApi().favoriteDelete(articleId)
-      if (status.value === "success" && data.value.success) {
-        favorited = false
-        ElMessage.info('已取消收藏！')
-      } else {
-        ElMessage.error('取消收藏失败')
-      }
-    } else {
-      let {data, status} = await useArticleApi().favoriteAdd(articleId)
-      if (status.value === "success" && data.value.success) {
-        favorited = false
-        ElMessage.info('收藏成功！')
-      } else {
-        ElMessage.error('收藏失败')
-      }
+  if (favorited.value) {
+    let {data, status} = await useArticleApi().favoriteDelete(articleId)
+    if (status.value === "success" && data.value.success) {
+      favorited = false
+      ElMessage.info('已取消收藏！')
     }
-  } catch (e) {
-    console.error(e)
-    ElMessage.error('操作：' + (e.message || e))
+  } else {
+    let {data, status} = await useArticleApi().favoriteAdd(articleId)
+    if (status.value === "success" && data.value.success) {
+      favorited = false
+      ElMessage.info('收藏成功！')
+    }
   }
 }
 

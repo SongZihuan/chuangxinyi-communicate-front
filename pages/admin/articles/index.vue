@@ -142,16 +142,10 @@ const deleteSubmit = async (row) => {
     }
   )
     .then(async () => {
-      try {
-        let {data, status} = await useAdminApi().deleteArticles(row.id)
-        if (status.value === "success" && data.value.success) {
-          await list()
-          ElMessage.success("删除成功")
-        } else {
-          ElMessage.success("删除失败")
-        }
-      } catch (err) {
-        ElMessage.success("删除失败")
+      let {data, status} = await useAdminApi().deleteArticles(row.id)
+      if (status.value === "success" && data.value.success) {
+        await list()
+        ElMessage.success("删除成功")
       }
     })
     .catch(() => {})

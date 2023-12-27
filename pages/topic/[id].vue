@@ -12,7 +12,7 @@
               <div class="topic-header-left">
                 <a
                   :href="'/user/' + topic.user.id"
-                  :title="topic.user.username"
+                  :title="Utils.getUserName(topic.user)"
                 >
                   avatar
                 </a>
@@ -28,7 +28,7 @@
                     itemscope
                     itemtype="http://schema.org/Person"
                   >
-                    <a :href="'/user/' + topic.user.id" itemprop="name">{{topic.user.username }}</a>
+                    <a :href="'/user/' + topic.user.id" itemprop="name">{{ Utils.getUserName(topic.user) }}</a>
                   </span>
                   <span class="meta-item">
                     <time
@@ -119,7 +119,7 @@
               <div v-for="user in likeUsers" :key="user.id">
                 <a
                   :href="'/user/' + user.id"
-                  :alt="user.username"
+                  :alt="Utils.getUserName(user)"
                   target="_blank"
                 >
                   avatar
@@ -141,13 +141,13 @@
         <div class="user-info">
           <div class="base">
             <div>
-              <a :href="'/user/' + topic.user.id" :alt="topic.user.username">
+              <a :href="'/user/' + topic.user.id" :alt="Utils.getUserName(topic.user)">
                 avatar
               </a>
             </div>
             <div class="username">
-              <a :href="'/user/' + topic.user.id" :alt="topic.user.username">
-                {{ topic.user.username }}
+              <a :href="'/user/' + topic.user.id" :alt="Utils.getUserName(topic.user)">
+                {{ Utils.getUserName(topic.user) }}
                 <span :class="'level-' + topic.user.level">
                   ({{ topic.user.levelName }})
                 </span>
@@ -206,38 +206,51 @@ let toc = ref(null)
 
 const getTopic = async () => {
   let {data, status, error} = await useTopicApi().getTopic(topicID)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     topic.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
+    showError({
+      statusCode: 404,
+      message: "话题未找到",
+    })
   }
 }
 
 const getFavorited = async () => {
   let {data, status, error} = await useTopicApi().favorited(topicID)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     favorited.value = data.value?.data?.favorited || false  // 如果没有token，没登陆，favorited回是underfined
   } else {
     console.log(status.value, error && error.value)
+    favorited.value = false
   }
 }
 
 
 const getComments = async () => {
   let {data, status, error} = await useTopicApi().comments(topicID)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     commentsPage.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
+    showError({
+      statusCode: 404,
+      message: "话题未找到",
+    })
   }
 }
 
 const getRecentlikes = async () => {
   let {data, status, error} = await useTopicApi().recentlikes(topicID)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     likeUsers.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
+    showError({
+      statusCode: 404,
+      message: "话题未找到",
+    })
   }
 }
 
@@ -261,19 +274,12 @@ onMounted(() => {
 })
 
 const addFavorite = async (topicId) => {
-  try {
-    if (favorited.value) {
-      await useTopicApi().favoriteDelete(topicId)
+  if (favorited.value) {
+    let {data, status} = await useTopicApi().favoriteDelete(topicId)
+    if (status === "success" && data.value.success) {
       favorited.value = false
       ElMessage.info('已取消收藏！')
-    } else {
-      await useTopicApi().favoriteAdd()
-      favorited.value = true
-      ElMessage.info('收藏成功')
     }
-  } catch (e) {
-    console.error(e)
-    ElMessage.error('收藏失败：' + (e.message || e))
   }
 }
 
@@ -281,36 +287,22 @@ const deleteTopic = async (topicId) => {
   if (process.client && !window.confirm('是否确认删除该话题？')) {
     return
   }
-  try {
-    await useTopicApi().deleteTopic(topicId)
+  let {data, status} = await useTopicApi().deleteTopic(topicId)
+  if (status === "success" && data.value.success) {
     ElMessage.info('删除成功')
     setTimeout(async () => {
       await Utils.linkTo('/topics')
     }, 1000)
-  } catch (e) {
-    ElMessage.error('删除失败：' + (e.message || e))
   }
 }
 
 const like = async (topic) => {
-  try {
-    let {data, status} = await useTopicApi().likeTopic(topic.value.topicId)
-    if (status.value === "success") {
-      if (data.value.code === 1) {
-        ElMessage.info('请登录后点赞')
-      } else if (data.value.success) {
-        topic.value.liked = true
-        topic.value.likeCount++
-        likeUsers.value = likeUsers.value || []
-        likeUsers.value.unshift(authStore.currentUser)
-      } else {
-        topic.value.liked = true
-        ElMessage.error("点赞失败")
-      }
-    }
-  } catch (e) {
-    topic.value.liked = true
-    ElMessage.error(e.message || e)
+  let {data, status} = await useTopicApi().likeTopic(topic.value.topicId)
+  if (status.value === "success" && data.value.success) {
+      topic.value.liked = true
+      topic.value.likeCount++
+      likeUsers.value = likeUsers.value || []
+      likeUsers.value.unshift(authStore.currentUser)
   }
 }
 

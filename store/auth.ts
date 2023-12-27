@@ -34,7 +34,11 @@ export const useAuthStore = defineStore("auth", ()=> {
     if (!currentUser.value) {
       return "陌生用户"
     }
-    return currentUser.value.nickname || currentUser.value.username || currentUser.value.email || currentUser.value.phone
+    return (currentUser.value.nickname ||
+      currentUser.value.username ||
+      currentUser.value.phone ||
+      (currentUser.value.uid && currentUser.value.uid.substr(0, 6)) ||
+      "陌生用户")
   })
 
   const setCurrentUser = (user: any) => {

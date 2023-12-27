@@ -31,16 +31,20 @@ const stat = ref({})
 
 const getTopics = async () => {
   let {data, status, error} = await useTopicApi().topics(1)
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     topicsPage.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
+    showError({
+      statusCode: 404,
+      message: "话题未找到",
+    })
   }
 }
 
 const getUserScoreRand = async () => {
   let {data, status, error} = await useUserApi().scoreRank()
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     scoreRank.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
@@ -49,7 +53,7 @@ const getUserScoreRand = async () => {
 
 const getLinksTop = async () => {
   let {data, status, error} = await useLinksApi().topLinks()
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     links.value = data.value.data
   } else {
     console.log(status.value, error && error.value)
@@ -58,7 +62,7 @@ const getLinksTop = async () => {
 
 const getStat = async () => {
   let {data, status, error} = await useStatApi().stat()
-  if (status.value === "success") {
+  if (status.value === "success" && data.value.success) {
     stat.value = data.value.data
   } else {
     console.log(status.value, error && error.value)

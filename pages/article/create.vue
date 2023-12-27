@@ -9,7 +9,7 @@
                 <li><a href="/">首页</a></li>
                 <li>
                   <a :href="'/user/' + user.id + '?tab=articles'">{{
-                    user.username
+                      Utils.getUserName(user)
                   }}</a>
                 </li>
                 <li class="is-active">
@@ -92,24 +92,16 @@ const submitCreate = async () => {
     return
   }
   publishing.value = true
-  try {
-    let {data, status} = await useArticleApi().create({
-      title: postForm.value.title,
-      content: postForm.value.content,
-      tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
+  let {data, status} = await useArticleApi().create({
+    title: postForm.value.title,
+    content: postForm.value.content,
+    tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
+  })
+  if (status.value === "success" && data.value.success) {
+    ElMessage.info("提交成功")
+    setTimeout(async ()=>{
+      await Utils.linkTo('/article/' + data.value.data.articleId)
     })
-    if (status.value === "success" && data.value.success) {
-      ElMessage.info("提交成功")
-      setTimeout(async ()=>{
-        await Utils.linkTo('/article/' + data.value.data.articleId)
-      })
-    } else {
-      publishing.value = false
-      ElMessage.error("提交失败")
-    }
-  } catch (e) {
-    publishing.value = false
-    ElMessage.error('提交失败：' + (e.message || e))
   }
 }
 

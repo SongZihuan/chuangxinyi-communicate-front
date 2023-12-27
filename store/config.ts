@@ -8,7 +8,7 @@ export const useConfigStore = defineStore("config", ()=> {
 
   const loadConfig = computed(async () => {
     let {data, status} = await useConfigApi().getConfig()
-    if (status.value === "success") {
+    if (status.value === "success" && data.value.success) {
       setConfig(data.value.data)
       return data.value.data
     }

@@ -14,7 +14,7 @@
               <img :src="runtimeConfig.public.AVATAR_URL + '?uid=' + user.uid" class="avatar" alt="头像" />
             </a>
             <div class="score-user-info">
-              <a :href="'/user/' + user.id">{{ user.username }}</a>
+              <a :href="'/user/' + user.id">{{ Utils.getUserName(user) }}</a>
               <p>{{ user.topicCount }} 帖子 • {{ user.commentCount }} 评论</p>
             </div>
             <div class="score-rank-info">
@@ -62,6 +62,7 @@ import PostBtnSidebar from '~/components/PostBtnSidebar'
 import SiteNotice from '~/components/SiteNotice'
 import SiteTip from '~/components/SiteTip'
 import SiteStat from '~/components/SiteStat'
+import Utils from '~/common/utils'
 
 const runtimeConfig = useRuntimeConfig()
 
