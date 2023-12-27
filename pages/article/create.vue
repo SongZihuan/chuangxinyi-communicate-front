@@ -1,6 +1,6 @@
 <template>
   <section class="main">
-    <div class="container main-container is-white left-main">
+    <div class="container main-container is-white">
       <div class="left-container">
         <div class="widget">
           <div class="widget-header">
@@ -32,12 +32,7 @@
 
             <div class="field">
               <div class="control">
-                <markdown-editor
-                  ref="mdEditor"
-                  v-model="postForm.content"
-                  editor-id="articleCreateEditor"
-                  placeholder="请输入内容，将图片复制或拖入编辑器可上传"
-                />
+                <Editor v-model="editor"></Editor>
               </div>
             </div>
 
@@ -61,9 +56,6 @@
           </div>
         </div>
       </div>
-      <div class="right-container">
-        <markdown-help />
-      </div>
     </div>
   </section>
 </template>
@@ -71,12 +63,9 @@
 <script setup lang="ts">
 import Utils from '~/common/utils'
 import TagInput from '~/components/TagInput'
-import MarkdownHelp from '~/components/MarkdownHelp'
-import MarkdownEditor from '~/components/MarkdownEditor'
 import {useAuthStore} from '~/store/auth'
 import {useArticleApi} from '~/api/article'
 import {ElMessage} from "element-plus"
-
 
 let publishing = ref(false)
 let postForm = ref({
@@ -84,6 +73,8 @@ let postForm = ref({
   tags: [],
   content: ''
 })
+
+let editor = ref("")
 
 let user = useAuthStore().currentUser
 
@@ -94,7 +85,7 @@ const submitCreate = async () => {
   publishing.value = true
   let {data, status} = await useArticleApi().create({
     title: postForm.value.title,
-    content: postForm.value.content,
+    content: editor.value,
     tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
   })
   if (status.value === "success" && data.value.success) {
@@ -103,6 +94,7 @@ const submitCreate = async () => {
       await Utils.linkTo('/article/' + data.value.data.articleId)
     })
   }
+  publishing.value = false
 }
 
 useHead({

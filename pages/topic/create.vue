@@ -1,6 +1,6 @@
 <template>
   <section class="main">
-    <div class="container main-container left-main">
+    <div class="container main-container">
       <div class="left-container">
         <div class="widget">
           <div class="widget-header">
@@ -47,11 +47,8 @@
 
             <div class="field">
               <div class="control">
-                <markdown-editor
-                  ref="mdEditor"
-                  v-model="postForm.content"
-                  editor-id="topicCreateEditor"
-                  placeholder="输入内容，将图片复制或拖入编辑器可上传"
+                <Editor
+                  v-model="content"
                 />
               </div>
             </div>
@@ -76,9 +73,6 @@
           </div>
         </div>
       </div>
-      <div class="right-container">
-        <markdown-help />
-      </div>
     </div>
   </section>
 </template>
@@ -86,8 +80,6 @@
 <script setup lang="ts">
 import Utils from '~/common/utils'
 import TagInput from '~/components/TagInput'
-import MarkdownHelp from '~/components/MarkdownHelp'
-import MarkdownEditor from '~/components/MarkdownEditor'
 import {useTopicApi} from '~/api/topics'
 import {useConfigStore} from '~/store/config'
 import { useAuthStore } from '~/store/auth'
@@ -101,6 +93,7 @@ definePageMeta({
 
 let nodes = ref({})
 let authStore = useAuthStore()
+let content = ref("")
 
 const getNodes = async () => {
   let {data, status, error} = await useTopicApi().nodes()
@@ -178,7 +171,7 @@ const submitCreate = async () => {
   let {data, status} = await useTopicApi().newTopics({
     nodeId: postForm.value.nodeId,
     title: postForm.value.title,
-    content: postForm.value.content,
+    content: content.value,
     tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
   })
   if (status.value === "success" && data.value.success) {

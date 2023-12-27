@@ -4,8 +4,8 @@ import { ElMessage } from "element-plus"
 
 let Utils = {
   linkTo: async (path: string) => {
-    const router = useRoute()
-    await router.path({
+    const router = useRouter()
+    await router.push({
       path: path
     })
   },

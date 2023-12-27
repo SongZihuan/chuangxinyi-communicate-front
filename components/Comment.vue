@@ -87,13 +87,8 @@
               title="取消回复"
             />
           </div>
-          <markdown-editor
-            ref="mdEditor"
+          <Editor
             v-model="content"
-            @submit="ctrlEnterCreate"
-            editor-id="createEditor"
-            height="150px"
-            placeholder="请发表你的观点..."
           />
         </div>
         <div class="comment-button-wrapper">
@@ -112,7 +107,6 @@
 <script setup lang="ts">
 import Utils from '~/common/utils'
 import LoadMore from '~/components/LoadMore'
-import MarkdownEditor from '~/components/MarkdownEditor'
 import {useAuthStore} from '~/store/auth'
 import {ElMessage} from "element-plus"
 import {useCommentApi} from "~/api/comment"
@@ -171,15 +165,16 @@ const ctrlEnterCreate = () => {
 }
 
 const create = async () => {
-  if (!this.content || this.content.length < 3) {
+  if (!content.value || content.value.length < 3) {
     ElMessage.error('请输入评论内容')
     return
   }
-  if (this.sending) {
-    ElMessage.error('正在发送中，请不要重复提交...')
+
+  if (sending.value) {
     return
   }
-  this.sending = true
+  sending = true
+
   try {
     let {data, status} = await useCommentApi().comment({
       entityType: entityType.value,

@@ -1,6 +1,6 @@
 <template>
   <section class="main">
-    <div class="container main-container left-main">
+    <div class="container main-container">
       <div class="left-container">
         <div class="widget">
           <div class="widget-header">
@@ -47,10 +47,8 @@
 
             <div class="field">
               <div class="control">
-                <markdown-editor
-                  v-model="postForm.content"
-                  editor-id="topicEditEditor"
-                  placeholder="输入内容，将图片复制或拖入编辑器可上传"
+                <Editor
+                  v-model="content"
                 />
               </div>
             </div>
@@ -75,9 +73,6 @@
           </div>
         </div>
       </div>
-      <div class="right-container">
-        <markdown-help />
-      </div>
     </div>
   </section>
 </template>
@@ -85,8 +80,6 @@
 <script setup lang="ts">
 import Utils from '~/common/utils'
 import TagInput from '~/components/TagInput'
-import MarkdownHelp from '~/components/MarkdownHelp'
-import MarkdownEditor from '~/components/MarkdownEditor'
 import { useTopicApi } from '~/api/topics'
 import {useAuthStore} from '~/store/auth'
 import {ElMessage} from "element-plus"
@@ -157,7 +150,7 @@ const submitCreate = async () => {
   let {data, status} = await useTopicApi().edit(topic.value.topicId, {
     nodeId: postForm.value.nodeId,
     title: postForm.value.title,
-    content: postForm.value.content,
+    content: content.value,
     tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
   })
 
