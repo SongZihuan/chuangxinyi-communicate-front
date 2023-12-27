@@ -6,8 +6,6 @@ export default async function(to: { path: string | string[] }) {
   const authStore = useAuthStore()
   const user = authStore.currentUser
 
-  console.log("AAA")
-
   if (to.path.indexOf('/admin') === 0) {
     if (!isAdminUser(user)) {
       abortNavigation({
