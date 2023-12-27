@@ -37,9 +37,11 @@ export default function (requests: req, opt?: any) {
         requests.query = {}
     }
 
-    return useNuxtApp().runWithContext(async () => {
-      const token = useAuthStore().userJwt
+    const nuxtApp = useNuxtApp()
+    const authStore = useAuthStore()
+    const token = authStore.userJwt
 
+    return useNuxtApp().runWithContext(async () => {
       let data = requests.data
       if (data) {
         if (process.client && data instanceof FormData) {
@@ -66,7 +68,7 @@ export default function (requests: req, opt?: any) {
           options.baseURL = getBaseAPI().baseAPI()
         },
 
-        onResponse: (response) => {
+        onResponse: async (response) => {
           if (response.status !== 200) {
             response._data = {
               success: false,
@@ -82,7 +84,19 @@ export default function (requests: req, opt?: any) {
             return response
           }
 
-          ElMessage.error(data.msg || "遇到错误")
+          if (data.code === 200) {  // token错误
+            if (!token) {
+              ElMessage.error("请登陆后再操作")
+            } else {
+              await nuxtApp.runWithContext(async ()=>{
+                await authStore.logout()
+              })
+              ElMessage.error("登录过期，请重新登录")
+            }
+          } else {
+            ElMessage.error(data.msg || "遇到错误")
+          }
+
           return response
         },
 
