@@ -162,7 +162,7 @@ a {
     word-break: break-all;
   }
 
-  ul.list-group { 
+  ul.list-group {
     li.list-group-item {
       display: flex;
       list-style: none;
@@ -249,21 +249,6 @@ img.avatar {
     max-height: 45px;
     min-width: 45px;
     min-height: 45px;
-  }
-}
-
-.footer {
-  background: #fff;
-  padding: 20px 0 20px 0;
-
-  .hide {
-    a {
-      color: #efeaea;
-
-      &:hover {
-        color: #746f6f;
-      }
-    }
   }
 }
 
