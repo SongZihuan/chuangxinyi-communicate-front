@@ -216,5 +216,55 @@ export function useAdminApi() {
         }
       )
     },
+    getLink: async (query: any) => {
+      return request({
+          url: '/api/admin/links',
+          method: "GET",
+          query: query,
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    addLinks: async (data: any) => {
+      return request({
+          url: '/api/admin/links',
+          method: "POST",
+          query: {},
+          data: data,
+          useCache: false,
+        }
+      )
+    },
+    getEditLink: async (id: number) => {
+      return request({
+          url: '/api/admin/links/' + id,
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    editLink: async (id: number, data: any) => {
+      return request({
+          url: '/api/admin/links/' + id,
+          method: "PUT",
+          query: {},
+          data: data,
+          useCache: false,
+        }
+      )
+    },
+    deleteLink: async (id: number) => {
+      return request({
+          url: '/api/admin/links/' + id,
+          method: "DELETE",
+          query: {},
+          data: {},
+          useCache: false,
+        }
+      )
+    },
   }
 }
