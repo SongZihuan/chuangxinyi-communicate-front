@@ -75,18 +75,10 @@ export const useAuthStore = defineStore("auth", ()=> {
     setCurrentUser(null)
     setUserJwt("")
 
-
     let cookieJwt = useCookie("jwt", {
       path: "/",
     })
-    console.log("BBB", cookieJwt.value)
     cookieJwt.value = null
-    console.log("DDD", cookieJwt.value)
-
-    let cookieJwt2 = useCookie("jwt", {
-      path: "/",
-    })
-    console.log("CCC", cookieJwt2.value)
   }
 
   return {

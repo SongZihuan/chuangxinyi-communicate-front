@@ -270,10 +270,6 @@ let isOwner = computed(() => {
   )
 })
 
-onMounted(() => {
-  Utils.handleToc(toc.value)
-})
-
 const addFavorite = async (topicId) => {
   if (!favorited.value) {
     let {data, status} = await useTopicApi().favoriteAdd(topicId)
@@ -310,8 +306,6 @@ const like = async (topic) => {
       topic.value.likeCount++
       likeUsers.value = likeUsers.value || []
       likeUsers.value.unshift(authStore.currentUser)
-  } else {
-    console.log("AAA", status.value, data.value)
   }
 }
 

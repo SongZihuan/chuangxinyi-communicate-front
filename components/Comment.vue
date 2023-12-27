@@ -195,7 +195,7 @@ const create = async () => {
 }
 const reply = (q) => {
   if (!isLogin) {
-    Utils.toSignin(useNuxtApp())
+    Utils.toSignin()
   }
 
   quote.value = q
@@ -209,7 +209,7 @@ const cancelReply = () => {
 }
 
 const toLogin = async () => {
-  await Utils.toSignin(useNuxtApp())
+  await Utils.toSignin()
 }
 
 </script>

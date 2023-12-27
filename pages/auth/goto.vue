@@ -5,7 +5,7 @@
     layout: "base",
   })
 
-  await Utils.toSignin(useNuxtApp())
+  await Utils.toSignin()
 </script>
 
 <template>

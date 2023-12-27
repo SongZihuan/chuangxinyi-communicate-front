@@ -69,14 +69,12 @@ export default function (requests: req, opt?: any) {
         },
 
         onResponse: async ({ response }) => {
-          console.log("AAACCC", response)
           if (response.status !== 200) {
             response._data = {
               success: false,
               code: response.status,
               msg: "请求异常",
             }
-            console.log("AABBB")
             return response
           }
 

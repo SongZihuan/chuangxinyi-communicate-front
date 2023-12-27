@@ -15,10 +15,8 @@ export default async function(to: { path: string | string[] }) {
       return
     }
   } else {
-    console.log("BBB", user)
     if (!isNormalUser(user)) {
-      const nuxtApp = useNuxtApp()
-      await Utils.toSignin(nuxtApp)
+      await Utils.toSignin()
       abortNavigation({
         statusCode: 403,
         message: '请先登录在进行操作'

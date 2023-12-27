@@ -54,7 +54,7 @@
     }
   }
 
-  getMsgcount()
+  await getMsgcount()
 </script>
 
 <style lang="scss" scoped>

@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { NextLoading } from '~/common/loading';
-import utils from '~/common/utils'
+import Utils from '~/common/utils'
 import {ElMessage} from "element-plus"
 import {useAuthStore} from '~/store/auth'
 
@@ -16,7 +16,7 @@ const route = useRoute()
 
 if (process.client) {
   NextLoading.start()
-  let redirect = route.query?.redirect
+  let redirect = route.query?.redirect as string
   if (!redirect) {
     redirect = "/"
   }
@@ -30,7 +30,7 @@ if (process.client) {
       await useAuthStore().login({
         token: loginToken
       }, useNuxtApp())
-      utils.linkTo(redirect)
+      Utils.linkTo(redirect)
       hasRoute.value = true
     } catch (e) {
       ElMessage.error(e.message || e)
@@ -39,7 +39,7 @@ if (process.client) {
 
   if (!hasRoute.value) {
     setTimeout(()=>{
-      utils.linkTo("/")
+      Utils.linkTo("/")
     }, 1000)
   }
 

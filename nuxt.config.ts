@@ -1,14 +1,22 @@
+import ElementPlus from 'unplugin-element-plus/vite'
+
 export default {
   devtools: { enabled: true },
   devServer: {
     port: process.env.SERVER_PORT,
   },
 
+  vite: {
+    plugins: [
+      ElementPlus({}),
+    ],
+  },
   /*
    ** Global CSS
    */
   css: [
-    '~/assets/styles/all.scss'
+    '~/assets/styles/all.scss',
+    'element-plus/dist/index.css'
   ],
 
   buildModules: [
@@ -34,6 +42,13 @@ export default {
       layouts: true,
       pages: true,
       commons: true
+    },
+    transpile: ['element-plus/es'],
+  },
+
+  postcss: {
+    plugins: {
+      tailwindcss: {},
     },
   },
 

@@ -284,7 +284,6 @@ const save = async () => {
 }
 
 const addTip = () => {
-  console.log("AAA")
   if (!config.value.siteTips) {
     config.value.siteTips = []
   }
@@ -292,7 +291,6 @@ const addTip = () => {
     title: '小帖士',
     content: ''
   })
-  console.log("BBB", config.value.siteTips)
 }
 
 const delTip = (index) => {

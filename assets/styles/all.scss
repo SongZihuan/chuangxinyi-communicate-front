@@ -1,7 +1,11 @@
-@import "./variables";
-@import "./mixin";
-@import "./navbar";
-@import "./main";
-@import "./article";
-@import "./topic";
-@import "./link";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+//@import "./variables";
+//@import "./mixin";
+//@import "./navbar";
+//@import "./main";
+//@import "./article";
+//@import "./topic";
+//@import "./link";
