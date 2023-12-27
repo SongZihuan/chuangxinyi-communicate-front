@@ -205,7 +205,6 @@ let addLoading = ref(false)
 let editForm = ref({})
 let editFormVisible = ref(false)
 let editLoading = ref(false)
-let editFormRules = ref({})
 
 const list = async () => {
   listLoading.value = true
@@ -249,6 +248,8 @@ const addSubmit = async () => {
     ElMessage.info("提交成功")
     addFormVisible.value = false
     await list()
+  } else {
+    console.log("BBB", data.value)
   }
 }
 

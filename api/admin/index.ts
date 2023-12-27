@@ -12,7 +12,10 @@ export function useAdminApi() {
         }
       )
     },
-    getNodes: async (query: any) => {
+    getNodes: async (query: any = undefined) => {
+      if (!query) {
+        query = {}
+      }
       return request({
           url: '/api/admin/nodes',
           method: "GET",
@@ -262,6 +265,28 @@ export function useAdminApi() {
           method: "DELETE",
           query: {},
           data: {},
+          useCache: false,
+        }
+      )
+    },
+    getSetting: async () => {
+      return request({
+          url: '/api/admin/settings',
+          method: "GET",
+          query: {},
+          data: undefined,
+          useCache: true,
+        }
+      )
+    },
+    saveSetting: async (config: any) => {
+      return request({
+          url: '/api/admin/settings',
+          method: "POST",
+          query: {},
+          data: {
+            config: JSON.stringify(config)
+          },
           useCache: false,
         }
       )
