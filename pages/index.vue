@@ -10,6 +10,10 @@
 <script setup lang="ts">
 import Utils from "~/common/utils"
 
+definePageMeta({
+  layout: "all"
+})
+
 useHead({
   title: Utils.siteTitle("社区"),
   meta: [
