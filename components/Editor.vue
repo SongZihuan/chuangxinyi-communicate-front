@@ -161,8 +161,14 @@ const clear = () => {
   editorRef.value && editorRef.value.clear()
 }
 
+const focus = () => {
+  console.log(editorRef.value)
+  editorRef.value && editorRef.value.focus(true)
+}
+
 defineExpose({
-  clear
+  clear,
+  focus,
 })
 
 if (process.client) {

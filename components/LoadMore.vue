@@ -30,20 +30,10 @@ const props = defineProps({
     },
     required: false
   },
-  // 初始化数据
-  initData: {
-    type: Object,
-    default() {
-      return {
-        results: [],
-        cursor: ''
-      }
-    }
-  }
 })
 
-let cursor = ref(props.initData.cursor)
-let results = ref(props.initData.results || [])
+let cursor = ref(0)
+let results = ref([])
 let hasMore = ref(true)
 let loading = ref(false)
 
@@ -65,11 +55,11 @@ const loadMore = async () => {
       useCache: false,
     })
 
-    if (status == "success") {
+    if (status.value == "success" && data.value.success) {
       cursor.value = data.value.data.cursor
     }
 
-    if (status == "success" && data.value.data.results && data.value.data.results.length) {
+    if (status.value == "success" && data.value.success && data.value.data.results && data.value.data.results.length) {
       data.value.data.results.forEach((item) => {
         results.value.push(item)
       })
@@ -100,6 +90,8 @@ defineExpose({
   unshiftResults,
   pushResults,
 })
+
+await loadMore()
 
 </script>
 

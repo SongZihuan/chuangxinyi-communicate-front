@@ -10,7 +10,7 @@
 
   <NuxtLayout>
 <!--    不要删除包裹NuxtPage的Div，删除可能引发router.push的错误-->
-    <div>
+    <div class="w-[100%]">
       <NuxtPage />
     </div>
   </NuxtLayout>

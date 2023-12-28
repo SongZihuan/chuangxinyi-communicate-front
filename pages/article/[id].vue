@@ -110,7 +110,7 @@
           </div>
 
           <!-- 评论 -->
-          <comment
+          <CommentList
             :entity-id="article.articleId"
             :comments-page="commentsPage"
             entity-type="article"
@@ -164,10 +164,10 @@
 
 <script setup lang="ts">
 import Utils from '~/common/utils'
-import Comment from '~/components/Comment'
 import { useArticleApi } from '~/api/article'
 import { useAuthStore } from '~/store/auth'
 import { ElMessage } from "element-plus"
+import { useTopicApi } from '~/api/topics'
 
 let article = ref({})
 let commentsPage = ref({})
@@ -264,16 +264,25 @@ let isOwner = computed(()=>{
 })
 
 const deleteArticle = async (articleId) => {
-  if (process.client && !window.confirm('是否确认删除该文章？')) {
-    return
-  }
-  let {data, status} = await useArticleApi().delete(articleId)
-  if (status.value === "success" && data.value.success) {
-    ElMessage.success("删除成功")
-    setTimeout(async ()=>{
-      await Utils.linkTo('/articles')
-    }, 1000)
-  }
+  ElMessageBox.confirm(
+    '是否确认删除该文章？',
+    'Warning',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(async () => {
+      let {data, status} = await useArticleApi().delete(articleId)
+      if (status.value === "success" && data.value.success) {
+        ElMessage.success("删除成功")
+        setTimeout(async ()=>{
+          await Utils.linkTo('/articles')
+        }, 1000)
+      }
+    })
+    .catch(() => {})
 }
 
 const addFavorite = async (articleId) => {

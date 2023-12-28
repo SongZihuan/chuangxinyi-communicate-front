@@ -146,6 +146,10 @@ let Utils = {
   },
 
   getUserName: (user: any): string => {
+    if (!user) {
+      return "陌生用户"
+    }
+
     if (user.nickname) {
       return user.nickname
     }

@@ -32,7 +32,7 @@
           </el-link>
         </div>
       </div>
-      <el-avatar shape="square" :size="50" :src="runtimeConfig.public.AVATAR_URL + '?uid=' + topic.user.uid" />
+      <Avatar :user="topic.user"/>
     </div>
 
     <template #footer v-if="topic.tags">

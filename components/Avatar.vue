@@ -1,7 +1,5 @@
 <template>
-  <div @click="onClick">
-    <el-avatar shape="square" :src="runtimeConfig.public.AVATAR_URL + '?uid=' + user.uid" />
-  </div>
+  <el-avatar @click="onClick" shape="square" :src="runtimeConfig.public.AVATAR_URL + '?uid=' + user.uid" />
 </template>
 
 <script setup lang="ts">

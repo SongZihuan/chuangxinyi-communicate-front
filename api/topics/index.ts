@@ -142,16 +142,6 @@ export function useTopicApi() {
         }
       )
     },
-    deleteTopic: async (id: number) => {
-      return request({
-          url: '/api/topic/delete/' + id,
-          method: "POST",
-          query: {},
-          data: undefined,
-          useCache: false,
-        }
-      )
-    },
     likeTopic: async (id: number) => {
       return request({
           url: '/api/topic/' + id + '/like',
