@@ -1,70 +1,28 @@
 <template>
-  <div class="select-tags">
-    <input id="tags" v-model="tags" name="tags" type="hidden" />
-    <div class="tags-selected">
-      <span v-for="tag in tags" :key="tag" class="tag-item">
-        <span class="text"
-          >{{ tag
-          }}<i
-            :data-name="tag"
-            @click="clickRemoveTag"
-            class="iconfont icon-close"
-        /></span>
-      </span>
-    </div>
-    <input
-      ref="tagInput"
-      v-model="inputTag"
-      :placeholder="
-        '标签（请用逗号分隔每个标签，最多' +
-          maxTagCount +
-          '个，每个最长15字符）'
-      "
-      @input="autocomplete"
-      @keydown.delete="removeTag"
-      @keydown.enter="addTag"
-      @keydown.tab="addTag"
-      @keydown.space="addTag"
-      @keydown.up="selectUp"
-      @keydown.down="selectDown"
-      @keydown.esc="close"
-      @focus="openRecommendTags"
-      @blur="closeRecommendTags"
-      @click="openRecommendTags"
-      class="input"
-      type="text"
-    />
-    <div v-if="autocompleteTags.length > 0" class="autocomplete-tags">
-      <div class="tags-container">
-        <section class="tag-section">
-          <div
-            v-for="(item, index) in autocompleteTags"
-            :key="item"
-            :class="{ active: index === selectIndex }"
-            @click="selectTag(index)"
-            v-text="item"
-            class="tag-item"
-          />
-        </section>
-      </div>
-    </div>
-    <div v-if="showRecommendTags" class="recommend-tags">
-      <div class="tags-container">
-        <div class="header">
-          <span>推荐标签</span>
-          <span class="close-recommend"
-            ><i @click="closeRecommendTags" class="iconfont icon-close"
-          /></span>
-        </div>
-        <a
-          v-for="tag in recommendTags"
-          :key="tag"
-          @click="addRecommendTag(tag)"
-          v-text="tag"
-          class="tag-item"
-        />
-      </div>
-    </div>
+  <div class="w=[100%]">
+    <client-only>
+      <el-autocomplete
+        v-model="tagInput"
+        :fetch-suggestions="autocomplete"
+        :placeholder="'标签（请用逗号分隔每个标签，最多' + maxTagCount + '个，每个最长15字符）'"
+        @keydown.delete="removeTag"
+        @keydown.enter="addTag"
+        @keydown.tab="addTag"
+        @keydown.space="addTag"
+        class="w-[100%]"
+      >
+        <template #prefix>
+          <el-tag
+            v-for="tag in tags"
+            :key="tag"
+            @click="clickRemoveTag(tag)"
+            class="mx-1"
+          >
+            {{ tag }}
+          </el-tag>
+        </template>
+      </el-autocomplete>
+    </client-only>
   </div>
 </template>
 
@@ -75,7 +33,7 @@ import {useTopicApi} from '~/api/topics'
 const configStore = useConfigStore()
 
 const props = defineProps({
-  value: {
+  modelValue: {
     type: Array,
     default() {
       return []
@@ -83,178 +41,105 @@ const props = defineProps({
   }
 })
 
-let tags = ref(props.value || [])
+let tags = ref(props.modelValue || [])
 let maxTagCount = ref(3)
 let maxWordCount = ref(15)
-let showRecommendTags = ref(false)
-let inputTag = ref("")
-let autocompleteTags = ref([])
-let selectIndex = ref(-1)
+let tagInput = ref("")
 
-let tagInput = ref(null)
-
-let recommendTags = computed(() => {
-  return configStore.setting.recommendTags
-})
-
-let emit = defineEmits(["input"])
+let emit = defineEmits(["update:modelValue"])
 
 const removeTag = () => {
-  const selectionStart = tagInput.value.selectionStart
-  if (!inputTag.value || selectionStart === 0) {
-    // input框没内容，或者光标在首位的时候就删除最后一个标签
+  if (!tagInput.value) {
     tags.value.splice(tags.value.length - 1, 1)
-    emit('input', tags.value)
+    emit('update:modelValue', tags.value)
   }
 }
 
-const clickRemoveTag = (event) => {
-  const tag = event.target.dataset.name
-  if (tag) {
-    const index = tags.value.indexOf(tag)
-    if (index !== -1) {
-      tags.value.splice(index, 1)
-      emit('input', tags.value)
-    }
+const clickRemoveTag = (tag: string) => {
+  const index = tags.value.indexOf(tag)
+  if (index !== -1) {
+    tags.value.splice(index, 1)
+    emit('update:modelValue', tags.value)
   }
-}
-
-/**
- * 手动点击选择标签
- * @param index
- */
-const selectTag = (index) => {
-  selectIndex.value = index
-  addTag()
 }
 
 /**
  * 添加标签
  * @param event
  */
-const addTag = (event) => {
-  if (event) {
-    event.stopPropagation()
-    event.preventDefault()
+const addTag = () => {
+  if (!tagInput.value) {
+    return
   }
 
-  if (
-    selectIndex.value >= 0 &&
-    autocompleteTags.value.length > selectIndex.value
-  ) {
-    addTagName(autocompleteTags.value[selectIndex.value])
-  } else {
-    addTagName(inputTag.value)
-  }
-  autocompleteTags.value = []
-  selectIndex.value = -1
+  addTagName(tagInput.value)
+  tagInput.value = ""
 }
 
-/**
- * 添加推荐标签
- * @param tagName
- */
-const addRecommendTag = (tagName) => {
-  addTagName(tagName)
-  closeRecommendTags()
-}
-
-/**
- * 添加标签
- * @param tagName 标签名称
- * @returns {boolean} 是否成功
- */
-const addTagName = (tagName) => {
+const addTagName = (tagName: string) => {
   if (!tagName) {
     return false
   }
 
-  // 最多四个标签
   if (tags.value && tags.value.length >= maxTagCount.value) {
+    ElMessage.error("标签太多了")
     return false
   }
 
   // 每个标签最多15个字符
   if (tagName.length > maxWordCount.value) {
+    ElMessage.error("标签字符太多了")
     return false
   }
 
   // 标签已经存在
   if (tags.value && tags.value.includes(tagName).value) {
+    ElMessage.error("标签已存在了")
     return false
   }
 
   tags.value.push(tagName)
-  inputTag.value = ''
-  emit('input', tags.value)
+  emit('update:modelValue', tags.value)
   return true
 }
 
-const autocomplete = async () => {
-  closeRecommendTags()
-  selectIndex.value = -1
-  if (!inputTag.value) {
-    autocompleteTags.value = []
+const autocomplete = async (queryString: string, cb) => {
+  if (!queryString) {
+    if (!configStore.setting.recommendTags) {
+      cb([])
+      return
+    }
+
+    console.log(configStore.setting.recommendTags)
+
+    let res = []
+    for (let i = 0; i < configStore.setting.recommendTags.length; i++) {
+      res.push({ value: configStore.setting.recommendTags[i], data: null })
+    }
+
+    console.log(res)
+    cb(res)
+    return
   } else {
     let {data, status} = await useTopicApi().tagAutoComplete({
-      input: inputTag.value
+      input: queryString
     })
 
     if (status.value === "success" && data.value.success) {
-      autocompleteTags.value = []
+      let res = []
       if (data.value.data.length > 0) {
         for (let i = 0; i < data.value.data.length; i++) {
-          autocompleteTags.value.push(data.value.data[i].name)
+          res.push({ value: data.value.data[i].name, data: data.value.data[i] })
         }
       }
+      cb(res)
+      return
     }
   }
+
+  cb([])  // 兜底
 }
 
-const selectUp = (event) => {
-  event.stopPropagation()
-  event.preventDefault()
-  const curIndex = selectIndex.value
-  const maxIndex = autocompleteTags.value.length - 1
-  if (maxIndex < 0 || curIndex < 0) {
-    // 已经在最顶部
-    return
-  }
-  selectIndex.value--
-}
-
-const selectDown = (event) => {
-  event.stopPropagation()
-  event.preventDefault()
-  const curIndex = selectIndex.value
-  const maxIndex = autocompleteTags.value.length - 1
-  if (maxIndex < 0 || curIndex >= maxIndex) {
-    // 已经在最底部
-    return
-  }
-  selectIndex.value++
-}
-
-// 关闭推荐
-const openRecommendTags = () => {
-  showRecommendTags.value = true
-}
-
-// 开启推荐
-const closeRecommendTags = () => {
-  setTimeout(() => {
-    showRecommendTags.value = false
-  }, 300)
-}
-
-// 关闭自动补全
-const close = () => {
-  if (autocompleteTags.value && autocompleteTags.value.length > 0) {
-    autocompleteTags.value = []
-    selectIndex.value = -1
-  }
-  closeRecommendTags()
-}
 </script>
 
 <style lang="scss" scoped>

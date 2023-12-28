@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center w-[100%]">
+  <div class="flex flex-col w-[100%]">
     <div class="my-2">
       <el-breadcrumb :separator-icon="ArrowRight">
         <el-breadcrumb-item :to="{ path: '/' }">{{ siteName }}</el-breadcrumb-item>

@@ -9,7 +9,10 @@
   </Head>
 
   <NuxtLayout>
-    <NuxtPage />
+<!--    不要删除包裹NuxtPage的Div，删除可能引发router.push的错误-->
+    <div>
+      <NuxtPage />
+    </div>
   </NuxtLayout>
 </template>
 

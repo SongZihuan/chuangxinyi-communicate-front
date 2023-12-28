@@ -157,12 +157,6 @@ onBeforeUnmount(()=>{
 const toolBarComponent = ref(null)
 const editorComponent = ref(null)
 
-if (process.client) {
-  const { Editor, Toolbar } = await import('@wangeditor/editor-for-vue')
-  toolBarComponent.value = Toolbar
-  editorComponent.value = Editor
-}
-
 const clear = () => {
   editorRef.value && editorRef.value.clear()
 }
@@ -170,6 +164,12 @@ const clear = () => {
 defineExpose({
   clear
 })
+
+if (process.client) {
+  const { Editor, Toolbar } = await import('@wangeditor/editor-for-vue')
+  toolBarComponent.value = Toolbar
+  editorComponent.value = Editor
+}
 
 </script>
 

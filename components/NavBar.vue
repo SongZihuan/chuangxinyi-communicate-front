@@ -9,7 +9,7 @@
     </template>
 
     <template #title>
-      <span class="text-2xl"> {{ appinfo.name }} </span>
+      <span class="text-2xl"> {{ siteName }} </span>
     </template>
 
     <template #content>
@@ -212,8 +212,8 @@ let setting = computed((): any => {
   return configStore.setting
 })
 
-let appinfo = computed((): any => {
-  return configStore.appinfo
+let siteName = computed((): any => {
+  return Utils.siteTitle('')
 })
 
 const login = async () => {
