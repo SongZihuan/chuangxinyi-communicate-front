@@ -1,14 +1,13 @@
 <template>
-  <div class="widget">
-    <div class="widget-content content">
-      <a :href="createTopicUrl" class="button is-link btn-block">
-        <span>发布新话题</span>
-      </a>
-    </div>
+  <div class="flex flex-col justify-center my-2">
+    <el-button type="primary" @click="onClick">
+      发表新话题
+    </el-button>
   </div>
 </template>
 
 <script setup lang="ts">
+  import Utils from "~/common/utils"
   const props = defineProps({
     currentNodeId: {
       type: Number,
@@ -16,13 +15,13 @@
     }
   })
 
-  let createTopicUrl = computed(() => {
+  const onClick = async () => {
     let url = '/topic/create'
     if (props.currentNodeId) {
       url += '?nodeId=' + props.currentNodeId
     }
-    return url
-  })
+    await Utils.linkTo(url)
+  }
 </script>
 
 <style lang="scss" scoped>

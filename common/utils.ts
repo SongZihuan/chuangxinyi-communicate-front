@@ -3,10 +3,11 @@ import { useAuthStore } from '~/store/auth'
 import { ElMessage } from "element-plus"
 
 let Utils = {
-  linkTo: async (path: string) => {
+  linkTo: async (path: string, query: any = undefined) => {
     const router = useRouter()
     await router.push({
-      path: path
+      path: path,
+      query: query || {},
     })
   },
 

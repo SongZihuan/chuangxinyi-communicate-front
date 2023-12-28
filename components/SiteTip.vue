@@ -1,11 +1,15 @@
 <template>
-  <div v-if="randomSiteTip" class="widget tip">
-    <div v-if="randomSiteTip.title" class="widget-header">
-      {{ randomSiteTip.title }}
-    </div>
-    <div class="widget-content content tip-content">
-      <div v-html="randomSiteTip.content"></div>
-    </div>
+  <div v-if="randomSiteTip" class="my-2">
+    <el-card>
+      <template #header>
+        <div>
+          {{ randomSiteTip.title }}
+        </div>
+      </template>
+      <div>
+        <div v-html="randomSiteTip.content"></div>
+      </div>
+    </el-card>
   </div>
 </template>
 

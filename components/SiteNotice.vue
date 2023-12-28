@@ -1,9 +1,15 @@
 <template>
-  <div v-if="config.siteNotification" class="widget">
-    <div class="widget-header">公告</div>
-    <div class="widget-content content notice-content">
-      <div v-html="config.siteNotification"></div>
-    </div>
+  <div class="my-2">
+    <el-card>
+      <template #header>
+        <div>
+          公告
+        </div>
+      </template>
+      <div>
+        <div v-html="config.siteNotification"></div>
+      </div>
+    </el-card>
   </div>
 </template>
 

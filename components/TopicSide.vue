@@ -1,59 +1,13 @@
 <template>
-  <div class="right-container">
-    <PostBtnSidebar :current-node-id="currentNodeId" />
-    <SiteNotice />
-    <SiteTip />
-    <div class="widget">
-      <div class="widget-header">
-        <span class="widget-title">积分排行</span>
-      </div>
-      <div class="widget-content">
-        <ul class="score-rank">
-          <li v-for="user in scoreRank" :key="user.id">
-            <a :href="'/user/' + user.id" class="score-user-avatar">
-              <img :src="runtimeConfig.public.AVATAR_URL + '?uid=' + user.uid" class="avatar" alt="头像" />
-            </a>
-            <div class="score-user-info">
-              <a :href="'/user/' + user.id">{{ Utils.getUserName(user) }}</a>
-              <p>{{ user.topicCount }} 帖子 • {{ user.commentCount }} 评论</p>
-            </div>
-            <div class="score-rank-info">
-              <span class="score-user-score">
-                <i class="iconfont icon-dollar" /><span>{{ user.score }}</span>
-              </span>
-            </div>
-          </li>
-        </ul>
-      </div>
+  <div class="flex justify-center w-[100%]">
+    <div class="w-[95%]">
+      <PostBtnSidebar :current-node-id="currentNodeId" />
+      <SiteNotice />
+      <SiteTip />
+      <SocreRank />
+      <Links />
+      <SiteStat />
     </div>
-    <div v-if="links && links.length" class="widget">
-      <div class="widget-header">
-        <span>友情链接</span>
-        <span class="slot"><a href="/links/1">查看更多&gt;&gt;</a></span>
-      </div>
-      <div class="widget-content links">
-        <ul class="list-group">
-          <li v-for="link in links" :key="link.linkId" class="list-group-item">
-            <a
-              :href="link.url"
-              :title="link.title"
-              class="link-title"
-              rel="nofollow"
-              target="_blank"
-            >
-              <p v-if="!link.logo" class="link-title">{{ link.title }}</p>
-              <p v-if="!link.logo" class="link-summary">
-                {{ link.summary }}
-              </p>
-              <p v-if="link.logo">
-                <img v-if="link.logo" :src="link.logo" />
-              </p>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <SiteStat :stat="stat" />
   </div>
 </template>
 
@@ -62,39 +16,15 @@ import PostBtnSidebar from '~/components/PostBtnSidebar'
 import SiteNotice from '~/components/SiteNotice'
 import SiteTip from '~/components/SiteTip'
 import SiteStat from '~/components/SiteStat'
-import Utils from '~/common/utils'
-
-const runtimeConfig = useRuntimeConfig()
 
 const props = defineProps({
   currentNodeId: {
     type: Number,
     default: 0,
   },
-  links: {
-    type: Array,
-    default() {
-      return null
-    },
-  },
-  stat: {
-    type: Object,
-    default() {
-      return {}
-    },
-  },
-  scoreRank: {
-    type: Array,
-    default() {
-      return null
-    },
-  },
 })
 
 let currentNodeId = ref(props.currentNodeId)
-let links = ref(props.links)
-let stat = ref(props.stat)
-let scoreRank = ref(props.scoreRank)
 </script>
 
 <style lang="scss" scoped>

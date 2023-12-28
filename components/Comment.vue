@@ -152,7 +152,6 @@ let quote = ref(null)
 let commentEditor = ref(null)
 let commentTitle = ref(null)
 let commentsLoadMore = ref(null)
-let mdEditor = ref(null)
 
 let btnName = computed(() => {
   return sending.value ? '正在发表...' : '回复 (Ctrl/Cmd + Enter)'
@@ -161,10 +160,6 @@ let btnName = computed(() => {
 let isLogin = computed(() => {
   return authStore.currentUser != null
 })
-
-const ctrlEnterCreate = () => {
-  create()
-}
 
 const create = async () => {
   if (!content.value || content.value.length < 3) {

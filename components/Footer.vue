@@ -31,37 +31,4 @@ let appName = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-//.footer {
-//  background: #fff;
-//  padding: 20px 0 20px 0;
-//
-//  font-size: 14px;
-//  color: #666;
-//  background: none;
-//  text-align: center;
-//  margin: 0px 10px;
-//
-//  a {
-//    color: #666;
-//    text-decoration: none;
-//  }
-//
-//  .light {
-//    font-weight: 700;
-//  }
-//  .icon-divider-vertical {
-//    font-size: 12px;
-//  }
-//
-//  .hide {
-//    a {
-//      color: #efeaea;
-//
-//      &:hover {
-//        color: #746f6f;
-//      }
-//    }
-//  }
-//}
-
 </style>
