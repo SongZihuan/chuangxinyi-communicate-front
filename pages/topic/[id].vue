@@ -114,18 +114,14 @@ import Comment from '~/components/CommentList.vue'
 import {useTopicApi} from '~/api/topics'
 import {useAuthStore} from '~/store/auth'
 import {ElMessage} from "element-plus"
-import { useAdminApi } from '~/api/admin'
 
 const authStore = useAuthStore()
 const route = useRoute()
 const topicID = route.params.id
 
-const runtimeConfig = useRuntimeConfig()
 let topic = ref({})
 let favorited = ref(false)
 let likeUsers = ref({})
-
-let toc = ref(null)
 
 const getTopic = async () => {
   let {data, status, error} = await useTopicApi().getTopic(topicID)
@@ -224,7 +220,7 @@ const like = async (topic) => {
 }
 
 const editTopic = async (topicId) => {
-  await Utils.linkTo('/topic/edit/' + topic.topicId)
+  await Utils.linkTo('/topic/edit/' + topicId)
 }
 
 useHead({

@@ -4,11 +4,21 @@ import { ElMessage } from "element-plus"
 
 let Utils = {
   linkTo: async (path: string, query: any = undefined) => {
-    const router = useRouter()
-    await router.push({
-      path: path,
-      query: query || {},
-    })
+    if (!query) {
+      query = {}
+    }
+
+    const runtimeConfig = useRuntimeConfig()
+    if (runtimeConfig.public.ENV === "development") {
+      let q = Utils.encodeSearchParams(query)
+      window.location.href = path + "?" +  q
+    } else {
+      const router = useRouter()
+      await router.push({
+        path: path,
+        query: query || {},
+      })
+    }
   },
 
   redirectTo(path: string) {

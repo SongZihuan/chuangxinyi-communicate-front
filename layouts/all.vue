@@ -1,10 +1,8 @@
 <template>
-  <div class="zendea">
-    <NavBar />
-      <slot />
-    <Footer />
-    <BackToTop />
-  </div>
+  <NavBar />
+    <slot />
+  <Footer />
+  <BackToTop />
 </template>
 
 <script setup lang="ts">

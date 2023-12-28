@@ -1,14 +1,12 @@
 <template>
-  <div class="zendea">
-    <NavBar />
-      <div class="flex flex-col items-center">
-        <div class="w-[80%] flex flex-col items-start">
-          <slot />
-        </div>
+  <NavBar />
+    <div class="flex flex-col items-center">
+      <div class="w-[80%] flex flex-col items-start">
+        <slot />
       </div>
-    <Footer />
-    <BackToTop />
-  </div>
+    </div>
+  <Footer />
+  <BackToTop />
 </template>
 
 <script setup lang="ts">
