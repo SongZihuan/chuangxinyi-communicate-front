@@ -1,165 +1,74 @@
 <template>
-  <section class="main">
-    <div class="container main-container size-360 left-main">
-      <div class="left-container">
-        <article
-          class="article-item article-detail"
-          itemscope
-          itemtype="http://schema.org/BlogPosting"
-        >
-          <div class="main-content">
-            <div class="article-header">
-              <div class="article-item-left">
-                <a
-                  :href="'/user/' + article.user.id"
-                  :title="Utils.getUserName(article.user)"
-                  target="_blank"
-                >
-                  <img v-lazy="runtimeConfig.public.AVATAR_URL + '?uid=' + article.user.uid" class="avatar" />
-                </a>
-              </div>
-              <div class="article-item-right">
-                <h1 class="article-title" itemprop="headline">
-                  {{ article.title }}
-                </h1>
-                <div class="article-meta">
-                  <span class="article-meta-item">
-                    由
-                    <a
-                      :href="'/user/' + article.user.id"
-                      class="article-author"
-                      itemprop="author"
-                      itemscope
-                      itemtype="http://schema.org/Person"
-                      ><span itemprop="name">{{
-                        Utils.getUserName(article.user)
-                      }}</span></a
-                    >发布于
-                    <time
-                      :datetime="Utils.formatDate(article.createTime, 'yyyy-MM-ddTHH:mm:ss')"
-                      itemprop="datePublished"
-                      >{{ Utils.prettyDate(article.createTime) }}</time
-                    >
-                  </span>
+  <div class="flex flex-row w-[100%]">
+    <div class="flex flex-col w-[80%]">
+      <div class="mr-2">
+        <h1 class="title my-1" itemprop="headline">
+          {{ article.title }}
+        </h1>
+        <div class="flex flex-row flex-wrap my-1">
+          <el-link
+            :href="'/user/' + article.user.id"
+            class="mr-2"
+          >
+            <el-tag>
+              作者：{{ Utils.getUserName(article.user) }}
+            </el-tag>
+          </el-link>
 
-                  <span
-                    v-if="article.tags && article.tags.length > 0"
-                    class="article-meta-item"
-                  >
-                    <span
-                      v-for="tag in article.tags"
-                      :key="tag.tagId"
-                      class="article-tag tag"
-                    >
-                      <a :href="'/articles/' + tag.tagId" class>{{
-                        tag.tagName
-                      }}</a>
-                    </span>
-                  </span>
-                </div>
+          <el-link
+            v-for="tag in article.tags"
+            :key="tag.tagId"
+            :href="'/topics/tag/' + tag.tagId"
+            class="mx-2"
+          >
+            <el-tag>
+              {{tag.tagName}}
+            </el-tag>
+          </el-link>
+        </div>
 
-                <div class="article-tool">
-                  <span v-if="isOwner">
-                    <a @click="deleteArticle(article.articleId)">
-                      <i class="iconfont icon-delete" />&nbsp;删除
-                    </a>
-                  </span>
-                  <span v-if="isOwner">
-                    <a :href="'/article/edit/' + article.articleId">
-                      <i class="iconfont icon-edit" />&nbsp;修改
-                    </a>
-                  </span>
-                  <span>
-                    <a @click="addFavorite(article.articleId)">
-                      <i class="iconfont icon-favorite" />&nbsp;{{
-                        favorited ? '已收藏' : '收藏'
-                      }}
-                    </a>
-                  </span>
-                </div>
-              </div>
-            </div>
+        <div v-if="isOwner" class="flex flex-col items-end my-2">
+          <el-button-group>
+            <el-button
+              @click="addFavorite"
+            >
+              <span v-if="favorited"> 取消收藏 </span>
+              <span v-else> 收藏 </span>
+            </el-button>
+            <el-button v-if="isOwner" type="primary" @click="deleteArticle">删除</el-button>
+            <el-button v-if="isOwner" type="primary" @click="editArticle">修改</el-button>
+          </el-button-group>
+        </div>
 
+        <el-divider>
+          正文
+        </el-divider>
+
+        <div>
+          <div>
             <div
               v-html="article.content"
               v-lazy-container="{ selector: 'img' }"
-              class="article-content content"
-              itemprop="articleBody"
             ></div>
-          </div>
-
-          <div class="article-footer">
-            <ul>
-              <li>
-                <strong>免责声明：</strong>
-                我们尊重原创，也注重分享。版权原作者所有，如有侵犯您的权益请及时联系（
-                <a href="mailto:support@zendea.com">support@zendea.com</a
-                >），我们将在24小时之内删除。
-              </li>
-              <li v-if="article.sourceUrl">
-                <strong>原文链接：</strong>
-                <a
-                  :href="article.sourceUrl"
-                  class="source-url"
-                  rel="nofollow"
-                  target="_blank"
-                  >{{ article.sourceUrl }}</a
-                >
-              </li>
-            </ul>
-          </div>
-
-          <!-- 评论 -->
-          <CommentList
-            :entity-id="article.articleId"
-            :comments-page="commentsPage"
-            entity-type="article"
-          />
-        </article>
-      </div>
-      <div class="right-container">
-        <div
-          v-if="relatedArticles && relatedArticles.length"
-          class="widget no-margin"
-        >
-          <div class="widget-header">相关文章</div>
-          <div class="widget-content article-related">
-            <ul>
-              <li v-for="a in relatedArticles" :key="a.articleId">
-                <a
-                  :href="'/article/' + a.articleId"
-                  :title="a.title"
-                  class="article-related-title"
-                  target="_blank"
-                  >{{ a.title }}</a
-                >
-              </li>
-            </ul>
           </div>
         </div>
 
-        <div
-          v-if="newestArticles && newestArticles.length"
-          class="widget no-margin"
-        >
-          <div class="widget-header">最新文章</div>
-          <div class="widget-content article-related">
-            <ul>
-              <li v-for="a in newestArticles" :key="a.articleId">
-                <a
-                  :href="'/article/' + a.articleId"
-                  :title="a.title"
-                  class="article-related-title"
-                  target="_blank"
-                  >{{ a.title }}</a
-                >
-              </li>
-            </ul>
-          </div>
+        <div>
+          <Comment
+            :entity-id="article.articleId"
+            :comment-count="article.commentCount"
+            entity-type="article"
+          />
         </div>
       </div>
     </div>
-  </section>
+
+    <div class="flex flex-col w-[20%]">
+      <div class="ml-2">
+        <UserInfo :user="article.user" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -167,17 +76,15 @@ import Utils from '~/common/utils'
 import { useArticleApi } from '~/api/article'
 import { useAuthStore } from '~/store/auth'
 import { ElMessage } from "element-plus"
-import { useTopicApi } from '~/api/topics'
+import Comment from '~/components/CommentList.vue'
 
 let article = ref({})
 let commentsPage = ref({})
 let favorited = ref({})
 let newestArticles = ref({})
-let relatedArticles = ref({})
 
 const route = useRoute()
 const articleId = route.params.id
-const runtimeConfig = useRuntimeConfig()
 
 const getArticles = async () => {
   let {data, status, error} = await useArticleApi().getArticle(articleId)
@@ -195,7 +102,7 @@ const getArticles = async () => {
 const getFavorited = async () => {
   let {data, status, error} = await useArticleApi().favorited(articleId)
   if (status.value === "success" && data.value.success) {
-    favorited.value = data.value.data
+    favorited.value = data.value.data.favorited || false // 如果报错就是false
   } else {
     console.log(status.value, error && error.value)
   }
@@ -219,15 +126,6 @@ const getNewest = async () => {
   }
 }
 
-const getRelated = async () => {
-  let {data, status, error} = await useArticleApi().getArticle(article.value.articleId)
-  if (status.value === "success" && data.value.success) {
-    relatedArticles.value = data.value.data
-  } else {
-    console.log(status.value, error && error.value)
-  }
-}
-
 await Promise.all([
   getArticles(),  // 要先执行
 ])
@@ -236,7 +134,6 @@ await Promise.all([
   getFavorited(),
   getComments(),
   getNewest(),
-  getRelated(),
 ])
 
 let keywords = ref('')
@@ -263,7 +160,7 @@ let isOwner = computed(()=>{
   return user && article.value && user.id === article.value.user.id
 })
 
-const deleteArticle = async (articleId) => {
+const deleteArticle = async () => {
   ElMessageBox.confirm(
     '是否确认删除该文章？',
     'Warning',
@@ -274,7 +171,7 @@ const deleteArticle = async (articleId) => {
     }
   )
     .then(async () => {
-      let {data, status} = await useArticleApi().delete(articleId)
+      let {data, status} = await useArticleApi().delete(article.value.articleId)
       if (status.value === "success" && data.value.success) {
         ElMessage.success("删除成功")
         setTimeout(async ()=>{
@@ -285,30 +182,38 @@ const deleteArticle = async (articleId) => {
     .catch(() => {})
 }
 
-const addFavorite = async (articleId) => {
+const addFavorite = async () => {
   if (favorited.value) {
-    let {data, status} = await useArticleApi().favoriteDelete(articleId)
+    let {data, status} = await useArticleApi().favoriteDelete(article.value.articleId)
     if (status.value === "success" && data.value.success) {
-      favorited = false
+      favorited.value = false
       ElMessage.success('已取消收藏！')
     }
   } else {
-    let {data, status} = await useArticleApi().favoriteAdd(articleId)
+    let {data, status} = await useArticleApi().favoriteAdd(article.value.articleId)
     if (status.value === "success" && data.value.success) {
-      favorited = false
+      favorited.value = true
       ElMessage.success('收藏成功！')
     }
   }
 }
 
+const editArticle = async () => {
+  await Utils.linkTo('/article/edit/' + article.value.articleId)
+}
+
 useHead({
   title: Utils.siteTitle(article.value.title),
   meta: [
-    { hid: 'description', name: 'description', content: description.value },
-    { hid: 'keywords', name: 'keywords', content: keywords.value }
+    { name: 'description', content: description.value },
+    { name: 'keywords', content: keywords.value }
   ]
 })
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.title{
+  font-size: 40px;
+}
+</style>

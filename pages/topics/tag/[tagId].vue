@@ -19,8 +19,6 @@ import TopicSide from '~/components/TopicSide'
 import TopicList from '~/components/TopicList'
 import Pagination from '~/components/Pagination'
 import { useTopicApi } from '~/api/topics'
-import { useUserApi } from '~/api/user'
-import { useLinksApi } from '~/api/links'
 import Utils from "~/common/utils"
 
 let tag = ref({})

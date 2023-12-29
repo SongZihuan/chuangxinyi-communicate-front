@@ -48,7 +48,6 @@
         <div class="my-2 flex flex-row items-center">
           <el-button-group>
             <el-button
-              :class="{ active: favorited }"
               @click="addFavorite"
             >
               <span v-if="favorited"> 取消收藏 </span>
@@ -74,8 +73,7 @@
         <div v-if="isOwner" class="flex flex-col items-end my-2">
           <el-button-group>
             <el-button type="primary" @click="deleteTopic">删除</el-button>
-            <!-- 话题类型为普通时才可以修改 -->
-            <el-button v-if="topic.type === 0" type="primary" @click="editTopic">修改</el-button>
+            <el-button type="primary" @click="editTopic">修改</el-button>
           </el-button-group>
         </div>
 

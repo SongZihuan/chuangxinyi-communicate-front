@@ -137,7 +137,7 @@ let Utils = {
     } else if (diffValue / day <= 30) {
       return parseInt(String(diffValue / day)) + '天前'
     }
-    return this.formatDate(timestamp, 'yyyy-MM-dd HH:mm:ss')
+    return Utils.formatDate(timestamp, 'yyyy-MM-dd HH:mm:ss')
   },
 
   siteTitle: (subTitle: string|undefined = undefined) => {

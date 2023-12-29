@@ -32,7 +32,6 @@
 
 <script setup lang="ts">
 import Utils from "~/common/utils"
-const runtimeConfig = useRuntimeConfig()
 
 const props = defineProps({
   user: {

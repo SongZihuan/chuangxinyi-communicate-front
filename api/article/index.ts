@@ -32,16 +32,6 @@ export function useArticleApi() {
         }
       )
     },
-    getArticlesTag: async (id: number) => {
-      return request({
-          url: '/api/articles/tag'+id,
-          method: "GET",
-          query: {},
-          data: undefined,
-          useCache: true,
-        }
-      )
-    },
     create: async (data: any) => {
       return request({
           url: '/api/articles',
@@ -88,16 +78,6 @@ export function useArticleApi() {
         }
       )
     },
-    related: async (id: number) => {
-      return request({
-          url: '/api/articles/related/' + id,
-          method: "GET",
-          query: {},
-          data: undefined,
-          useCache: true,
-        }
-      )
-    },
     newest: async (userId: number) => {
       return request({
           url: '/api/articles/user/newest/' + userId,
@@ -110,7 +90,7 @@ export function useArticleApi() {
     },
     delete: async (id: number) => {
       return request({
-          url: '/api/article/delete/' + id,
+          url: '/api/article/' + id + "/delete",
           method: "POST",
           query: {},
           data: {},
@@ -134,7 +114,7 @@ export function useArticleApi() {
     favoriteAdd: async (id: number) => {
       return request({
           url: '/api/article/' + id + '/favorite',
-          method: "DELETE",
+          method: "POST",
           query: {
             entityType: 'article',
             entityId: id
@@ -160,16 +140,6 @@ export function useArticleApi() {
           method: "PUT",
           query: {},
           data: data,
-          useCache: false,
-        }
-      )
-    },
-    redirect: async (id: number) => {
-      return request({
-          url: '/api/article/redirect/' + id,
-          method: "GET",
-          query: {},
-          data: undefined,
           useCache: false,
         }
       )

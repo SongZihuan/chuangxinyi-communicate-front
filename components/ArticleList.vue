@@ -41,9 +41,7 @@
               :key="tag.tagId"
               class="article-tag tag"
             >
-              <a :href="'/articles/tag/' + tag.tagId" class>
-                {{ tag.tagName }}
-              </a>
+              {{ tag.tagName }}
             </span>
           </span>
         </div>

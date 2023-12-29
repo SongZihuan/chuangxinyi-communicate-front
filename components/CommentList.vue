@@ -1,12 +1,7 @@
 <template>
   <div>
     <el-divider>
-      <span v-if="commentCount > 0">
-        回帖: {{ commentCount }}
-      </span>
-      <span v-else>
-        回帖
-      </span>
+      <span> 回帖 </span>
     </el-divider>
 
     <div v-if="isLogin" class="comment-create">
@@ -39,7 +34,12 @@
     </div>
 
     <el-divider>
-      评论
+      <span v-if="commentCount > 0">
+        评论: {{ commentCount }}
+      </span>
+      <span v-else>
+        评论
+      </span>
     </el-divider>
 
     <LoadMore
@@ -128,6 +128,7 @@ const create = async () => {
   sending.value = false
 }
 const reply = (newComment: any) => {
+  commentCount.value++
   commentsLoadMore.value.pushResults(newComment)
 }
 const toLogin = async () => {
