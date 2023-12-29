@@ -68,11 +68,10 @@ useHead({
   title: Utils.siteTitle('友情链接'),
   meta: [
     {
-      hid: 'description',
       name: 'description',
       content: Utils.siteDescription()
     },
-    { hid: 'keywords', name: 'keywords', content: Utils.siteKeywords() }
+    { name: 'keywords', content: Utils.siteKeywords() }
   ]
 })
 

@@ -52,7 +52,7 @@ export function useTopicApi() {
     },
     topicsTag: async (page: number, id: number) => {
       return request({
-          url: '/api/topics/noreply',
+          url: '/api/topics/tag',
           method: "GET",
           query: {
             tagId: id,
