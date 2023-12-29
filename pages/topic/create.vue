@@ -84,7 +84,7 @@ let postForm = ref({
 
 const getNode = async () => {
   const setting = configStore.setting || {}
-  const nodeId = route.query.nodeId || setting.defaultNodeId
+  const nodeId = route.query.nodeId || setting.defaultNodeId || 0
   if (nodeId) {
     let {data, status, error} = await useTopicApi().getNode(nodeId)
     if (status.value === "success" && data.value.success) {

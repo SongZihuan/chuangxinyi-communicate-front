@@ -10,7 +10,7 @@ let Utils = {
 
     const runtimeConfig = useRuntimeConfig()
     if (runtimeConfig.public.ENV === "development") {
-      if (query) {
+      if (Object.keys(query).length !== 0) {
         let q = Utils.encodeSearchParams(query)
         window.location.href = path + "?" +  q
       } else {

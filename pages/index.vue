@@ -1,10 +1,8 @@
 <template>
-  <section class="main">
-    <div class="flex flex-row justify-between">
-      <Topics class="w-[75%]" />
-      <TopicSide class="w-[25%]"/>
-    </div>
-  </section>
+  <div class="flex flex-row justify-between">
+    <Topics class="w-[75%]" />
+    <TopicSide class="w-[25%]"/>
+  </div>
 </template>
 
 <script setup lang="ts">

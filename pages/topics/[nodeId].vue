@@ -1,37 +1,24 @@
 <template>
-  <div>
-    <section class="main">
-      <div class="container main-container left-main">
-        <div class="left-container">
-          <div class="main-content">
-            <div class="node-header">
-              <div class="title">
-                {{ node.name }}
-                <span class="total">
-                  共有 {{ node.topicCount }} 个讨论话题
-                </span>
-              </div>
-              <div class="summary">
-                <p>{{ node.description }}</p>
-              </div>
-            </div>
-            <topic-list :topics="topicsPage.results" :in-home="false" />
-            <pagination
-              :page="topicsPage.page"
-              :url-prefix="'/topics/' + node.nodeId + '?p='"
-            />
-            <div v-if="!topicsPage.page.total" class="summary">
-              本节点暂无话题。
-            </div>
+  <div class="flex flex-row justify-between">
+    <div class="w-[75%]">
+      <div class="flex flex-col">
+        <div class="mb-2">
+          <div class="title">
+            <span class="node-title"> {{ node.name }} </span>
+            <el-tag class="mx-2">
+              共有 {{ node.topicCount }} 个讨论话题
+            </el-tag>
+          </div>
+          <div class="summary">
+            <p>{{ node.description }}</p>
           </div>
         </div>
-        <topic-side
-          :current-node-id="node.nodeId"
-          :score-rank="scoreRank"
-          :links="links"
-        />
+
+        <TopicList ref="topicList" :topics="topicsPage.results"/>
+        <Pagination @change="onChange" :page="topicsPage.page" url-prefix="/topics?p=" />
       </div>
-    </section>
+    </div>
+    <TopicSide class="w-[25%]" :currentNodeId="node.nodeId"/>
   </div>
 </template>
 
@@ -40,15 +27,12 @@ import TopicSide from '~/components/TopicSide'
 import TopicList from '~/components/TopicList'
 import Pagination from '~/components/Pagination'
 import { useTopicApi } from '~/api/topics'
-import { useUserApi } from '~/api/user'
-import { useLinksApi } from '~/api/links'
 import Utils from "~/common/utils"
 
 let node = ref({})
 let topicsPage = ref({})
-let links = ref({})
-let scoreRank = ref({})
 
+const topicList = shallowRef()
 const route = useRoute()
 const page = route.query.p || 1
 const nodeId = route.params.nodeId
@@ -67,7 +51,7 @@ const getNode = async () => {
 }
 
 const getTopics = async () => {
-  let {data, status, error} = await useTopicApi().topicsNode(page, nodeId)
+  let {data, status, error} = await useTopicApi().topicsNode(page.value, nodeId)
   if (status.value === "success" && data.value.success) {
     topicsPage.value = data.value.data
   } else {
@@ -79,65 +63,31 @@ const getTopics = async () => {
   }
 }
 
-const getScoreRank = async () => {
-  let {data, status, error} = await useUserApi().scoreRank()
-  if (status.value === "success" && data.value.success) {
-    scoreRank.value = data.value.data
-  } else {
-    console.log(status.value, error && error.value)
-  }
-}
-
-const getLinks = async () => {
-  let {data, status, error} = await useLinksApi().topLinks()
-  if (status.value === "success" && data.value.success) {
-    links.value = data.value.data
-  } else {
-    console.log(status.value, error && error.value)
-  }
+const onChange = async (newPage: number) => {
+  page.value = newPage
+  await getTopics()
+  topicList.value.setTopicList(topicsPage.value.results as any)
 }
 
 await Promise.all([
   getNode(),
   getTopics(),
-  getScoreRank(),
-  getLinks(),
 ])
 
 useHead({
   title: Utils.siteTitle(node.value.name + ' - 话题'),
   meta: [
     {
-      hid: 'description',
       name: 'description',
       content: Utils.siteDescription()
     },
-    { hid: 'keywords', name: 'keywords', content: Utils.siteKeywords() }
+    { name: 'keywords', content: Utils.siteKeywords() }
   ]
 })
 </script>
 
 <style lang="scss" scoped>
-.node-header {
-  margin-bottom: 5px;
-  border-bottom: 1px solid #f2f2f2;
-  padding: 5px 10px;
-
-  .container {
-    padding: 15px 20px;
-  }
-  .title {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 8px;
-    .total {
-      color: #999;
-      font-size: 14px;
-      margin-left: 10px;
-    }
-  }
-  .summary {
-    font-size: 14px;
-  }
+.node-title{
+  font-size: 30px;
 }
 </style>
