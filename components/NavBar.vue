@@ -135,38 +135,6 @@
       </client-only>
     </template>
   </el-page-header>
-
-
-<!--          <div v-if="user" class="navbar-item has-dropdown is-hoverable">-->
-<!--            <a :href="'/user/' + user.id" class="navbar-link">-->
-<!--              <strong>{{ username }}</strong>-->
-<!--            </a>-->
-<!--            <div class="navbar-dropdown">-->
-<!--              <a :href="'/user/' + user.id" class="navbar-item">-->
-<!--                <i class="iconfont icon-home" />&nbsp;我的首页-->
-<!--              </a>-->
-<!--              <a class="navbar-item" href="/user/settings">-->
-<!--                <i class="iconfont icon-user" />&nbsp;编辑资料-->
-<!--              </a>-->
-<!--              <a class="navbar-item" href="/user/favorites">-->
-<!--                <i class="iconfont icon-favorite" />&nbsp;我的收藏-->
-<!--              </a>-->
-<!--              <a @click="logout" class="navbar-item">-->
-<!--                <i class="iconfont icon-logout" />&nbsp;退出登录-->
-<!--              </a>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div v-else class="navbar-item">-->
-<!--            <div class="buttons">-->
-<!--              <div class="button is-small is-info" @click="login"-->
-<!--                >登录-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </nav>-->
 </template>
 
 <script setup lang="ts">
