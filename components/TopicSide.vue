@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center w-[100%]">
     <div class="w-[95%]">
-      <PostBtnSidebar :current-node-id="currentNodeId" />
+      <PostBtnSidebar :current-node-id="currentNodeId" :current-tag="currentTag" />
       <SiteNotice />
       <SiteTip />
       <SocreRank />
@@ -22,9 +22,14 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
+  currentTag: {
+    type: String,
+    default: "",
+  }
 })
 
 let currentNodeId = ref(props.currentNodeId)
+let currentTag = ref(props.currentTag)
 </script>
 
 <style lang="scss" scoped>

@@ -23,7 +23,7 @@
         <Editor
           v-model="content"
         />
-        <TagInput v-model="postForm.tags" />
+        <TagInput ref="tagInput" v-model="postForm.tags" />
 
         <div class="flex flex-col items-end my-2">
           <el-button
@@ -58,6 +58,7 @@ definePageMeta({
 let nodes = ref({})
 let authStore = useAuthStore()
 let content = ref("")
+let tagInput = ref()
 
 const getNodes = async () => {
   let {data, status, error} = await useTopicApi().nodes()
@@ -147,6 +148,19 @@ const submitCreate = async () => {
 useHead({
   title: Utils.siteTitle('发表话题')
 })
+
+const addRouteTag = () => {
+  let tag = route.query.tag as string
+  if (!tag) {
+    return
+  }
+  tagInput.value.addTagName(tag)
+}
+
+onMounted(()=>{
+  addRouteTag()
+})
+
 </script>
 
 <style lang="scss" scoped></style>

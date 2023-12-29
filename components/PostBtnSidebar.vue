@@ -12,6 +12,10 @@
     currentNodeId: {
       type: Number,
       default: 0
+    },
+    currentTag: {
+      type: String,
+      default: ""
     }
   })
 
@@ -19,6 +23,8 @@
     let url = '/topic/create'
     if (props.currentNodeId) {
       url += '?nodeId=' + props.currentNodeId
+    } else if (props.currentTag) {
+      url += '?tag=' + props.currentTag
     }
     await Utils.linkTo(url)
   }

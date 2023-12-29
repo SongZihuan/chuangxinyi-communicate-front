@@ -140,6 +140,11 @@ const autocomplete = async (queryString: string, cb) => {
   cb([])  // 兜底
 }
 
+defineExpose({
+  addTagName,
+  removeTag,
+})
+
 </script>
 
 <style lang="scss" scoped>

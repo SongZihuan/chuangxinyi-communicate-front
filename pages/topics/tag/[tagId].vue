@@ -1,22 +1,17 @@
 <template>
-  <section class="main">
-    <div class="container main-container is-white left-main">
-      <div class="left-container">
-        <div class="tag-header">
-          <div class="title">
-            标签:
-            <span class="name">{{ tag.tagName }}</span>
-          </div>
+  <div class="flex flex-row justify-between">
+    <div class="w-[75%]">
+      <div class="flex flex-col">
+        <div class="mb-2">
+          <span class="tag-title"> 标签：{{ tag.tagName }}</span>
         </div>
-        <topic-list :topics="topicsPage.results" />
-        <pagination
-          :page="topicsPage.page"
-          :url-prefix="'/topics/' + tag.tagId + '?p='"
-        />
+
+        <TopicList ref="topicList" :topics="topicsPage.results"/>
+        <Pagination @change="onChange" :page="topicsPage.page" url-prefix="/topics?p=" />
       </div>
-      <topic-side :score-rank="scoreRank" :links="links" />
     </div>
-  </section>
+    <TopicSide class="w-[25%]" :current-tag="tag.tagName"/>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -30,8 +25,6 @@ import Utils from "~/common/utils"
 
 let tag = ref({})
 let topicsPage = ref({})
-let links = ref({})
-let scoreRank = ref({})
 
 const route = useRoute()
 const page = route.query.p || 1
@@ -63,59 +56,25 @@ const getTopics = async () => {
   }
 }
 
-const getScoreRank = async () => {
-  let {data, status, error} = await useUserApi().scoreRank()
-  if (status.value === "success" && data.value.success) {
-    scoreRank.value = data.value.data
-  } else {
-    console.log(status.value, error && error.value)
-  }
-}
-
-const getLinks = async () => {
-  let {data, status, error} = await useLinksApi().topLinks()
-  if (status.value === "success" && data.value.success) {
-    links.value = data.value.data
-  } else {
-    console.log(status.value, error && error.value)
-  }
-}
-
 await Promise.all([
   getTag(),
   getTopics(),
-  getScoreRank(),
-  getLinks(),
 ])
 
 useHead({
   title: Utils.siteTitle(tag.value.tagName + ' - 话题'),
   meta: [
     {
-      hid: 'description',
       name: 'description',
       content: Utils.siteDescription()
     },
-    { hid: 'keywords', name: 'keywords', content: Utils.siteKeywords() }
+    {  name: 'keywords', content: Utils.siteKeywords() }
   ]
 })
 </script>
 
 <style lang="scss" scoped>
-.tag-header {
-  margin-bottom: 5px;
-  border-bottom: 1px solid #f2f2f2;
-  padding: 5px 10px;
-
-  .title {
-    font-size: 14px;
-    color: #999;
-    margin-bottom: 8px;
-    .name {
-      color: #333;
-      font-size: 24px;
-      margin-left: 10px;
-    }
-  }
+.tag-title {
+  font-size: 30px;
 }
 </style>

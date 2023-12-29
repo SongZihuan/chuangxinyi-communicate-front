@@ -23,7 +23,7 @@
         <Editor
           v-model="content"
         />
-        <TagInput v-model="postForm.tags" />
+        <TagInput ref="tagInput" v-model="postForm.tags" />
 
         <div class="flex flex-col items-end my-2">
           <el-button
@@ -57,6 +57,7 @@ definePageMeta({
 const route = useRoute()
 const topicId = route.params.id
 
+let tagInput = shallowRef()
 let topic = ref({})
 let nodes = ref({})
 
