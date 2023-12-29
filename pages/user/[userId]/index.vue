@@ -1,146 +1,37 @@
 <template>
-  <section class="main">
-    <div class="container main-container is-white left-main">
-      <div class="left-container">
-        <div class="tabs">
-          <ul>
-            <li :class="{ 'is-active': activeTab === 'topics' }">
-              <a :href="'/user/' + user.id + '?tab=topics'">
-                <span>话题</span>
-              </a>
-            </li>
-            <li :class="{ 'is-active': activeTab === 'articles' }">
-              <a :href="'/user/' + user.id + '?tab=articles'">
-                <span>文章</span>
-              </a>
-            </li>
-            <li>
-              <a @click="toHomePage" href="#">
-                <span>主页</span>
-              </a>
-            </li>
-          </ul>
+  <div class="flex flex-row w-[100%]">
+    <div class="flex flex-col w-[70%]">
+      <div class="mr-2">
+        <div class="my-2">
+          <el-breadcrumb :separator-icon="ArrowRight">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/user/' + user.id, query: {'tab': 'topics'}}">{{ Utils.getUserName(user) }}</el-breadcrumb-item>
+          </el-breadcrumb>
         </div>
-
-        <div v-if="activeTab === 'topics'">
-          <div v-if="recentTopics && recentTopics.length">
-            <topic-list :topics="recentTopics" />
-            <div class="more">
-              <a :href="'/user/' + user.id + '/topics'">查看更多&gt;&gt;</a>
-            </div>
-          </div>
-          <div v-else class="notification is-primary" style="margin-top: 10px">
-            暂无话题
-          </div>
-        </div>
-
-        <div v-if="activeTab === 'articles'">
-          <div v-if="recentArticles && recentArticles.length">
-            <article-list :articles="recentArticles" />
-            <div class="more">
-              <a :href="'/user/' + user.id + '/articles'">查看更多&gt;&gt;</a>
-            </div>
-          </div>
-          <div v-else class="notification is-primary" style="margin-top: 10px">
-            暂无文章
-          </div>
-        </div>
-      </div>
-      <div class="right-container">
-        <UserInfo :user="user" />
-        <div class="widget">
-          <div class="widget-header">关注</div>
-          <div class="widget-content watch-actions">
-            <div
-              v-if="!isOwner"
-              :class="{ active: user.watched }"
-              @click="watch(user)"
-              class="action watch"
-              title="关注"
-            >
-              <i class="iconfont icon-eye" />
-            </div>
-            <span v-if="!isOwner" class="split"></span>
-            <div v-for="user in userWatchers" :key="user.id">
-              <a
-                :href="'/user/' + user.id"
-                :alt="Utils.getUserName(user)"
-                :title="Utils.getUserName(user)"
-              >
-                <img :src="runtimeConfig.public.AVATAR_URL + '?uid=' + user.uid" class="avatar" alt="头像" />
-              </a>
-            </div>
-          </div>
-        </div>
+        <UserCenter :user-id="Number(userId)" />
       </div>
     </div>
-  </section>
+    <div class="flex flex-col w-[30%]">
+      <UserInfo v-model="user" :id="Number(userId)" />
+      <UserWatcher :id="Number(userId)" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import TopicList from '~/components/TopicList'
-import ArticleList from '~/components/ArticleList'
 import Utils from '~/common/utils'
 import { useUserApi } from '~/api/user'
-import { useAuthStore } from '~/store/auth'
-import {ElMessage} from "element-plus"
+import { ArrowRight } from '@element-plus/icons-vue'
 
 const defaultTab = 'topics'
 const route = useRoute()
 const userId = route.params.userId
 
-let user = ref({})
-let watched = ref({})
-let userWatchers = ref({})
-
-const getUserProfile = async () => {
-  let {data, status, error} = await useUserApi().profile(userId)
-  if (status.value === "success" && data.value.success) {
-    user.value = data.value.data
-  } else {
-    console.log(status.value, error && error.value)
-    showError({
-      statusCode: 404,
-      message: "用户未找到",
-    })
-  }
-}
-
-const getWatched = async () => {
-  let {data, status, error} = await useUserApi().watched(userId)
-  if (status.value === "success" && data.value.success) {
-    watched.value = data.value.data.watched
-  } else {
-    console.log(status.value, error && error.value)
-    showError({
-      statusCode: 404,
-      message: "用户未找到",
-    })
-  }
-}
-
-const getUserWatcher = async () => {
-  let {data, status, error} = await useUserApi().recentwatchers(userId)
-  if (status.value === "success" && data.value.success) {
-    userWatchers.value = data.value.data
-  } else {
-    console.log(status.value, error && error.value)
-    showError({
-      statusCode: 404,
-      message: "用户未找到",
-    })
-  }
-}
-
-await Promise.all([
-  getUserProfile(),
-  getWatched(),
-  getUserWatcher(),
-])
-
 const activeTab = ref(route.query.tab || defaultTab)
 let recentTopics = ref({})
 let recentArticles = ref({})
+
+let user = ref({})
 
 const getRecent = async ()=> {
   if (activeTab.value === 'topics') {
@@ -157,41 +48,6 @@ const getRecent = async ()=> {
 }
 
 await getRecent()
-
-let currentUser = useAuthStore().currentUser
-let isOwner = computed(()=>{
-  return user.value && currentUser && user.value.id === currentUser.id
-})
-
-const runtimeConfig = useRuntimeConfig()
-const toHomePage = () => {
-  Utils.openTo(runtimeConfig.public.HOME_PAGE + "?userID=" + user.value.uid)
-}
-
-const watch = async (user) => {
-  if (!currentUser) {
-    ElMessage.success('请登录后再关注')
-    return
-  }
-
-  if (watched.value) {
-    let {data, status} = await useUserApi().deleteWatched(user.value.id)
-    if (status.value ==="success" && data.value.success) {
-      watched.value = false
-      user.value.watchCount--
-      ElMessage.success('已取消关注！')
-      await getUserWatcher()
-    }
-  } else {
-    let {data, status} = await useUserApi().addWatched(user.value.id)
-    if (status.value ==="success" && data.value.success) {
-      watched.value = true
-      user.value.watchCount++
-      ElMessage.success('关注成功！')
-      await getUserWatcher()
-    }
-  }
-}
 
 useHead({
   title: Utils.siteTitle(Utils.getUserName(user)),

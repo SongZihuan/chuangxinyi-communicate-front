@@ -21,7 +21,7 @@
       <el-table-column prop="id" label="编号"></el-table-column>
       <el-table-column prop="userId" label="用户">
         <template v-slot="scope">
-          <user-info :user="scope.row.user" />
+          <UserInfo :id="scope.row.user.id" />
         </template>
       </el-table-column>
       <el-table-column prop="score" label="积分"></el-table-column>

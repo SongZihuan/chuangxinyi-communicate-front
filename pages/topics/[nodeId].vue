@@ -14,7 +14,7 @@
           </div>
         </div>
 
-        <TopicList ref="topicList" :topics="topicsPage.results"/>
+        <TopicList ref="topicList" :topics="topicsPage.results" :show-node-id="false"/>
         <Pagination @change="onChange" :page="topicsPage.page"/>
       </div>
     </div>

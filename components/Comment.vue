@@ -13,7 +13,7 @@
             </el-tag>
           </template>
 
-          <UserInfo :user="comment.user" />
+          <UserInfo :id="comment.user.id" />
         </el-popover>
 
         <el-tag v-if="index !== -1" class="mx-1">

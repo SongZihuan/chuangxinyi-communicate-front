@@ -64,7 +64,7 @@
 
     <div class="flex flex-col w-[20%]">
       <div class="ml-2">
-        <UserInfo :user="article.user" />
+        <UserInfo :id="article.user.id" />
       </div>
     </div>
   </div>

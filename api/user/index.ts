@@ -139,11 +139,11 @@ export function useUserApi() {
     deleteWatched: async (id: number) => {
       return request({
           url: '/api/watch/delete',
-          method: "GET",
+          method: "DELETE",
           query: {
             userId: id,
           },
-          data: {},
+          data: undefined,
           useCache: false,
         }
       )
@@ -151,9 +151,9 @@ export function useUserApi() {
     addWatched: async (id: number) => {
       return request({
           url: '/api/users/' + id + '/watch',
-          method: "GET",
+          method: "POST",
           query: {},
-          data: {},
+          data: undefined,
           useCache: false,
         }
       )

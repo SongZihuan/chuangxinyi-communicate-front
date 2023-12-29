@@ -30,7 +30,7 @@
     </div>
     <div class="flex flex-col w-[30%]">
       <div class="ml-2">
-        <UserInfo :user="currentUser" />
+        <UserInfo :id="currentUser.id" />
       </div>
     </div>
   </div>

@@ -23,7 +23,7 @@
         />
       </div>
       <div class="right-container">
-        <UserInfo :user="user" />
+        <UserInfo :id="user.id" />
       </div>
     </div>
   </section>

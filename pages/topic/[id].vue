@@ -102,7 +102,7 @@
 
     <div class="flex flex-col w-[20%]">
       <div class="ml-2">
-        <UserInfo :user="topic.user" />
+        <UserInfo :id="topic.user.id" />
       </div>
     </div>
   </div>
