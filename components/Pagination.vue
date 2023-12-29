@@ -5,6 +5,7 @@
         <el-pagination
           layout="prev, pager, jumper, total, next"
           :total="page.total"
+          v-model:page-size="page.limit"
           v-model:current-page="page.page"
           @change="onChange"
         />

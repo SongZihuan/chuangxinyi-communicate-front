@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col">
     <TopicList ref="topicList"  :topics="topicsPage.results"/>
-    <Pagination @change="onChange" :page="topicsPage.page" url-prefix="/topics?p=" />
+    <Pagination @change="onChange" :page="topicsPage.page"/>
   </div>
 </template>
 

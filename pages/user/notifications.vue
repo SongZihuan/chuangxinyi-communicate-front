@@ -1,105 +1,29 @@
 <template>
-  <section class="main">
-    <div class="container main-container is-white left-main">
-      <div class="left-container">
-        <div class="widget">
-          <div class="widget-header">
-            <nav class="breadcrumb">
-              <ul>
-                <li>
-                  <a href="/">首页</a>
-                </li>
-                <li>
-                  <a :href="'/user/' + currentUser.id">{{
-                      currentUserName
-                  }}</a>
-                </li>
-                <li class="is-active">
-                  <a href="#" aria-current="page">消息</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-
-          <div class="widget-content">
-            <ul
-              v-if="messagesPage && messagesPage.results"
-              class="message-list"
-            >
-              <li
-                v-for="message in messagesPage.results"
-                :key="message.messageId"
-                class="message-item"
-              >
-                <div class="message-item-left">
-                  <img v-lazy="runtimeConfig.public.AVATAR_URL + '?uid=' + message.from.uid" class="avatar" />
-                </div>
-                <div class="message-item-right">
-                  <div class="message-item-meta">
-                    <span v-if="message.from.id > 0" class="username">
-                      <a :href="'/user/' + message.from.id" target="_blank">{{
-                          Utils.getUserName(message.from)
-                      }}</a>
-                    </span>
-                    <span v-else class="username">
-                      <a href="javascript:void(0)" target="_blank">{{
-                          Utils.getUserName(message.from)
-                      }}</a>
-                    </span>
-                    <span class="time">
-                      {{ Utils.prettyDate(message.createTime) }}
-                    </span>
-                  </div>
-                  <div class="content">
-                    <div class="message-content">
-                      <span class="icon">
-                        <i :class="'iconfont icon-' + message.icon" />
-                      </span>
-                      {{ message.content }}
-                      <a
-                        v-if="message.detailUrl"
-                        :href="message.detailUrl"
-                        class="show-more"
-                        >点击查看详情&gt;&gt;</a
-                      >
-                    </div>
-                    <blockquote
-                      v-if="message.quoteContent"
-                      class="message-quote"
-                    >
-                      {{ message.quoteContent }}
-                    </blockquote>
-                  </div>
-                </div>
-              </li>
-            </ul>
-            <div
-              v-else
-              class="notification is-primary"
-              style="margin-top: 10px;"
-            >
-              暂无消息
-            </div>
-            <pagination
-              :page="messagesPage.page"
-              url-prefix="/user/messages?p="
-            />
-          </div>
+  <div class="flex flex-row w-[100%]">
+    <div class="flex flex-col w-[70%]">
+      <div class="mr-2">
+        <div class="my-2">
+          <el-breadcrumb :separator-icon="ArrowRight">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/user/' + currentUser.id, query: {'tab': 'topics'}}">{{ currentUserName }}</el-breadcrumb-item>
+            <el-breadcrumb-item > 站内信 </el-breadcrumb-item>
+          </el-breadcrumb>
         </div>
+<!--        还未完成-->
       </div>
-      <div class="right-container">
+    </div>
+    <div class="flex flex-col w-[30%]">
+      <div class="ml-2">
         <UserInfo :user="currentUser" />
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
-import Pagination from '~/components/Pagination'
 import Utils from "~/common/utils"
 import { useAuthStore } from '~/store/auth'
-
-const runtimeConfig = useRuntimeConfig()
+import { ArrowRight } from '@element-plus/icons-vue'
 
 definePageMeta({
   middleware: [

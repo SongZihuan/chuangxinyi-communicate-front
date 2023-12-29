@@ -1,44 +1,31 @@
 <template>
-  <section class="main">
-    <div class="container main-container is-white left-main">
-      <div class="left-container">
-        <div class="widget">
-          <div class="widget-header">积分记录</div>
-          <div class="widget-content">
-            <ul class="score-logs">
-              <li
-                v-for="scoreLog in scoreLogsPage.results"
-                :key="scoreLog.id"
-                :class="{ plus: scoreLog.type === 0 }"
-              >
-                <span class="score-type">{{
-                  scoreLog.type === 0 ? '获得积分' : '减少积分'
-                }}</span>
-                <span class="score-score"
-                  ><i class="iconfont icon-dollar" /><span>{{
-                    scoreLog.score
-                  }}</span></span
-                >
-                <span class="score-description">{{
-                  scoreLog.description
-                }}</span>
-                <span class="score-time"
-                  >@{{ Utils.formatDate(scoreLog.createTime) }}</span
-                >
-              </li>
-            </ul>
-            <pagination
-              :page="scoreLogsPage.page"
-              url-prefix="/user/scores?p="
-            />
-          </div>
+  <div class="flex flex-row w-[100%]">
+    <div class="flex flex-col w-[70%]">
+      <div class="mr-2">
+        <div class="my-2">
+          <el-breadcrumb :separator-icon="ArrowRight">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/user/' + currentUser.id, query: {'tab': 'topics'}}">{{ currentUserName }}</el-breadcrumb-item>
+            <el-breadcrumb-item > 积分记录 </el-breadcrumb-item>
+          </el-breadcrumb>
         </div>
+        <div>
+          <ScoreLog
+            v-for="(log, index) in scoreLogsPage.results"
+            :key="index"
+            :score-log="log"
+            class="my-2"
+          />
+        </div>
+        <Pagination @change="onChange" :page="scoreLogsPage.paging"/>
       </div>
-      <div class="right-container">
+    </div>
+    <div class="flex flex-col w-[30%]">
+      <div class="ml-2">
         <UserInfo :user="currentUser" />
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -46,9 +33,10 @@ import Pagination from '~/components/Pagination'
 import { useUserApi } from '~/api/user'
 import { useAuthStore } from '~/store/auth'
 import Utils from '~/common/utils'
+import { ArrowRight } from '@element-plus/icons-vue'
 
 const route = useRoute()
-const page = route.query.p || 1
+let page = ref(route.query.p || 1)
 
 definePageMeta({
   middleware: [
@@ -60,7 +48,7 @@ let scoreLogsPage = ref({})
 let currentUser = useAuthStore().currentUser
 
 const getScoreLog = async () => {
-  let {data, status, error} = await useUserApi().scoreLog(page)
+  let {data, status, error} = await useUserApi().scoreLog(page.value)
   if (status.value === "success" && data.value.success) {
     scoreLogsPage.value = data.value.data
   } else {
@@ -75,6 +63,11 @@ await Promise.all([
 useHead({
   title: Utils.siteTitle("积分"),
 })
+
+const onChange = async (newPage: number) => {
+  page.value = newPage
+  await getScoreLog()
+}
 
 </script>
 
