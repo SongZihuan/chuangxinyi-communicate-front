@@ -1,66 +1,35 @@
 <template>
-  <section class="main">
-    <div class="container main-container is-white">
-      <div class="left-container">
-        <div class="widget">
-          <div class="widget-header">
-            <nav class="breadcrumb">
-              <ul>
-                <li><a href="/">首页</a></li>
-                <li>
-                  <a :href="'/user/' + currentUser.id + '?tab=topics'">{{
-                      currentUserName
-                  }}</a>
-                </li>
-                <li class="is-active">
-                  <a href="#" aria-current="page">文章</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-          <div class="widget-content">
-            <div class="field">
-              <div class="control">
-                <input
-                  v-model="postForm.title"
-                  class="input"
-                  type="text"
-                  placeholder="标题"
-                />
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="control">
-                <Editor
-                  v-model="content"
-                  editor-id="articleEditEditor"
-                />
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="control">
-                <tag-input v-model="postForm.tags" />
-              </div>
-            </div>
-
-            <div class="field is-grouped">
-              <div class="control">
-                <a
-                  :class="{ 'is-loading': publishing }"
-                  :disabled="publishing"
-                  @click="submitCreate"
-                  class="button is-success"
-                  >提交更改</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="flex flex-col w-[100%]">
+    <div class="my-2">
+      <el-breadcrumb :separator-icon="ArrowRight">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/user/' + currentUser.id, query: {'tab': 'topics'}}">{{ currentUserName }}</el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
-  </section>
+
+    <div class="my-2">
+      <el-form :model="postForm">
+        <div class="flex flex-row">
+          <el-input v-model="postForm.title" placeholder="请输入标题" class="ml-1" />
+        </div>
+        <Editor
+          v-model="content"
+        />
+        <TagInput ref="tagInput" v-model="postForm.tags" />
+
+        <div class="flex flex-col items-end my-2">
+          <el-button
+            :loading="publishing"
+            @click="submitCreate"
+            type="success"
+          >
+            发表文章
+          </el-button>
+        </div>
+
+      </el-form>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -69,6 +38,8 @@ import { useTopicApi } from '~/api/topics'
 import { useAuthStore } from '~/store/auth'
 import {ElMessage} from "element-plus"
 import Utils from "~/common/utils"
+import { ArrowRight } from '@element-plus/icons-vue'
+import { useArticleApi } from '~/api/article'
 
 definePageMeta({
   middleware: [
@@ -80,7 +51,6 @@ const route = useRoute()
 const articleId = route.params.id
 
 let article = ref({})
-let content = ref("")
 
 const getEdis = async () => {
   let {data, status, error} = await useTopicApi().getEdit(articleId)
@@ -99,8 +69,9 @@ let publishing = ref(false)
 let postForm = ref({
   title: article.value.title,
   tags: article.value.tags,
-  content: article.value.content
 })
+
+let content = ref(article.value.content)
 
 let currentUser = useAuthStore().currentUser
 let currentUserName = useAuthStore().currentUserName
@@ -112,15 +83,16 @@ const submitCreate = async () => {
 
   publishing.value = true
 
-  let {data, status} = await useArticleApi().edit(article.value.articleId, {
+  let {data, status} = await useArticleApi().edit(articleId, {
     title: postForm.value.title,
     content: content.value,
     tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
   })
+  console.log(data.value)
   if (status.value === "success" && data.value.success) {
     ElMessage.success('修改成功')
     setTimeout(()=>{
-      utils.linkTo('/article/' + article.articleId)
+      Utils.linkTo('/article/' + articleId)
     }, 1000)
   }
 }

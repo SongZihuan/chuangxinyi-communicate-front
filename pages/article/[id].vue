@@ -15,16 +15,15 @@
             </el-tag>
           </el-link>
 
-          <el-link
+          <el-text
             v-for="tag in article.tags"
             :key="tag.tagId"
-            :href="'/topics/tag/' + tag.tagId"
             class="mx-2"
           >
             <el-tag>
               {{tag.tagName}}
             </el-tag>
-          </el-link>
+          </el-text>
         </div>
 
         <div v-if="isOwner" class="flex flex-col items-end my-2">
@@ -175,7 +174,7 @@ const deleteArticle = async () => {
       if (status.value === "success" && data.value.success) {
         ElMessage.success("删除成功")
         setTimeout(async ()=>{
-          await Utils.linkTo('/articles')
+          await Utils.linkTo('/')
         }, 1000)
       }
     })
