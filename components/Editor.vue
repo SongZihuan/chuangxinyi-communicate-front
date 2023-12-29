@@ -162,7 +162,6 @@ const clear = () => {
 }
 
 const focus = () => {
-  console.log(editorRef.value)
   editorRef.value && editorRef.value.focus(true)
 }
 

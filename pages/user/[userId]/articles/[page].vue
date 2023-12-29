@@ -26,7 +26,6 @@ import Pagination from '~/components/Pagination'
 import { useUserApi } from '~/api/user'
 import Utils from "~/common/utils"
 import { ArrowRight } from '@element-plus/icons-vue'
-import TopicList from '~/components/TopicList.vue'
 
 const route = useRoute()
 const userId = route.params.userId

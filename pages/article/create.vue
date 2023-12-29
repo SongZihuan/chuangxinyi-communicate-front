@@ -37,7 +37,6 @@
 <script setup lang="ts">
 import Utils from '~/common/utils'
 import TagInput from '~/components/TagInput'
-import {useAuthStore} from '~/store/auth'
 import {useArticleApi} from '~/api/article'
 import {ElMessage} from "element-plus"
 import { ArrowRight } from '@element-plus/icons-vue'
@@ -49,8 +48,6 @@ let postForm = ref({
 })
 
 let content = ref("")
-
-let user = useAuthStore().currentUser
 
 const submitCreate = async () => {
   if (publishing.value) {

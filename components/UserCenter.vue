@@ -34,7 +34,6 @@
   })
 
   let userId = ref(props.userId)
-  console.log("AAB", userId.value)
 
   const currentTabToName = (p: string): string => {
     switch (p) {

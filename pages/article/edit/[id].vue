@@ -89,7 +89,6 @@ const submitCreate = async () => {
     content: content.value,
     tags: postForm.value.tags ? postForm.value.tags.join(',') : ''
   })
-  console.log(data.value)
   if (status.value === "success" && data.value.success) {
     ElMessage.success('修改成功')
     setTimeout(()=>{

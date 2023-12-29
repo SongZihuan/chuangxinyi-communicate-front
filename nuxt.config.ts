@@ -1,4 +1,6 @@
 import ElementPlus from 'unplugin-element-plus/vite'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import path from 'path'
 
 export default {
   devtools: { enabled: true },
@@ -9,6 +11,9 @@ export default {
   vite: {
     plugins: [
       ElementPlus({}),
+      createSvgIconsPlugin({
+        iconDirs: [path.resolve(process.cwd(), 'assets/svg')]
+      })
     ],
   },
   /*

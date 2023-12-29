@@ -98,7 +98,6 @@ const props = defineProps({
   }
 })
 
-console.log("PROPS", props)
 
 const emit = defineEmits(["update:modelValue"])
 
@@ -126,7 +125,6 @@ const getUserProfile = async () => {
     user.value = data.value.data
     emit("update:modelValue", user.value)
   } else {
-    console.log("CPDD", status.value, error && error.value, data.value)
   }
 }
 

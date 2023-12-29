@@ -24,14 +24,11 @@ const props = defineProps({
 let userId = ref(props.userId)
 
 const getTopics = async () => {
-  console.log(props.userId)
   let {data, status, error} = await useUserApi().articleRecent(userId.value)
   if (status.value === "success" && data.value.success) {
     articlesPage.value = data.value.data
-    console.log("SUCCESS", articlesPage.value)
   } else {
     console.log(status.value, error && error.value, data.value)
-    console.log("FAIL")
   }
 }
 

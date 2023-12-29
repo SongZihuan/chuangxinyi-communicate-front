@@ -117,7 +117,6 @@ const autocomplete = async (queryString: string, cb) => {
       res.push({ value: configStore.setting.recommendTags[i], data: null })
     }
 
-    console.log(res)
     cb(res)
     return
   } else {
