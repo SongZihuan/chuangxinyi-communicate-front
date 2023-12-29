@@ -20,7 +20,7 @@
                 </span>
               </div>
             </div>
-            <Pagination :page="tagsPage.page" url-prefix="/tags/" />
+            <Pagination :page="tagsPage.page" @change="onChange"/>
           </div>
         </div>
       </div>

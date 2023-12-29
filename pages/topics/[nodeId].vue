@@ -15,7 +15,7 @@
         </div>
 
         <TopicList ref="topicList" :topics="topicsPage.results"/>
-        <Pagination @change="onChange" :page="topicsPage.page" url-prefix="/topics?p=" />
+        <Pagination @change="onChange" :page="topicsPage.page"/>
       </div>
     </div>
     <TopicSide class="w-[25%]" :currentNodeId="node.nodeId"/>

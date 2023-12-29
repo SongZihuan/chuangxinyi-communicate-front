@@ -7,7 +7,7 @@
         </div>
 
         <TopicList ref="topicList" :topics="topicsPage.results"/>
-        <Pagination @change="onChange" :page="topicsPage.page" url-prefix="/topics?p=" />
+        <Pagination @change="onChange" :page="topicsPage.page"/>
       </div>
     </div>
     <TopicSide class="w-[25%]" :current-tag="tag.tagName"/>
@@ -29,6 +29,7 @@ let topicsPage = ref({})
 const route = useRoute()
 const page = route.query.p || 1
 const tagId = route.params.tagId
+let topicList = shallowRef()
 
 const getTag = async () => {
   let {data, status, error} = await useTopicApi().tag(tagId)
@@ -60,6 +61,12 @@ await Promise.all([
   getTag(),
   getTopics(),
 ])
+
+const onChange = async (newPage: number) => {
+  page.value = newPage
+  await getTopics()
+  topicList.value.setTopicList(topicsPage.value.results as any)
+}
 
 useHead({
   title: Utils.siteTitle(tag.value.tagName + ' - 话题'),
