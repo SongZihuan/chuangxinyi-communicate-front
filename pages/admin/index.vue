@@ -1,23 +1,26 @@
 <template>
-  <div class="page-container">
-    <h1 class="index-title">控制台</h1>
-    <div class="widget">
-      <div class="widget-header">构建信息</div>
-      <div class="widget-content">
-        <div>App name: {{ systeminfo.appName }}</div>
-      </div>
+  <el-card class="my-2">
+    <template #header>
+      <div>构建信息</div>
+    </template>
+
+    <div>
+      <div>APP名称: {{ systeminfo.appName }}</div>
     </div>
-    <div class="widget">
-      <div class="widget-header">运行信息</div>
-      <div class="widget-content">
-        <div>Runtime: {{ systeminfo.upTime }}</div>
-        <div>OS: {{ systeminfo.os }}</div>
-        <div>Arch: {{ systeminfo.arch }}</div>
+  </el-card>
+  <el-card class="my-2">
+    <template #header>
+      <div>运行时信息</div>
+    </template>
+
+    <div>
+        <div>运行时间: {{ systeminfo.upTime }}</div>
+        <div>系统: {{ systeminfo.os }}</div>
+        <div>架构: {{ systeminfo.arch }}</div>
         <div>CPU: {{ systeminfo.numCpu }}</div>
-        <div>Go version: {{ systeminfo.goversion }}</div>
-      </div>
+        <div>Go版本: {{ systeminfo.goversion }}</div>
     </div>
-  </div>
+  </el-card>
 </template>
 
 <script setup lang="ts">
@@ -44,6 +47,9 @@ const getSystemInfo = async () => {
   } else {
     console.log(status.value, error && error.value)
   }
+  setTimeout(async () => {
+    await getSystemInfo()
+  }, 1000)
 }
 
 await Promise.all([
@@ -52,4 +58,5 @@ await Promise.all([
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+</style>
