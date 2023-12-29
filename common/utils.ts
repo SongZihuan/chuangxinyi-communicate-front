@@ -10,8 +10,12 @@ let Utils = {
 
     const runtimeConfig = useRuntimeConfig()
     if (runtimeConfig.public.ENV === "development") {
-      let q = Utils.encodeSearchParams(query)
-      window.location.href = path + "?" +  q
+      if (query) {
+        let q = Utils.encodeSearchParams(query)
+        window.location.href = path + "?" +  q
+      } else {
+        window.location.href = path
+      }
     } else {
       const router = useRouter()
       await router.push({

@@ -67,8 +67,8 @@ const getEdit = async () => {
   } else {
     console.log(status.value, error && error.value)
     showError({
-      statusCode: 404,
-      message: "话题未找到",
+      statusCode: 403,
+      message: "无权限编辑",
     })
   }
 }

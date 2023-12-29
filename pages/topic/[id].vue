@@ -49,13 +49,13 @@
           <el-button-group>
             <el-button
               :class="{ active: favorited }"
-              @click="addFavorite(topic.topicId)"
+              @click="addFavorite"
             >
               <span v-if="favorited"> 取消收藏 </span>
               <span v-else> 收藏 </span>
             </el-button>
             <el-button
-              @click="like(topic)"
+              @click="like()"
               class="mr-2"
             >
               <span v-if="topic.likeCount"> 喜欢：{{topic.likeCount}} </span>
@@ -64,16 +64,18 @@
           </el-button-group>
 
           <div class="flex flex-row items-center justify-center">
-            <Avatar v-for="user in likeUsers" :key="user.id" :user="user" class="mx-2" />
+            <el-badge v-for="user in likeUsers" :key="user.id" :value="user.likeCount > 99 ? '99+' : user.likeCount">
+              <Avatar :user="user" class="mx-2" />
+            </el-badge>
           </div>
 
         </div>
 
         <div v-if="isOwner" class="flex flex-col items-end my-2">
           <el-button-group>
-            <el-button type="primary" @click="deleteTopic(topic.topicId)">删除</el-button>
+            <el-button type="primary" @click="deleteTopic">删除</el-button>
             <!-- 话题类型为普通时才可以修改 -->
-            <el-button v-if="topic.type === 0" type="primary" @click="editTopic(topic.topicId)">修改</el-button>
+            <el-button v-if="topic.type === 0" type="primary" @click="editTopic">修改</el-button>
           </el-button-group>
         </div>
 
@@ -173,15 +175,15 @@ let isOwner = computed(() => {
   )
 })
 
-const addFavorite = async (topicId) => {
+const addFavorite = async () => {
   if (!favorited.value) {
-    let {data, status} = await useTopicApi().favoriteAdd(topicId)
+    let {data, status} = await useTopicApi().favoriteAdd(topic.value.topicId)
     if (status.value === "success" && data.value.success) {
       favorited.value = true
       ElMessage.success('已收藏！')
     }
   } else {
-    let {data, status} = await useTopicApi().favoriteDelete(topicId)
+    let {data, status} = await useTopicApi().favoriteDelete(topic.value.topicId)
     if (status.value === "success" && data.value.success) {
       favorited.value = false
       ElMessage.success('已取消收藏！')
@@ -189,7 +191,7 @@ const addFavorite = async (topicId) => {
   }
 }
 
-const deleteTopic = async (topicId) => {
+const deleteTopic = async () => {
   ElMessageBox.confirm(
     '是否确认删除该话题？',
     'Warning',
@@ -200,27 +202,31 @@ const deleteTopic = async (topicId) => {
     }
   )
     .then(async () => {
-     ElMessage.error("话题不支持删除哦！")
+      let {data, status} = await useTopicApi().deleteTopic(topic.value.topicId)
+      if (status.value === "success" && data.value.success) {
+        ElMessage.success("删除成功")
+        setTimeout(async ()=>{
+          await Utils.linkTo("/")  // huidao 首页
+        }, 1000)
+      }
     })
     .catch(() => {})
 }
 
-const like = async (topic) => {
+const like = async () => {
   ElMessage.success({
     message: '谢谢喜欢！',
     grouping: true,
   })
-  let {data, status} = await useTopicApi().likeTopic(topic.topicId)
+  let {data, status} = await useTopicApi().likeTopic(topic.value.topicId)
   if (status.value === "success" && data.value.success) {
-      topic.value.liked = true
-      topic.value.likeCount++
-      likeUsers.value = likeUsers.value || []
-      likeUsers.value.unshift(authStore.currentUser)
+      await getTopic()
+      await getRecentlikes()
   }
 }
 
-const editTopic = async (topicId) => {
-  await Utils.linkTo('/topic/edit/' + topicId)
+const editTopic = async () => {
+  await Utils.linkTo('/topic/edit/' + topic.value.topicId)
 }
 
 useHead({
