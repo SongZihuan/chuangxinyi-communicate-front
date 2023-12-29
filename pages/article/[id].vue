@@ -1,6 +1,11 @@
 <template>
   <div class="flex flex-row w-[100%]">
     <div class="flex flex-col w-[80%]">
+      <el-breadcrumb :separator-icon="ArrowRight">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item> 文章 </el-breadcrumb-item>
+        <el-breadcrumb-item> {{ article.title }} </el-breadcrumb-item>
+      </el-breadcrumb>
       <div class="mr-2">
         <h1 class="title my-1" itemprop="headline">
           {{ article.title }}
@@ -76,6 +81,7 @@ import { useArticleApi } from '~/api/article'
 import { useAuthStore } from '~/store/auth'
 import { ElMessage } from "element-plus"
 import Comment from '~/components/CommentList.vue'
+import { ArrowRight } from '@element-plus/icons-vue'
 
 let article = ref({})
 let commentsPage = ref({})

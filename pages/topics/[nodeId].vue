@@ -2,7 +2,12 @@
   <div class="flex flex-row justify-between">
     <div class="w-[75%]">
       <div class="flex flex-col">
-        <div class="mb-2">
+        <el-breadcrumb :separator-icon="ArrowRight">
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item> {{ node.name }} </el-breadcrumb-item>
+        </el-breadcrumb>
+
+        <div class="my-2">
           <div class="title">
             <span class="node-title"> {{ node.name }} </span>
             <el-tag class="mx-2">
@@ -28,6 +33,7 @@ import TopicList from '~/components/TopicList'
 import Pagination from '~/components/Pagination'
 import { useTopicApi } from '~/api/topics'
 import Utils from "~/common/utils"
+import { ArrowRight } from '@element-plus/icons-vue'
 
 let node = ref({})
 let topicsPage = ref({})

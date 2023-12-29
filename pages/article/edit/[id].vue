@@ -4,6 +4,7 @@
       <el-breadcrumb :separator-icon="ArrowRight">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/user/' + currentUser.id, query: {'tab': 'topics'}}">{{ currentUserName }}</el-breadcrumb-item>
+        <el-breadcrumb-item >编辑器</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 

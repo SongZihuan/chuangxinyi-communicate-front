@@ -3,7 +3,8 @@
     <div class="my-2">
       <el-breadcrumb :separator-icon="ArrowRight">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/user/' + user.id, query: {'tab': 'topics'}}">{{ username }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/user/' + currentUser.id, query: {'tab': 'topics'}}">{{ currentUserName }}</el-breadcrumb-item>
+        <el-breadcrumb-item >编辑器</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
@@ -98,10 +99,7 @@ const getNode = async () => {
       })
     }
   }
-
-  postForm.value = {
-    nodeId: currentNode.value ? currentNode.value.nodeId : 0
-  }
+  postForm.value.nodeId = currentNode.value ? currentNode.value.nodeId : 0
 }
 
 await Promise.all([
@@ -111,8 +109,8 @@ await Promise.all([
 
 let publishing = ref(false)
 
-let user = authStore.currentUser
-let username = authStore.currentUserName
+let currentUser = authStore.currentUser
+let currentUserName = authStore.currentUserName
 
 const submitCreate = async () => {
   if (publishing.value) {

@@ -2,7 +2,7 @@
   <div class="flex flex-col w-[100%]">
     <div class="my-2">
       <el-breadcrumb :separator-icon="ArrowRight">
-        <el-breadcrumb-item :to="{ path: '/' }">{{ siteName }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>关于</el-breadcrumb-item>
       </el-breadcrumb>
 

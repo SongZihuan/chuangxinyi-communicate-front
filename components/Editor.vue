@@ -154,8 +154,8 @@ onBeforeUnmount(()=>{
   editor.destroy()
 })
 
-const toolBarComponent = ref(null)
-const editorComponent = ref(null)
+const toolBarComponent = shallowRef()
+const editorComponent = shallowRef()
 
 const clear = () => {
   editorRef.value && editorRef.value.clear()
