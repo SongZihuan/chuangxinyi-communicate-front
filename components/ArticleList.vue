@@ -23,6 +23,15 @@ const props = defineProps({
 })
 
 let articles = ref(props.articles)
+
+const setArticles = (newArticles: any) => {
+  articles.value = newArticles
+}
+
+defineExpose({
+  setArticles,
+})
+
 </script>
 
 <style lang="scss" scoped></style>

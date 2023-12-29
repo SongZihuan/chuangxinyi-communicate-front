@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col">
-    <TopicList ref="topicList"  :topics="topicsPage.results"/>
+    <TopicList ref="topicListRef"  :topics="topicsPage.results"/>
     <Pagination @change="onChange" :page="topicsPage.page"/>
   </div>
 </template>
@@ -21,12 +21,12 @@ const props = defineProps({
 })
 
 let page = ref(props.page)
-let topicList = shallowRef()
+let topicListRef = shallowRef()
 
 const onChange = async (newPage: number) => {
   page.value = newPage
   await getTopics()
-  topicList.value.setTopicList(topicsPage.value.results as any)
+  topicListRef.value.setTopicList(topicsPage.value.results as any)
 }
 
 const getTopics = async () => {

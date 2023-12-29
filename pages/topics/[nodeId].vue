@@ -14,7 +14,7 @@
           </div>
         </div>
 
-        <TopicList ref="topicList" :topics="topicsPage.results" :show-node-id="false"/>
+        <TopicList ref="topicListRef" :topics="topicsPage.results" :show-node-id="false"/>
         <Pagination @change="onChange" :page="topicsPage.page"/>
       </div>
     </div>
@@ -32,7 +32,7 @@ import Utils from "~/common/utils"
 let node = ref({})
 let topicsPage = ref({})
 
-const topicList = shallowRef()
+const topicListRef = shallowRef()
 const route = useRoute()
 const page = route.query.p || 1
 const nodeId = route.params.nodeId
@@ -66,7 +66,7 @@ const getTopics = async () => {
 const onChange = async (newPage: number) => {
   page.value = newPage
   await getTopics()
-  topicList.value.setTopicList(topicsPage.value.results as any)
+  topicListRef.value.setTopicList(topicsPage.value.results as any)
 }
 
 await Promise.all([
