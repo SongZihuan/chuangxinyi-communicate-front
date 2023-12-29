@@ -1,85 +1,46 @@
 <template>
-  <section class="main">
-    <div class="container main-container is-white left-main">
-      <div class="left-container">
-        <div class="widget">
-          <div class="widget-header">
-            <nav class="breadcrumb">
-              <ul>
-                <li><a href="/">首页</a></li>
-                <li>
-                  <a :href="'/user/' + currentUser.id">{{
-                      currentUserName
-                  }}</a>
-                </li>
-                <li class="is-active">
-                  <a href="#" aria-current="page">收藏列表</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-
-          <div class="widget-content">
-            <ul v-if="favorites && favorites.length" class="article-list">
-              <li v-for="favorite in favorites" :key="favorite.favoriteId">
-                <article v-if="favorite.deleted" class="article-item">
-                  <div class="article-summary">
-                    收藏内容失效!!!
-                  </div>
-                </article>
-                <article v-else class="article-item">
-                  <div class="article-item-left">
-                    <a :href="'/user/' + favorite.user.id" target="_blank">
-                      <img v-lazy="runtimeConfig.public.AVATAR_URL + '?uid=' + favorite.user.uid" class="avatar" />
-                    </a>
-                  </div>
-
-                  <div class="article-item-right">
-                    <div class="article-title">
-                      <a :href="favorite.url">{{ favorite.title }}</a>
-                    </div>
-
-                    <div class="article-summary">
-                      {{ favorite.content }}
-                    </div>
-
-                    <div class="article-meta">
-                      <span class="article-meta-item"
-                        ><a :href="'/user/' + favorite.user.id">{{
-                          Utils.getUserName(favorite.user)
-                        }}</a></span
-                      >
-                      <span class="article-meta-item">
-                        <time>
-                          {{ Utils.prettyDate(favorite.createTime) }}
-                        </time>
-                      </span
-                      >
-                    </div>
-                  </div>
-                </article>
-              </li>
-              <li v-if="hasMore" class="more">
-                <a @click="list">查看更多&gt;&gt;</a>
-              </li>
-            </ul>
-          </div>
+  <div class="flex flex-row w-[100%]">
+    <div class="flex flex-col w-[70%]">
+      <div class="mr-2">
+        <div class="my-2">
+          <el-breadcrumb :separator-icon="ArrowRight">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/user/' + currentUser.id, query: {'tab': 'topics'}}">{{ currentUserName }}</el-breadcrumb-item>
+            <el-breadcrumb-item > 收藏列表 </el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
+        <div class="my-2">
+          <Favorite
+            v-for="(item, index) in favoritesList"
+            :key="index"
+            :item="item"
+            class="my-2"
+          />
+        </div>
+        <div class="flex flex-row justify-center">
+          <el-button
+            v-if="hasMore"
+            :loading="loadding"
+            @click="list"
+          >
+            加载更多
+          </el-button>
         </div>
       </div>
-      <div class="right-container">
-        <user-center-sidebar :user="currentUser" />
+    </div>
+    <div class="flex flex-col w-[30%]">
+      <div class="ml-2">
+        <UserInfo :user="currentUser" />
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
-import UserCenterSidebar from '~/components/UserCenterSidebar'
 import Utils from '../../common/utils'
 import { useAuthStore } from '~/store/auth'
 import { useUserApi } from '~/api/user'
-
-const runtimeConfig = useRuntimeConfig()
+import { ArrowRight } from '@element-plus/icons-vue'
 
 definePageMeta({
   middleware: [
@@ -87,25 +48,30 @@ definePageMeta({
   ],
 })
 
-let favorites = ref([])
+let favoritesList = ref([])
 let cursor = ref(0)
-let hasMore = ref(false)
+let hasMore = ref(true)
+let loadding = ref(false)
 
 let currentUser = useAuthStore().currentUser
 let currentUserName = useAuthStore().currentUserName
 
 const list = async () => {
+  loadding.value = true
   let {data, status} = await useUserApi().favorites(cursor.value)
   if (status.value === "success" && data.value.success) {
     if (data.value.data.results && data.value.data.results.length) {
-      favorites.value = favorites.value.concat(data.value.data.results)
+      favoritesList.value = favoritesList.value.concat(data.value.data.results)
     } else {
       hasMore.value = false
+      ElMessage.success("见底啦！")
     }
     cursor.value = data.value.data.cursor
   } else {
     hasMore.value = false
+    ElMessage.success("见底啦！")
   }
+  loadding.value = false
 }
 
 await Promise.all([

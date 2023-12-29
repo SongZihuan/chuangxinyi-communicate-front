@@ -27,11 +27,57 @@
         回复数：{{ user.commentCount }}
       </el-text>
     </div>
+    <div class="flex flex-col items-center mt-5 justify-stretch">
+      <el-button-group>
+        <el-button
+          @click="toHomePage"
+          stretch
+        >
+          主页
+        </el-button>
+        <el-button
+          v-if="isOwner"
+          @click="Utils.linkTo('/user/scores')"
+        >
+          积分明细
+        </el-button>
+        <el-button
+          v-if="isOwner"
+          @click="toUserCenter"
+        >
+          编辑资料
+        </el-button>
+        <el-button
+          v-if="isOwner"
+          @click="Utils.linkTo('/user/notifications')"
+        >
+          动态
+        </el-button>
+        <el-button
+          v-if="isOwner"
+          @click="Utils.linkTo('/user/favorites')"
+        >
+          收藏
+        </el-button>
+      </el-button-group>
+    </div>
   </el-card>
 </template>
 
 <script setup lang="ts">
 import Utils from "~/common/utils"
+import { useAuthStore } from '~/store/auth'
+
+const runtimeConfig = useRuntimeConfig()
+
+let currentUser = computed(()=>{
+  return useAuthStore().currentUser
+})
+
+let isOwner = computed(()=>{
+  return props.user && currentUser.value && props.user.id === currentUser.value.id
+})
+
 
 const props = defineProps({
   user: {
@@ -42,6 +88,14 @@ const props = defineProps({
     }
   }
 })
+
+const toUserCenter = () => {
+  Utils.openTo(runtimeConfig.public.USER_CENTER)
+}
+
+const toHomePage = () => {
+  Utils.openTo(runtimeConfig.public.HOME_PAGE + "?userID=" + props.user.uid)
+}
 
 let user = ref(props.user)
 </script>

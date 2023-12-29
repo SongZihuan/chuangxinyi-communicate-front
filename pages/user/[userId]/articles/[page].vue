@@ -23,7 +23,7 @@
         />
       </div>
       <div class="right-container">
-        <user-center-sidebar :user="user" />
+        <UserInfo :user="user" />
       </div>
     </div>
   </section>
@@ -32,7 +32,6 @@
 <script setup lang="ts">
 import ArticleList from '~/components/ArticleList'
 import Pagination from '~/components/Pagination'
-import UserCenterSidebar from '~/components/UserCenterSidebar'
 import { useUserApi } from '~/api/user'
 import Utils from "~/common/utils"
 

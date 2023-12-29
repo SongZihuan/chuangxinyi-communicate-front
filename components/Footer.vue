@@ -6,7 +6,7 @@
           <el-text class="flex flex-row justify-center items-center">
             <el-link href="/about">关于</el-link>
             <span class="mx-1"> | </span>
-            <el-link href="/tags">标签</el-link>
+            <el-link href="/tags/1">标签</el-link>
           </el-text>
         </div>
         <div class="flex flex-row justify-center items-center my-3">

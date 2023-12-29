@@ -10,6 +10,10 @@ let Utils = {
 
     const runtimeConfig = useRuntimeConfig()
     if (runtimeConfig.public.ENV === "development") {
+      if (process.server) {
+        return
+      }
+
       if (Object.keys(query).length !== 0) {
         let q = Utils.encodeSearchParams(query)
         window.location.href = path + "?" +  q
@@ -26,10 +30,16 @@ let Utils = {
   },
 
   redirectTo(path: string) {
+    if (process.server) {
+      return
+    }
     window.location.href = path
   },
 
   openTo(path: string) {
+    if (process.server) {
+      return
+    }
     window.open(path)
   },
 

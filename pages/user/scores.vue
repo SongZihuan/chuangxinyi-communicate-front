@@ -35,14 +35,13 @@
         </div>
       </div>
       <div class="right-container">
-        <user-center-sidebar :user="currentUser" />
+        <UserInfo :user="currentUser" />
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import UserCenterSidebar from '~/components/UserCenterSidebar'
 import Pagination from '~/components/Pagination'
 import { useUserApi } from '~/api/user'
 import { useAuthStore } from '~/store/auth'

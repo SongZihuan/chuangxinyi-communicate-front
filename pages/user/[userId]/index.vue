@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="right-container">
-        <user-center-sidebar :user="user" />
+        <UserInfo :user="user" />
         <div class="widget">
           <div class="widget-header">关注</div>
           <div class="widget-content watch-actions">
@@ -80,7 +80,6 @@
 <script setup lang="ts">
 import TopicList from '~/components/TopicList'
 import ArticleList from '~/components/ArticleList'
-import UserCenterSidebar from '~/components/UserCenterSidebar'
 import Utils from '~/common/utils'
 import { useUserApi } from '~/api/user'
 import { useAuthStore } from '~/store/auth'
