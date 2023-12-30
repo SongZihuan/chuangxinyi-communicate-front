@@ -1,7 +1,6 @@
 <template>
-  <section v-loading="listLoading" class="page-container">
-    <!--工具条-->
-    <div class="toolbar">
+  <div class="flex flex-col my-2">
+    <div class="flex flex-row my-2">
       <el-form :inline="true" :model="filters">
         <el-form-item>
           <el-input v-model="filters.id" placeholder="编号"></el-input>
@@ -29,8 +28,7 @@
       </el-form>
     </div>
 
-    <!--列表-->
-    <div class="articles main-content">
+    <div class="flex flex-row flex-wrap w-[100%]" v-loading="listLoading">
       <div v-for="item in results" :key="item.id" class="article">
         <div class="article-header">
           <img :src="runtimeConfig.public.AVATAR_URL + '?uid=' + item.user.uid" class="avatar" />
@@ -72,7 +70,7 @@
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">

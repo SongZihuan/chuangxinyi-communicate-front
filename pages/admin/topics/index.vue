@@ -1,6 +1,6 @@
 <template>
-  <section v-loading="listLoading" class="page-container">
-    <div class="toolbar">
+  <div class="flex flex-col my-2">
+    <div class="flex flex-row my-2">
       <el-form :inline="true" :model="filters">
         <el-form-item>
           <el-input v-model="filters.id" placeholder="编号"></el-input>
@@ -38,37 +38,30 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="pagebar">
-      <el-pagination
-        :page-sizes="[20, 50, 100, 300]"
-        @current-change="handlePageChange"
-        @size-change="handleLimitChange"
-        :current-page="page.page"
-        :page-size="page.limit"
-        :total="page.total"
-        layout="total, sizes, prev, pager, next, jumper"
-      >
-      </el-pagination>
-    </div>
-    <div class="topics main-content">
-      <div v-for="(item, index) in results" :key="item.id" class="topic">
-        <div class="topic-header">
-          <img :src="runtimeConfig.public.AVATAR_URL + '?uid=' + item.user.uid" class="avatar" />
-          <div class="topic-right">
-            <div class="topic-title">
-              <a :href="'/topic/' + item.id" target="_blank">{{
-                item.title
-              }}</a>
+
+    <div class="flex flex-row flex-wrap justify-start w-[100%]" v-loading="listLoading">
+      <el-card v-for="(item, index) in results" :key="item.id" class="mx-2 my-2 w-[32%]">
+        <div>
+          <div class="flex flex-row justify-start items-center">
+            <Avatar :user="item.user" class="m-1" />
+            <div class="flex flex-col items-start justify-center">
+              <el-link :href="'/topic/' + item.id" class="m-1">
+                {{ item.title }}
+              </el-link>
+              <el-link :href="'/user/'+item.user.id" v-if="item.user">
+                {{ Utils.getUserName(item.user )}}
+              </el-link>
             </div>
-            <div class="topic-meta">
-              <label v-if="item.user" class="author">{{
-                item.user.nickname
-              }}</label>
-              <label>{{ Utils.formatDate(item.createTime) }}</label>
-              <label class="node">{{ item.node ? item.node.name : '' }}</label>
-              <label v-for="tag in item.tags" :key="tag.tagId" class="tag">{{
-                tag.tagName
-              }}</label>
+          </div>
+          <div class="topic-right">
+            <div class="flex flex-row flex-wrap">
+              <el-tag class="m-1">编号：{{ item.id }}</el-tag>
+              <el-tag class="m-1" v-if="item.status === 1" type="danger">已删除</el-tag>
+              <el-tag class="m-1">{{ Utils.formatDate(item.createTime) }}</el-tag>
+              <el-tag class="m-1" v-if="item.node">{{ item.node.name }}</el-tag>
+              <el-tag v-for="tag in item.tags" :key="tag.tagId" class="m-1">
+                {{ tag.tagName }}
+              </el-tag>
             </div>
           </div>
         </div>
@@ -77,25 +70,18 @@
           {{ item.summary }}
         </div>
 
-        <div class="topic-footer">
-          <span v-if="item.status === 1" class="danger">已删除</span>
-          <span class="info">编号：{{ item.id }}</span>
+        <template #footer>
+          <div class="topic-footer">
+            <el-button @click="handleEdit(index, item)" class="m-1">编辑</el-button>
 
-          <a @click="handleEdit(index, item)" class="btn"
-          >编辑</a
-          >
+            <el-button v-if="item.status === 0" @click="deleteSubmit(item)" class="m-1">删除</el-button>
+            <el-button v-else @click="undeleteSubmit(item)" class="m-1">取消删除</el-button>
 
-          <a v-if="item.status === 0" @click="deleteSubmit(item)" class="btn"
-            >删除</a
-          >
-          <a v-else @click="undeleteSubmit(item)" class="btn">取消删除</a>
-
-          <a v-if="!item.recommend" @click="recommend(item.id)" class="btn"
-            >推荐</a
-          >
-          <a v-else @click="cancelRecommend(item.id)" class="btn">取消推荐</a>
-        </div>
-      </div>
+            <el-button v-if="!item.recommend" @click="recommend(item.id)" class="m-1">推荐</el-button>
+            <el-button v-else @click="cancelRecommend(item.id)" class="m-1">取消推荐</el-button>
+          </div>
+        </template>
+      </el-card>
     </div>
 
     <div class="pagebar">
@@ -111,41 +97,43 @@
       </el-pagination>
     </div>
 
-    <el-dialog
-      v-model="editFormVisible"
-      :close-on-click-modal="false"
-      title="编辑"
-    >
-      <el-form
-        ref="editFormRef"
-        :model="editForm"
-        :rules="editFormRules"
-        label-width="80px"
+    <client-only>
+      <el-dialog
+        v-model="editFormVisible"
+        :close-on-click-modal="false"
+        title="编辑"
+        destroy-on-close
+        draggable
       >
-        <el-input v-model="editForm.id" type="hidden"></el-input>
+        <el-form
+          ref="editFormRef"
+          :model="editForm"
+          :rules="editFormRules"
+          label-width="80px"
+        >
+          <el-input v-model="editForm.id" type="hidden"></el-input>
 
-        <el-form-item label="标题" prop="rule">
-          <el-input v-model="editForm.title"></el-input>
-        </el-form-item>
+          <el-form-item label="标题" prop="rule">
+            <el-input v-model="editForm.title"></el-input>
+          </el-form-item>
 
-        <el-form-item label="内容" prop="rule">
-          <el-input v-model="editForm.content"></el-input>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click.native="editFormVisible = false">取消</el-button>
-          <el-button
-            @click.native="editSubmit"
-            :loading="editLoading"
-            type="primary"
-          >
-            提交
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
-  </section>
+          <Editor v-model="editForm.content" ref="editorRef"/>
+        </el-form>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click.native="editFormVisible = false">取消</el-button>
+            <el-button
+              @click.native="editSubmit"
+              :loading="editLoading"
+              type="primary"
+            >
+              提交
+            </el-button>
+          </div>
+        </template>
+      </el-dialog>
+    </client-only>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -173,18 +161,18 @@ let filters = ref({
 
 let editForm = ref({
   id: '',
-  name: '',
-  description: '',
-  status: '',
-  sortNo: '',
-  createTime: '',
+  title: '',
+  content: '',
 })
 let editFormVisible = ref(false)
 let editLoading = ref(false)
 let editFormRules = ref({})
 let editFormRef = ref(false)
+let editorRef = shallowRef()
 
-const runtimeConfig = useRuntimeConfig()
+onMounted(()=>{
+  console.log("AAA", editorRef.value)
+})
 
 const list = async () => {
   listLoading.value = true

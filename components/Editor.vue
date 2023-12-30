@@ -165,9 +165,16 @@ const focus = () => {
   editorRef.value && editorRef.value.focus(true)
 }
 
+const setValue = (newContent: string) => {
+  editorRef.value && editorRef.value.setHtml(newContent)
+  valueHtml.value = newContent
+  handleEditorChange()
+}
+
 defineExpose({
   clear,
   focus,
+  setValue,
 })
 
 if (process.client) {
