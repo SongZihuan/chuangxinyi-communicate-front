@@ -18,6 +18,7 @@
             clearable
             placeholder="请选择状态"
           >
+            <el-option label="全部" value="-1"></el-option>
             <el-option label="正常" value="0"></el-option>
             <el-option label="删除" value="1"></el-option>
           </el-select>
@@ -28,38 +29,46 @@
       </el-form>
     </div>
 
-    <div class="flex flex-row flex-wrap w-[100%]" v-loading="listLoading">
-      <div v-for="item in results" :key="item.id" class="article">
-        <div class="article-header">
-          <img :src="runtimeConfig.public.AVATAR_URL + '?uid=' + item.user.uid" class="avatar" />
-          <div class="article-right">
-            <div class="article-title">
-              <a :href="'/article/' + item.id" target="_blank">{{
-                item.title
-              }}</a>
+    <div class="flex flex-row flex-wrap justify-start w-[100%]" v-loading="listLoading">
+      <el-card v-for="item in results" :key="item.id" class="mx-2 my-2 w-[32%]">
+        <div>
+          <div class="flex flex-row justify-start items-center">
+            <Avatar :user="item.user" class="m-1" />
+            <div class="flex flex-col items-start justify-center">
+              <el-link :href="'/topic/' + item.id" class="m-1">
+                {{ item.title }}
+              </el-link>
+              <el-link :href="'/user/'+item.user.id" v-if="item.user">
+                {{ Utils.getUserName(item.user )}}
+              </el-link>
             </div>
-            <div class="article-meta">
-              <label v-if="item.user" class="author">{{
-                item.user.nickname
-              }}</label>
-              <label>{{ Utils.formatDate(item.createTime) }}</label>
-              <label v-for="tag in item.tags" :key="tag.tagId" class="tag">{{
-                tag.tagName
-              }}</label>
+          </div>
+          <div class="topic-right">
+            <div class="flex flex-row flex-wrap">
+              <el-tag class="m-1">编号：{{ item.id }}</el-tag>
+              <el-tag class="m-1" v-if="item.status === 1" type="danger">已删除</el-tag>
+              <el-tag class="m-1">{{ Utils.formatDate(item.createTime) }}</el-tag>
+              <el-tag class="m-1" v-if="item.node">{{ item.node.name }}</el-tag>
+              <el-tag v-for="tag in item.tags" :key="tag.tagId" class="m-1">
+                {{ tag.tagName }}
+              </el-tag>
             </div>
           </div>
         </div>
-        <div class="summary">{{ item.summary }}</div>
-        <div class="article-footer">
-          <span v-if="item.status === 1" class="danger">已删除</span>
-          <span class="info">编号：{{ item.id }}</span>
-          <a @click="deleteSubmit(item)" class="btn">删除</a>
+
+        <div class="summary">
+          {{ item.summary }}
         </div>
-      </div>
+
+        <template #footer>
+          <div class="topic-footer">
+            <el-button :disabled="item.status !== 0" @click="deleteSubmit(item)" class="m-1">删除</el-button>
+          </div>
+        </template>
+      </el-card>
     </div>
 
-    <!--工具条-->
-    <div class="pagebar">
+    <div class="flex flex-col items-end my-2">
       <el-pagination
         :page-sizes="[20, 50, 100, 300]"
         @current-change="handlePageChange"
@@ -67,8 +76,9 @@
         :current-page="page.page"
         :page-size="page.limit"
         :total="page.total"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
+        layout="total, sizes, prev, pager, jumper, next"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -95,7 +105,7 @@ let results = ref([])
 let listLoading = ref(false)
 let page = ref({})
 let filters = ref({
-  status: '0'
+  status: '-1'
 })
 
 const list = async () => {

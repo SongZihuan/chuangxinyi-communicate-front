@@ -29,6 +29,7 @@
             clearable
             placeholder="请选择状态"
           >
+            <el-option label="全部" value="-1"></el-option>
             <el-option label="正常" value="0"></el-option>
             <el-option label="删除" value="1"></el-option>
           </el-select>
@@ -84,7 +85,7 @@
       </el-card>
     </div>
 
-    <div class="pagebar">
+    <div class="flex flex-col items-end my-2">
       <el-pagination
         :page-sizes="[20, 50, 100, 300]"
         @current-change="handlePageChange"
@@ -92,7 +93,7 @@
         :current-page="page.page"
         :page-size="page.limit"
         :total="page.total"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="total, sizes, prev, pager, jumper, next"
       >
       </el-pagination>
     </div>
@@ -156,7 +157,7 @@ let results = ref([])
 let listLoading = ref(false)
 let page = ref({})
 let filters = ref({
-  status: '0'
+  status: '-1'
 })
 
 let editForm = ref({
