@@ -4,6 +4,7 @@
   "description": "zendea-site",
   "author": "zendea",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
