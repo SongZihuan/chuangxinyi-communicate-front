@@ -1,6 +1,7 @@
 import {useConfigStore} from '~/store/config'
 import {useAuthStore} from '~/store/auth'
 import {useMsgStore} from '~/store/msg'
+import {useSocket} from '~/common/useWebstocket'
 
 export default defineNuxtPlugin(async (): Promise<void> => {
   const configStore = useConfigStore()
@@ -13,5 +14,9 @@ export default defineNuxtPlugin(async (): Promise<void> => {
   if (user) {
     const msgStore = useMsgStore()
     await msgStore.setMessageList()
+
+    if (process.client) {
+      await useSocket(useNuxtApp())
+    }
   }
 })
