@@ -157,6 +157,7 @@ let results = ref([])
 let listLoading = ref(false)
 let page = ref({})
 let filters = ref({
+  recommend: "-1",
   status: '-1'
 })
 

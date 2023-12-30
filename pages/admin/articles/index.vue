@@ -99,8 +99,6 @@ useHead({
   title: Utils.siteTitle("文章")
 })
 
-const runtimeConfig = useRuntimeConfig()
-
 let results = ref([])
 let listLoading = ref(false)
 let page = ref({})

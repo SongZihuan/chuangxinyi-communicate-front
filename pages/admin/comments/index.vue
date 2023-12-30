@@ -1,6 +1,6 @@
 <template>
-  <section v-loading="listLoading" class="page-container">
-    <div class="toolbar">
+  <div class="flex flex-col my-2">
+    <div class="flex flex-row my-2">
       <el-form :inline="true" :model="filters">
         <el-form-item>
           <el-input v-model="filters.id" placeholder="编号"></el-input>
@@ -15,6 +15,7 @@
             clearable
             placeholder="请选择类型"
           >
+            <el-option label="全部" value=""></el-option>
             <el-option label="话题" value="topic"></el-option>
             <el-option label="文章" value="article"></el-option>
           </el-select>
@@ -30,6 +31,7 @@
             clearable
             placeholder="请选择状态"
           >
+            <el-option label="全部" value="-1"></el-option>
             <el-option label="正常" value="0"></el-option>
             <el-option label="删除" value="1"></el-option>
           </el-select>
@@ -39,48 +41,39 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="main-content">
-      <ul class="comments">
-        <li v-for="item in results" :key="item.id">
-          <div class="comment-item">
-            <div
-              :style="{ backgroundImage: 'url(' + runtimeConfig.public.AVATAR_URL + '?uid=' + scope.row.uid + ')' }"
-              class="avatar"
-            ></div>
-            <div class="content">
-              <div class="meta">
-                <span class="nickname"
-                  ><a :href="'/user/' + item.user.id" target="_blank">{{
-                    item.user.nickname
-                  }}</a></span
-                >
-                <span class="create-time"
-                  >@{{ Utils.formatDate(item.createTime) }}</span
-                >
-                <span v-if="item.entityType === 'article'">
-                  <a :href="'/article/' + item.entityId" target="_blank"
-                    >文章：{{ item.entityId }}</a
-                  >
-                </span>
-
-                <span v-if="item.entityType === 'topic'">
-                  <a :href="'/topic/' + item.entityId" target="_blank"
-                    >话题：{{ item.entityId }}</a
-                  >
-                </span>
-              </div>
-              <div v-html="item.content" class="summary"></div>
-              <div class="tools">
-                <span v-if="item.status === 1" class="item info">已删除</span>
-                <a @click="handleDelete(item)" class="item">删除</a>
+    <div class="flex flex-row flex-wrap justify-start w-[100%]" v-loading="listLoading">
+      <el-card v-for="item in results" :key="item.id" class="mx-2 my-2 w-[100%]">
+        <div class="comment-item">
+          <div>
+            <div class="flex flex-row justify-start items-center">
+              <Avatar :user="item.user" class="m-1" />
+              <div class="flex flex-col items-start justify-center">
+                <el-link :href="'/user/'+item.user.id" v-if="item.user">
+                  {{ Utils.getUserName(item.user )}}
+                </el-link>
+                <el-link v-if="item.entityType === 'article'" :href="'/article/' + item.entityId">
+                  文章：{{ item.entityId }}
+                </el-link>
+                <el-link v-else :href="'/topic/' + item.entityId">
+                  话题：{{ item.entityId }}
+                </el-link>
               </div>
             </div>
           </div>
-        </li>
-      </ul>
+
+          <div class="my-2">
+            <div v-html="item.content" class="summary"></div>
+          </div>
+        </div>
+        <template #footer>
+          <div class="topic-footer">
+            <el-button :disabled="item.status !== 0" @click="handleDelete(item)" class="m-1">删除</el-button>
+          </div>
+        </template>
+      </el-card>
     </div>
 
-    <div class="pagebar">
+    <div class="flex flex-col items-end my-2">
       <el-pagination
         :page-sizes="[20, 50, 100, 300]"
         @current-change="handlePageChange"
@@ -88,10 +81,11 @@
         :current-page="page.page"
         :page-size="page.limit"
         :total="page.total"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
+        layout="total, sizes, prev, pager, jumper, next"
+      >
+      </el-pagination>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -120,7 +114,7 @@ let filters = ref({
   userId: '',
   entityType: '',
   entityId: '',
-  status: ''
+  status: '-1'
 })
 
 const list = async () => {
