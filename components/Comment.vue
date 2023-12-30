@@ -4,7 +4,7 @@
       <div class="flex flex-row">
         <el-popover
           placement="top-start"
-          :width="200"
+          :width="400"
           trigger="click"
         >
           <template #reference>

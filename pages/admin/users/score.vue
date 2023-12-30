@@ -1,6 +1,6 @@
 <template>
-  <section class="page-container">
-    <div class="toolbar">
+  <section class="flex flex-col my-2">
+    <div class="flex flex-row my-2">
       <el-form :inline="true" :model="filters">
         <el-form-item>
           <el-input v-model="filters.userId" placeholder="用户编号"></el-input>
@@ -21,7 +21,16 @@
       <el-table-column prop="id" label="编号"></el-table-column>
       <el-table-column prop="userId" label="用户">
         <template v-slot="scope">
-          <UserInfo :id="scope.row.user.id" />
+          <el-popover
+            placement="top-start"
+            :width="400"
+            trigger="click"
+          >
+            <template #reference>
+              {{ Utils.getUserName(scope.row.user) }}
+            </template>
+            <UserInfo :id="scope.row.user.id" />
+          </el-popover>
         </template>
       </el-table-column>
       <el-table-column prop="score" label="积分"></el-table-column>
@@ -59,8 +68,7 @@
       >
       </el-pagination>
     </div>
-
-    <ScoreLog ref="scoreLogRef" />
+    <AdminScoreLog ref="scoreLogRef" />
   </section>
 </template>
 

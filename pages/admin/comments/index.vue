@@ -104,8 +104,6 @@ useHead({
   title: Utils.siteTitle("评论")
 })
 
-const runtimeConfig = useRuntimeConfig()
-
 let results = ref([])
 let listLoading = ref(false)
 let page = ref({})

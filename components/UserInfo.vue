@@ -120,11 +120,10 @@ const toHomePage = () => {
 }
 
 const getUserProfile = async () => {
-  let {data, status, error} = await useUserApi().profile(props.id)
+  let {data, status} = await useUserApi().profile(props.id)
   if (status.value === "success" && data.value.success) {
     user.value = data.value.data
     emit("update:modelValue", user.value)
-  } else {
   }
 }
 

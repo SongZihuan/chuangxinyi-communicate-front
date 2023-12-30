@@ -77,10 +77,6 @@ const btnList =  [
   },
 ]
 
-const toggleNav = () => {
-  navbarActive.value = !navbarActive.value
-}
-
 let siteName = computed((): any => {
   return Utils.siteTitle('管理后台')
 })

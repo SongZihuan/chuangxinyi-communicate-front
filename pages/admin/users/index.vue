@@ -1,6 +1,6 @@
 <template>
-  <section class="page-container">
-    <div class="toolbar">
+  <div class="flex flex-col my-2">
+    <div class="flex flex-row my-2">
       <el-form :inline="true" :model="filters">
         <el-form-item>
           <el-input v-model="filters.id" placeholder="编号"></el-input>
@@ -20,63 +20,32 @@
     <el-table
       :data="results"
       v-loading="listLoading"
-      @selection-change="handleSelectionChange"
-      highlight-current-row
       stripe
       style="width: 100%;"
     >
       <el-table-column type="expand">
         <template v-slot="scope">
-          <div
-            v-if="scope.row.roles && scope.row.roles.length"
-            class="content-form"
-          >
-            <div class="form-item">
-              <div class="field-key">角色：</div>
-              <div class="field-value">
-                <el-tag
-                  v-for="role in scope.row.roles"
-                  :key="role"
-                  size="mini"
-                  style="margin-right:3px;"
-                  >{{ role }}
-                </el-tag>
-              </div>
-            </div>
+          <div class="content-form">
+            <el-text class="form-item">
+              状态： {{ scope.row.status === 0 ? '正常' : '删除' }}
+            </el-text>
           </div>
           <div class="content-form">
-            <div class="form-item">
-              <span class="field-key">状态：</span>
-              <span class="field-value">
-                {{ scope.row.status === 0 ? '正常' : '删除' }}
-              </span>
-            </div>
+            <el-text class="form-item">
+              创建时间：{{ Utils.formatDate(scope.row.createTime) }}
+            </el-text>
           </div>
           <div class="content-form">
-            <div class="form-item">
-              <span class="field-key">创建时间：</span>
-              <span class="field-value">
-                {{ Utils.formatDate(scope.row.createTime) }}
-              </span>
-            </div>
-          </div>
-          <div class="content-form">
-            <div class="form-item">
-              <span class="field-key">更新时间：</span>
-              <span class="field-value">
-                {{ Utils.formatDate(scope.row.updateTime) }}
-              </span>
-            </div>
+            <el-text class="form-item">
+              更新时间： {{ Utils.formatDate(scope.row.updateTime) }}
+            </el-text>
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="id" label="编号" width="100"></el-table-column>
       <el-table-column prop="avatar" label="头像" width="80">
         <template v-slot="scope">
-          <img
-            :src="runtimeConfig.public.AVATAR_URL + '?uid=' + scope.row.uid"
-            style="max-height: 50px; max-width: 50px; border-radius: 50%;"
-          />
+          <Avatar :user="scope.row" />
         </template>
       </el-table-column>
       <el-table-column prop="uid" label="标识符"></el-table-column>
@@ -86,20 +55,22 @@
       <el-table-column prop="nickname" label="昵称"></el-table-column>
       <el-table-column prop="score" label="积分"></el-table-column>
       <el-table-column prop="createTime" label="角色">
-        <template v-slot="scope">{{
-          scope.row.level === 10 ? '管理员' : '普通用户'
-        }}</template>
+        <template v-slot="scope">
+          <el-tag>
+            {{ scope.row.level === 10 ? '管理员' : '普通用户' }}
+          </el-tag>
+        </template>
       </el-table-column>
       <el-table-column label="操作" width="150">
         <template v-slot="scope">
-          <el-button @click="handleEdit(scope.$index, scope.row)" size="small"
-            >编辑</el-button
-          >
+          <el-button @click="handleEdit(scope.$index, scope.row)" size="small">
+            编辑
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <div class="pagebar">
+    <div class="flex flex-col items-end my-2">
       <el-pagination
         :page-sizes="[20, 50, 100, 300]"
         @current-change="handlePageChange"
@@ -107,49 +78,51 @@
         :current-page="page.page"
         :page-size="page.limit"
         :total="page.total"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="total, sizes, prev, pager, jumper, next"
       >
       </el-pagination>
     </div>
 
-    <el-dialog
-      v-model="editFormVisible"
-      :close-on-click-modal="false"
-      title="编辑"
-    >
-      <el-form
-        :model="editForm"
-        :rules="editFormRules"
-        label-width="80px"
+    <client-only>
+      <el-dialog
+        v-model="editFormVisible"
+        :close-on-click-modal="false"
+        title="编辑"
       >
-        <el-input v-model="editForm.id" type="hidden"></el-input>
-        <el-form-item label="角色" prop="level">
-          <el-select v-model="editForm.level" placeholder="请选择">
-            <el-option :key="0" :value="0" label="普通用户"></el-option>
-            <el-option :key="1" :value="10" label="管理员"></el-option>
-          </el-select>
-        </el-form-item>
+        <el-form
+          :model="editForm"
+          :rules="editFormRules"
+          label-width="80px"
+        >
+          <el-input v-model="editForm.id" type="hidden"></el-input>
+          <el-form-item label="角色" prop="level">
+            <el-select v-model="editForm.level" placeholder="请选择">
+              <el-option :key="0" :value="0" label="普通用户"></el-option>
+              <el-option :key="1" :value="10" label="管理员"></el-option>
+            </el-select>
+          </el-form-item>
 
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="editForm.status" placeholder="请选择">
-            <el-option :key="0" :value="0" label="正常"></el-option>
-            <el-option :key="1" :value="1" label="删除"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click.native="editFormVisible = false">取消</el-button>
-          <el-button
-            @click.native="editSubmit"
-            :loading="editLoading"
-            type="primary"
-          >提交</el-button
-          >
-        </div>
-      </template>
-    </el-dialog>
-  </section>
+          <el-form-item label="状态" prop="status">
+            <el-select v-model="editForm.status" placeholder="请选择">
+              <el-option :key="0" :value="0" label="正常"></el-option>
+              <el-option :key="1" :value="1" label="删除"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click.native="editFormVisible = false">取消</el-button>
+            <el-button
+              @click.native="editSubmit"
+              :loading="editLoading"
+              type="primary"
+            >提交</el-button
+            >
+          </div>
+        </template>
+      </el-dialog>
+    </client-only>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -181,8 +154,6 @@ let editForm = ref({
 let editFormVisible = ref(false)
 let editLoading = ref(false)
 let editFormRules = ref({})
-
-const runtimeConfig = useRuntimeConfig()
 
 const list = async () => {
   listLoading.value = true
