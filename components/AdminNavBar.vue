@@ -36,7 +36,6 @@ import Logo from 'assets/images/logo.png'
 import Utils from '~/common/utils'
 
 const route = useRoute()
-let navbarActive = ref(false)
 
 const btnList =  [
   {
