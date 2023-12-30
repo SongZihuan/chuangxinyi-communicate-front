@@ -28,7 +28,8 @@ if (process.client) {
   if (loginToken && subToken) {
     try {
       await useAuthStore().login({
-        token: loginToken
+        token: loginToken,
+        subToken: subToken,
       }, useNuxtApp())
       Utils.linkTo(redirect)
       hasRoute.value = true

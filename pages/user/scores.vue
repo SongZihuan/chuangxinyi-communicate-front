@@ -46,6 +46,7 @@ definePageMeta({
 
 let scoreLogsPage = ref({})
 let currentUser = useAuthStore().currentUser
+let currentUserName = useAuthStore().currentUserName
 
 const getScoreLog = async () => {
   let {data, status, error} = await useUserApi().scoreLog(page.value)

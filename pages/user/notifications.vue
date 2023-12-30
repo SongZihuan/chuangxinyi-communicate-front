@@ -9,7 +9,15 @@
             <el-breadcrumb-item > 站内信 </el-breadcrumb-item>
           </el-breadcrumb>
         </div>
-<!--        还未完成-->
+        <div>
+          <Message
+            v-for="(msg, index) in messagePage.results"
+            :key="index"
+            :msg="msg"
+            class="my-2"
+          />
+        </div>
+        <Pagination @change="onChange" :page="messagePage.paging"/>
       </div>
     </div>
     <div class="flex flex-col w-[30%]">
@@ -21,9 +29,14 @@
 </template>
 
 <script setup lang="ts">
-import Utils from "~/common/utils"
+import Pagination from '~/components/Pagination'
 import { useAuthStore } from '~/store/auth'
+import Utils from '~/common/utils'
 import { ArrowRight } from '@element-plus/icons-vue'
+import { useMsgApi } from '~/api/msg'
+
+const route = useRoute()
+let page = ref(route.query.p || 1)
 
 definePageMeta({
   middleware: [
@@ -31,17 +44,23 @@ definePageMeta({
   ],
 })
 
-let messagesPage = ref({})
+let messagePage = ref({})
+let currentUser = useAuthStore().currentUser
+let currentUserName = useAuthStore().currentUserName
 
 const getMessage = async () => {
-  // 对接用户中心
-  messagesPage.value = {
-    results: [],
-    page: {
-      page: 1,
-      limit: 20,
-      total: 0,
+  let {data, status, error} = await useMsgApi().getMessage(page.value, 20)
+  if (status.value === "success" && data.value.code === "SUCCESS") {
+    messagePage.value = {
+      results: data.value.data.message,
+      paging: {
+        total: data.value.data.count,
+        page: page.value,
+        limit: 20,
+      }
     }
+  } else {
+    console.log(status.value, error && error.value, data.value)
   }
 }
 
@@ -49,12 +68,14 @@ await Promise.all([
   getMessage(),
 ])
 
-let currentUser = useAuthStore().currentUser
-let currentUserName = useAuthStore().currentUserName
-
 useHead({
-  title: Utils.siteTitle("通知"),
+  title: Utils.siteTitle("站内信"),
 })
+
+const onChange = async (newPage: number) => {
+  page.value = newPage
+  await getMessage()
+}
 
 </script>
 

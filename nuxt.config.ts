@@ -59,8 +59,10 @@ export default {
 
   runtimeConfig: {
     PrivateAPI: process.env.NUXT_PRIVARE_BASE_API,
+    CenterPrivateAPI: process.env.CENTER_PRIVATE_BASE_API,
     public: {
       BaseAPI: process.env.NUXT_PUBLIC_BASE_API,
+      CenterBaseAPI: process.env.CENTER_PUBLIC_BASE_API,
       OAUTH2_URL: process.env.OAUTH2_URL,
       REDIECT_URL: process.env.REDIECT_URL,
       USER_CENTER: process.env.USER_CENTER,

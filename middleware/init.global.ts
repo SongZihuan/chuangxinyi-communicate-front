@@ -1,5 +1,6 @@
 import {useConfigStore} from '~/store/config'
 import {useAuthStore} from '~/store/auth'
+import {useMsgStore} from '~/store/msg'
 
 export default defineNuxtPlugin(async (): Promise<void> => {
   const configStore = useConfigStore()
@@ -7,5 +8,10 @@ export default defineNuxtPlugin(async (): Promise<void> => {
 
   const authStore = useAuthStore()
   await authStore.getTokenFromCookie
-  await authStore.getCurrentUser
+
+  let user = await authStore.getCurrentUser
+  if (user) {
+    const msgStore = useMsgStore()
+    await msgStore.setMessageList()
+  }
 })

@@ -86,15 +86,17 @@ export default function (requests: req, opt?: any) {
 
           if (data.code === 200) {  // token错误
             if (!token) {
-              ElMessage.error("请登陆后再操作")
+              process.client && ElMessage.error("请登陆后再操作")
             } else {
               await nuxtApp.runWithContext(async ()=>{
                 await authStore.logout()
               })
-              ElMessage.error("登录过期，请重新登录")
+              process.client && ElMessage.error("登录过期，请重新登录")
             }
           } else {
-            ElMessage.error(data.message || "遇到错误")
+            if (data.message) {
+              process.client && ElMessage.error(data.message)
+            }
           }
 
           return response

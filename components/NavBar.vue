@@ -56,32 +56,30 @@
 
           <div class="flex flex-row items-center mx-3">
             <el-dropdown trigger="click">
-              <el-badge :value="msgcount > 9 ? '9+' : msgcount" :hidden="msgcount === 0">
-                <div class="flex flex-row items-center">
-                  <el-text class="flex flex-row items-center">
-                    <el-icon><Bell /></el-icon>
-                    消息
-                  </el-text>
-                </div>
-              </el-badge>
+              <div class="flex flex-row items-center">
+                <el-text class="flex flex-row items-center">
+                  <el-icon><Bell /></el-icon>
+                  消息
+                </el-text>
+              </div>
               <template #dropdown>
                 <div class="dropdown-content msglist-wrapper">
-<!--                  还未配置，等对接用户中心-->
                   <div class="msglist">
-                    <ul>
-                      <li v-for="msg in messages" :key="msg.messageId" class="msg-item">
-                        <a :href="'/user/' + msg.from.id" :title="Utils.getUserName(msg.from)">
-                          <img
-                            v-lazy="runtimeConfig.public.AVATAR_URL + '?uid=' + msg.from.uid"
-                            class="avatar size-20"
-                          />
-                        </a>
-                        <a href="/user/notifications">{{ msg.content }}</a>
-                      </li>
-                    </ul>
+                    <el-card v-for="msg in messages" :key="msg.id" class="m-1">
+                      <div>
+                        <el-text>
+                          {{ msg.title }}
+                        </el-text>
+                      </div>
+                      <div>
+                        <div>
+                          {{ msg.content }}
+                        </div>
+                      </div>
+                    </el-card>
                   </div>
-                  <div class="flex justify-between items-center mx-3 my-3">
-                    <a href="/user/notifications">消息中心&gt;&gt;</a>
+                  <div class="flex flex-col justify-end items-end my-2 mx-2">
+                    <el-link href="/user/notifications">消息中心</el-link>
                   </div>
                 </div>
               </template>
@@ -144,24 +142,20 @@ import { useAuthStore } from '~/store/auth'
 import { ElMessage } from "element-plus"
 import Logo from "~/assets/images/logo.png"
 import {HomeFilled, Plus, Bell} from "@element-plus/icons-vue"
+import {useMsgStore} from '~/store/msg'
 
 const configStore = useConfigStore()
 const authStore = useAuthStore()
-let msgcount = ref(0)
 let messages = ref([])
-const runtimeConfig = useRuntimeConfig()
 
 let user = computed(()=>{
   return authStore.currentUser
 })
 
-const getMsgcount = async () => {
-  if (user) {
-    // 还未对接用户中心
-    // const ret = await this.$axios.get('/api/user/notifications/recent')
-    // this.msgcount = ret.count
-    // this.messages = ret.notifications
-  }
+let msgStore = useMsgStore()
+
+const getMsgcount = () => {
+  messages.value = msgStore.msgList
 }
 
 await getMsgcount()
