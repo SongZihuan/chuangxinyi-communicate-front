@@ -1,9 +1,9 @@
 <template>
-  <section v-loading="loading" class="page-container">
+  <div v-loading="loading" class="page-container">
     <el-tabs v-model="tabValue">
       <el-tab-pane label="通用配置" name="commonConfigTab">
-        <div class="config">
-          <el-form label-width="160px">
+        <div class="flex flex-col justify-start">
+          <el-form label-width="100px">
             <el-form-item label="网站名称">
               <el-input
                 v-model="config.siteTitle"
@@ -70,42 +70,30 @@
       <el-tab-pane label="小贴士" name="tipConfigTab" class="tip-panel">
         <draggable
           v-model="config.siteTips"
-          draggable=".tip"
-          itemKey="id"
-          handle=".tip-sort-btn"
-          class="tips"
         >
           <template #item="{element, index}">
-            <el-row :gutter="20">
-              <el-col :span="1">
-                <i class="iconfont icon-sort tip-sort-btn" />
-              </el-col>
-              <el-col :span="5">
-                <el-input
-                  v-model="element.title"
-                  type="text"
-                  size="small"
-                  placeholder="标题"
-                ></el-input>
-              </el-col>
-              <el-col :span="10">
-                <el-input
-                  v-model="element.content"
-                  type="textarea"
-                  size="small"
-                  placeholder="内容"
-                ></el-input>
-              </el-col>
-              <el-col :span="2">
-                <el-button
-                  @click="delTip(index)"
-                  type="danger"
-                  size="small"
-                >
-                  删除
-                </el-button>
-              </el-col>
-            </el-row>
+            <div class="flex flex-row justify-start items-center">
+              <el-input
+                v-model="element.title"
+                type="text"
+                placeholder="标题"
+                class="w-[40%] m-2"
+              />
+              <el-input
+                v-model="element.content"
+                type="textarea"
+                placeholder="内容"
+                class="w-[40%] m-2"
+              />
+              <el-button
+                @click="delTip(index)"
+                type="danger"
+                size="small"
+                class="m-2"
+              >
+                删除
+              </el-button>
+            </div>
           </template>
         </draggable>
         <div class="add-tip">
@@ -120,55 +108,36 @@
       <el-tab-pane label="导航配置" name="navConfigTab" class="nav-panel">
         <draggable
           v-model="config.siteNavs"
-          itemKey="id"
         >
           <template #item="{element, index}">
-            <el-row :gutter="20">
-              <el-col :span="1">
-                <i class="iconfont icon-sort nav-sort-btn" />
-              </el-col>
-              <el-col :span="10">
-                <el-input
-                  v-model="element.title"
-                  type="text"
-                  size="small"
-                  placeholder="标题"
-                ></el-input>
-              </el-col>
-              <el-col :span="11">
-                <el-input
-                  v-model="element.url"
-                  type="text"
-                  size="small"
-                  placeholder="链接"
-                ></el-input>
-              </el-col>
-              <el-col :span="2">
-                <el-button
-                  @click="delNav(index)"
-                  type="danger"
-                  icon="el-icon-delete"
-                  circle
-                  size="small"
-                ></el-button>
-              </el-col>
-            </el-row>
+            <div class="flex flex-row justify-start items-center">
+              <el-input
+                v-model="element.title"
+                type="text"
+                placeholder="标题"
+                class="w-[40%] m-2"
+              ></el-input>
+              <el-input
+                v-model="element.url"
+                type="text"
+                placeholder="链接"
+                class="w-[40%] m-2"
+              ></el-input>
+              <el-button
+                @click="delNav(index)"
+                type="danger"
+                class="m-2"
+              >删除</el-button>
+            </div>
           </template>
         </draggable>
         <div class="add-nav">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="点击按钮添加导航"
-            placement="top"
+          <el-button
+            @click="addNav"
+            type="primary"
           >
-            <el-button
-              @click="addNav"
-              type="primary"
-              icon="el-icon-plus"
-              circle
-            ></el-button>
-          </el-tooltip>
+            新增
+          </el-button>
         </div>
       </el-tab-pane>
       <el-tab-pane
@@ -176,7 +145,7 @@
         label="积分配置"
         name="scoreConfigTab"
       >
-        <el-form label-width="160px">
+        <el-form label-width="100px">
           <el-form-item label="发帖获得积分">
             <el-input-number
               v-model="config.scoreConfig.postTopicScore"
@@ -195,28 +164,36 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="页面定制" name="customConfigTab">
-        <div class="config">
-          <el-form label-width="160px">
-            <el-form-item label="首页首屏HTML">
-              <el-input
-                v-model="config.siteIndexHtml"
-                type="textarea"
-                rows="6"
-                placeholder="首页首屏（支持输入HTML）"
-              ></el-input>
-            </el-form-item>
-          </el-form>
-        </div>
+      <el-tab-pane label="底部信息" name="footerTab">
+        <el-form label-width="100px">
+          <el-form-item label="ICP备案号">
+            <el-input
+              v-model="config.footerConfig.icp"
+              type="text"
+            />
+          </el-form-item>
+          <el-form-item label="公安备案号">
+            <el-input
+              v-model="config.footerConfig.gongan"
+              type="text"
+            />
+          </el-form-item>
+          <el-form-item label="版权信息">
+            <el-input
+              v-model="config.footerConfig.copyright"
+              type="text"
+            />
+          </el-form-item>
+        </el-form>
       </el-tab-pane>
     </el-tabs>
 
-    <div style="margin-top: 20px;">
-      <el-button :loading="loading" @click="save" type="primary"
-        >保存</el-button
-      >
+    <div class="flex flex-col items-end my-2">
+      <el-button :loading="loading" @click="save" type="primary">
+        保存
+      </el-button>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
