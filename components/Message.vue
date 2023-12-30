@@ -24,12 +24,18 @@
       <el-tag class="mx-2">
         {{ Utils.formatDate(msg.createAt * 1000) }}
       </el-tag>
+
+      <el-tag v-if="!msg.readAt" type="danger" @click="readMsg(msg.id)">
+        未读
+      </el-tag>
+
     </template>
   </el-card>
 </template>
 
 <script setup lang="ts">
 import Utils from "~/common/utils"
+import { useMsgApi } from '~/api/msg'
 
 const props = defineProps({
   msg: {
@@ -39,7 +45,14 @@ const props = defineProps({
 })
 
 let msg = ref(props.msg)
-console.log("MSG: ", props.msg)
+
+const readMsg = async (id: number) => {
+  let {data, status} = await useMsgApi().readMessage(id)
+  if (status.value === "success" && data.value.code === "SUCCESS") {
+    msg.value.readAt = 1
+  }
+}
+
 </script>
 
 <style scoped lang="scss">

@@ -17,7 +17,12 @@
             class="my-2"
           />
         </div>
-        <Pagination @change="onChange" :page="messagePage.paging"/>
+        <div class="flex flex-row justify-between">
+          <el-button @click="readAll">
+            已读全部
+          </el-button>
+          <Pagination @change="onChange" :page="messagePage.paging"/>
+        </div>
       </div>
     </div>
     <div class="flex flex-col w-[30%]">
@@ -75,6 +80,13 @@ useHead({
 const onChange = async (newPage: number) => {
   page.value = newPage
   await getMessage()
+}
+
+const readAll = async () => {
+  let {data, status} = await useMsgApi().readAllMessage()
+  if (status.value === "success" && data.value.code === "SUCCESS") {
+    await getMessage()
+  }
 }
 
 </script>

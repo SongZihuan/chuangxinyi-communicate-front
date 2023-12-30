@@ -69,7 +69,7 @@ export const useSocketStore = (nuxtApp: any) => {
 
           await authStore.logout()
 
-          sendMessageNow(MessageTypeEnum.BYE);
+          sendMessageNow("BYE");
           (socketInstance.value as any).close()
           resetState();
         })
