@@ -74,28 +74,28 @@ export default function (requests: req, opt?: any) {
         if (data.code === "SUCCESS") {
           return response
         } else if (data.code === "POLICY_DENY" || data.code === "CORS_DENY" || data.code === "WEBSITE_DENY") {
-          process.client && ElMessage.error("系统错误，稍后重试")
+          process.client && ElMessage.error({message: "系统错误，稍后重试", grouping: true})
           return response;
         } else if (data.code === "DOUBLE_CHECK_DENY") {
-          process.client && ElMessage.error("二次身份验证失败，请重试")
+          process.client && ElMessage.error({message: "二次身份验证失败，请重试", grouping: true})
           return response
         } else if (data.code === "ROBOT_DENY") {
           if (data.subCode !== "CAPTCHA_SECOND_CHECK") {
-            process.client && ElMessage.error("人机验证失败，行为疑似机器人")
+            process.client && ElMessage.error({message: "人机验证失败，行为疑似机器人", grouping: true})
           }
           return response
         } else if (data.code === "TOKEN_DENY") {
           if (!token) {
-            process.client && ElMessage.error("请登陆后再操作")
+            process.client && ElMessage.error({message: "请登陆后再操作", grouping: true})
           } else {
             await nuxtApp.runWithContext(async ()=>{
               await authStore.logout()
             })
-            process.client && ElMessage.error("登录过期，请重新登录")
+            process.client && ElMessage.error({message: "登录过期，请重新登录", grouping: true})
           }
         } else if (data.code === "LOGIC_DENY") {
           if (data.msg.length !== 0) {
-            process.client && ElMessage.error(data.msg)
+            process.client && ElMessage.error({message: data.msg, grouping: true})
           }
           return Promise.resolve(data);
         }
