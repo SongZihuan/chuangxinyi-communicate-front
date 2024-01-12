@@ -91,7 +91,6 @@
           <div>
             <div
               v-html="topic.content"
-              v-lazy-container="{ selector: 'img' }"
             ></div>
           </div>
         </div>

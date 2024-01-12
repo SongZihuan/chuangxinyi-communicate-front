@@ -47,7 +47,6 @@
         </div>
         <div
           v-html="comment.content"
-          v-lazy-container="{ selector: 'img' }"
         />
       </div>
     </el-card>

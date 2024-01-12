@@ -50,7 +50,7 @@ const props = defineProps({
 
 const runtimeConfig = useRuntimeConfig()
 
-if (runtimeConfig.public.ENV !== "development" && props.error.statusCode >= 500) {
+if ((runtimeConfig.public.ENV !== "development" && runtimeConfig.public.ENV !== "test") && props.error.statusCode >= 500) {
   setTimeout(async ()=>{
     await Utils.linkTo('/')
   }, 1000)

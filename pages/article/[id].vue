@@ -52,7 +52,6 @@
           <div>
             <div
               v-html="article.content"
-              v-lazy-container="{ selector: 'img' }"
             ></div>
           </div>
         </div>
