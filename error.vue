@@ -24,7 +24,7 @@
             props.error.message ? props.error.message : '不允许访问'
           }}
         </span>
-        <span v-else-if="runtimeConfig.public.ENV === 'development'">
+        <span v-else-if="runtimeConfig.public.ENV === 'development' || runtimeConfig.public.ENV === 'test'">
           {{ props.error.message ? props.error.message : '页面错误' }}
         </span>
         <span v-else>
