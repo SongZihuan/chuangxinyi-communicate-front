@@ -64,7 +64,7 @@ export default {
       BaseAPI: process.env.NUXT_PUBLIC_BASE_API,
       CenterBaseAPI: process.env.CENTER_PUBLIC_BASE_API,
       OAUTH2_URL: process.env.OAUTH2_URL,
-      REDIECT_URL: process.env.REDIECT_URL,
+      REDIRECT_URL: process.env.REDIRECT_URL,
       USER_CENTER: process.env.USER_CENTER,
       HOME_PAGE: process.env.HOME_PAGE,
       AVATAR_URL: process.env.AVATAR_URL,

@@ -72,7 +72,7 @@ let Utils = {
 
 
       let oauth2Query = Utils.encodeSearchParams({
-        redirect_uri: runtimeConfig.public.REDIECT_URL,
+        redirect_uri: runtimeConfig.public.REDIRECT_URL,
         redirect: ref,
         domain: domainUID,
         params: '{}',

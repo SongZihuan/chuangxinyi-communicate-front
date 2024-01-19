@@ -140,7 +140,7 @@ import Utils from '~/common/utils'
 import { useConfigStore } from '~/store/config'
 import { useAuthStore } from '~/store/auth'
 import { ElMessage } from "element-plus"
-import Logo from "~/assets/images/logo.png"
+import Logo from "assets/images/logo.png"
 import {HomeFilled, Plus, Bell} from "@element-plus/icons-vue"
 import {useMsgStore} from '~/store/msg'
 
