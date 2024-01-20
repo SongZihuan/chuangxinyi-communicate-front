@@ -10,7 +10,7 @@
       </div>
       <div>
         <el-text>
-          注册时间：{{ Utils.formatDate(user.createTime, 'yyyy-MM-dd') }}
+          注册时间：{{ Utils.formatDate(user.createTime, 'YYYY-MM-DD') }}
         </el-text>
       </div>
       <div>

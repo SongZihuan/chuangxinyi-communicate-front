@@ -1,6 +1,12 @@
 import { useConfigStore } from '~/store/config'
 import { useAuthStore } from '~/store/auth'
 import { ElMessage } from "element-plus"
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime); // 相对时间
+dayjs.locale('zh-cn'); // 使用本地化语言
 
 let Utils = {
   linkTo: async (path: string, query: any = undefined) => {
@@ -100,54 +106,12 @@ let Utils = {
     return params.join('&')
   },
 
-  // TODO 函数弃用，改写一下
   formatDate: (timestamp: number, fmt: string | undefined = undefined) => {
-    fmt = fmt || 'yyyy-MM-dd HH:mm:ss'
-    const date = new Date(timestamp)
-    const o = {
-      'M+': date.getMonth() + 1,
-      'd+': date.getDate(),
-      'h+': date.getHours() % 12,
-      'H+': date.getHours(),
-      'm+': date.getMinutes(),
-      's+': date.getSeconds(),
-      'q+': Math.floor((date.getMonth() + 3) / 3),
-      S: date.getMilliseconds()
-    }
-    if (/(y+)/.test(fmt)) {
-      fmt = fmt.replace(
-        RegExp.$1,
-        (date.getFullYear() + '').substr(4 - RegExp.$1.length)
-      )
-    }
-    for (const k in o) {
-      if (new RegExp('(' + k + ')').test(fmt)) {
-        fmt = fmt.replace(
-          RegExp.$1 as string,
-          (RegExp.$1.length === 1
-            ? o[k]
-            : ('00' + o[k]).substr(('' + o[k]).length)) as string
-        ) as string
-      }
-    }
-    return fmt
+    return dayjs(timestamp).format(fmt || 'YYYY-MM-DD HH:mm:ss')
   },
 
   prettyDate: (timestamp: number) => {
-    const minute = 1000 * 60
-    const hour = minute * 60
-    const day = hour * 24
-    const diffValue = new Date().getTime() - timestamp
-    if (diffValue / minute < 1) {
-      return '刚刚'
-    } else if (diffValue / minute < 60) {
-      return parseInt(String(diffValue / minute)) + '分钟前'
-    } else if (diffValue / hour <= 24) {
-      return parseInt(String(diffValue / hour)) + '小时前'
-    } else if (diffValue / day <= 30) {
-      return parseInt(String(diffValue / day)) + '天前'
-    }
-    return Utils.formatDate(timestamp, 'yyyy-MM-dd HH:mm:ss')
+    return dayjs(timestamp).fromNow();
   },
 
   siteTitle: (subTitle: string|undefined = undefined) => {

@@ -35,6 +35,9 @@ dependencies:
   '@wangeditor/editor-for-vue':
     specifier: ^5.1.12
     version: 5.1.12(@wangeditor/editor@5.1.23)(vue@3.3.13)
+  dayjs:
+    specifier: ^1.11.10
+    version: 1.11.10
   eslint:
     specifier: ^8.56.0
     version: 8.56.0

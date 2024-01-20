@@ -12,7 +12,7 @@
         <div class="flex flex-row justify-center items-center my-3">
           <div class="mx-3" v-if="config?.copyright">
             <el-text>
-              © {{ appConfig.CopyrightYear as string }} {{ config.copyright }} 版权所有
+              版权所有 © {{ dayjs().format("YYYY") }} {{ config.copyright }}
             </el-text>
           </div>
 
@@ -41,8 +41,8 @@
 import {useConfigStore} from '~/store/config'
 import Utils from "~/common/utils"
 import beian from "~/assets/images/beian.png"
+import dayjs from "dayjs"
 
-const appConfig = useAppConfig()
 const configStore = useConfigStore()
 
 let config = computed(() => {

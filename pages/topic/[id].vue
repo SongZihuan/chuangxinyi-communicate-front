@@ -218,14 +218,14 @@ const deleteTopic = async () => {
 }
 
 const like = async () => {
-  ElMessage.success({
-    message: '谢谢喜欢！',
-    grouping: true,
-  })
   let {data, status} = await useTopicApi().likeTopic(topic.value.topicId)
   if (status.value === "success" && data.value.success) {
-      await getTopic()
-      await getRecentlikes()
+    ElMessage.success({
+      message: '谢谢喜欢！',
+      grouping: true,
+    })
+    await getTopic()
+    await getRecentlikes()
   }
 }
 
