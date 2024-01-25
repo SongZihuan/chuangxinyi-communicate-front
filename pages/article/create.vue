@@ -40,12 +40,17 @@ import TagInput from '~/components/TagInput'
 import {useArticleApi} from '~/api/article'
 import {ElMessage} from "element-plus"
 import { ArrowRight } from '@element-plus/icons-vue'
+import { useAuthStore } from '~/store/auth'
 
 let publishing = ref(false)
 let postForm = ref({
   title: '',
   tags: [],
 })
+let authStore = useAuthStore()
+
+let currentUser = authStore.currentUser
+let currentUserName = authStore.currentUserName
 
 let content = ref("")
 
