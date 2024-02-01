@@ -70,6 +70,9 @@ export default {
       AVATAR_URL: process.env.AVATAR_URL,
       FILE_URL: process.env.FILE_URL,
       CENTER_WS_URL: process.env.CENTER_WS_URL,
+      LOGOUT_URL: process.env.LOGOUT_URL,
+      LOGOUT_REFERRER: process.env.LOGOUT_REFERRER,
+      LOGOUT_REDIRECT_URL: process.env.LOGOUT_REDIRECT_URL,
       ENV: process.env.ENV || "development",
     }
   }

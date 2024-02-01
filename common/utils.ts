@@ -90,6 +90,19 @@ let Utils = {
     }
   },
 
+  toLogout: async () => {
+    const configStore = useConfigStore()
+    const runtimeConfig = useRuntimeConfig()
+    let domainUID = configStore.appinfo.domainID
+
+    let oauth2Query = Utils.encodeSearchParams({
+      redirect_uri: runtimeConfig.public.LOGOUT_REDIRECT_URL,
+      domain: domainUID,
+    })
+
+    window.location.href = `${runtimeConfig.public.LOGOUT_URL}?${oauth2Query}`
+  },
+
   encodeSearchParams: (obj: Object) => {
     const params: Array[string] = []
 

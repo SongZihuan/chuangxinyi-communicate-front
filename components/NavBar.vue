@@ -139,7 +139,6 @@
 import Utils from '~/common/utils'
 import { useConfigStore } from '~/store/config'
 import { useAuthStore } from '~/store/auth'
-import { ElMessage } from "element-plus"
 import Logo from "assets/images/logo.png"
 import {HomeFilled, Plus, Bell} from "@element-plus/icons-vue"
 import {useMsgStore} from '~/store/msg'
@@ -183,20 +182,7 @@ const login = async () => {
 }
 
 const logout = async () => {
-  try {
-    await authStore.logout()
-    let ref = '/'
-    if (ref === '/' && process.client) {
-      ref = window.location.pathname
-    }
-
-    ElMessage.success("退出成功")
-    setTimeout(()=> {
-      Utils.linkTo(ref)
-    }, 1000)
-  } catch (e) {
-    console.error(e)
-  }
+  await Utils.toLogout()
 }
 const onBack = async () => {
   await Utils.linkTo("/")
