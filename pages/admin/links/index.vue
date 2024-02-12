@@ -120,7 +120,6 @@
             <el-button @click.native="addFormVisible = false">取消</el-button>
             <el-button
               @click.native="addSubmit"
-              :loading="addLoading"
               type="primary"
             >
               提交
@@ -166,7 +165,6 @@
             <el-button @click.native="editFormVisible = false">取消</el-button>
             <el-button
               @click.native="editSubmit"
-              :loading="editLoading"
               type="primary"
             >
               提交
@@ -207,11 +205,9 @@ let addForm = ref({
   summary: ''
 })
 let addFormVisible = ref(false)
-let addLoading = ref(false)
 
 let editForm = ref({})
 let editFormVisible = ref(false)
-let editLoading = ref(false)
 
 const list = async () => {
   listLoading.value = true

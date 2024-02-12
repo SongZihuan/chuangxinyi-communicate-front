@@ -123,9 +123,9 @@ const create = async () => {
     commentsLoadMore.value.pushResults(data.value.data)
     content.value = ''
     editorRef.value.clear()
+  } else {
+    sending.value = false
   }
-
-  sending.value = false
 }
 const reply = (newComment: any) => {
   commentCount.value++

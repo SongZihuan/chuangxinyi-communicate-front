@@ -69,8 +69,9 @@ const submitCreate = async () => {
     setTimeout(async ()=>{
       await Utils.linkTo('/article/' + data.value.data.articleId)
     })
+  } else {
+    publishing.value = false
   }
-  publishing.value = false
 }
 
 useHead({

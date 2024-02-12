@@ -140,6 +140,8 @@ const submitCreate = async () => {
     setTimeout(()=>{
       Utils.linkTo('/topic/' + data.value.data.topicId)
     }, 1000)
+  } else {
+    publishing.value = false
   }
 }
 

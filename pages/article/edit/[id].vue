@@ -94,6 +94,8 @@ const submitCreate = async () => {
     setTimeout(()=>{
       Utils.linkTo('/article/' + articleId)
     }, 1000)
+  } else {
+    publishing.value = false
   }
 }
 

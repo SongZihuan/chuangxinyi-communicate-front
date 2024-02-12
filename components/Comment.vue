@@ -149,9 +149,9 @@ const create = async () => {
     content.value = ''
     editorRef.value.clear()
     reply.value = false
+  } else {
+    sending.value = false
   }
-
-  sending.value = false
 }
 
 const onSonReply = (newComment: any) => {

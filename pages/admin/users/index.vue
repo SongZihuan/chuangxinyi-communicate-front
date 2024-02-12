@@ -114,7 +114,6 @@
             <el-button @click.native="editFormVisible = false">取消</el-button>
             <el-button
               @click.native="editSubmit"
-              :loading="editLoading"
               type="primary"
             >提交</el-button
             >
@@ -152,7 +151,6 @@ let editForm = ref({
   id: ''
 })
 let editFormVisible = ref(false)
-let editLoading = ref(false)
 let editFormRules = ref({})
 
 const list = async () => {
