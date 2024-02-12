@@ -53,13 +53,13 @@
             v-if="isOwner"
             @click="Utils.linkTo('/user/scores')"
           >
-            积分明细
+            积分
           </el-button>
           <el-button
             v-if="isOwner"
             @click="toUserCenter"
           >
-            编辑资料
+            编辑
           </el-button>
           <el-button
             v-if="isOwner"

@@ -133,6 +133,7 @@ const getTopic = async () => {
   let {data, status, error} = await useTopicApi().getTopic(topicID)
   if (status.value === "success" && data.value.success) {
     topic.value = data.value.data
+    console.log("AAV", topic.value.content)
   } else {
     console.log(status.value, error && error.value)
     showError({
