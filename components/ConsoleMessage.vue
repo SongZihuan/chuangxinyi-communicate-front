@@ -39,7 +39,7 @@
                           .         ',i?(jcJQZwqdbbdpqm0Jzr(?i".
                                             .'\`^""""^\`'
 
-PS：如果你看到乱码，请把控制它横向宽度放大一点哦！
+PS：如果你看到乱码，请把控制台横向宽度放大一点哦！
 正在关注我们的代码？可以上Github联系我们：https://www.github.com/wuntsong-org
 如果你发现任何Bug，或有任何想法，欢迎随时提交Issuer和PR。
 如果你想成为我们的一员，请联系我们！
