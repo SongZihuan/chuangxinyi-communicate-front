@@ -1,7 +1,3 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
   <Head>
 <!--    <link href="//cdn.staticfile.org/bulma/0.8.0/css/bulma.min.css" rel="stylesheet">-->
@@ -14,7 +10,11 @@
       <NuxtPage />
     </div>
   </NuxtLayout>
+  <ConsoleMessage></ConsoleMessage>
 </template>
+
+<script setup lang="ts">
+</script>
 
 <style lang="scss">
 </style>

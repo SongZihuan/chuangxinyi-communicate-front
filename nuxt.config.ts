@@ -7,15 +7,6 @@ export default {
   devServer: {
     port: process.env.SERVER_PORT,
   },
-
-  vite: {
-    plugins: [
-      ElementPlus({}),
-      createSvgIconsPlugin({
-        iconDirs: [path.resolve(process.cwd(), 'assets/svg')]
-      })
-    ],
-  },
   /*
    ** Global CSS
    */
@@ -75,5 +66,23 @@ export default {
       LOGOUT_REDIRECT_URL: process.env.LOGOUT_REDIRECT_URL,
       ENV: process.env.ENV || "development",
     }
+  },
+  vite: {
+    plugins: [
+      ElementPlus({}),
+      createSvgIconsPlugin({
+        iconDirs: [path.resolve(process.cwd(), 'assets/svg')]
+      })
+    ],
+    build: {
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          //生产环境时移除console
+          drop_console: process.env.NUXT_NOT_CONSOLE === "true",
+          drop_debugger: process.env.NUXT_NOT_CONSOLE === "true",
+        },
+      },
+    },
   }
 }

@@ -36,6 +36,7 @@
       </template>
     </el-result>
   </div>
+  <ConsoleMessage></ConsoleMessage>
 </template>
 
 <script setup lang="ts">
